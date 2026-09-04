@@ -1,0 +1,12 @@
+@import "tailwindcss";
+:root{--ink:#18352f;--lake:#0d6d70;--deep:#0b4148;--mist:#edf5f0;--sand:#f6f0df;--leaf:#537a4c;--gold:#d6a23c;--white:#fffdf8}
+html{scroll-behavior:smooth;background:var(--sand);color:var(--ink)}
+body{margin:0;font-family:"Noto Sans Tamil","Latha","Nirmala UI",system-ui,sans-serif;background:linear-gradient(180deg,#eef7f3 0,#fffdf8 34rem,#f6f0df 100%);line-height:1.75}
+*{box-sizing:border-box}a{color:inherit}.container-shell{width:min(1180px,calc(100% - 2rem));margin-inline:auto}.focus-ring:focus-visible{outline:3px solid #f4b942;outline-offset:3px}.glass{background:color-mix(in srgb,#fff 84%,transparent);backdrop-filter:blur(12px);border:1px solid rgba(11,65,72,.12)}
+.section-title{font-size:clamp(1.8rem,4vw,3.15rem);line-height:1.18;font-weight:800;letter-spacing:-.02em;color:var(--deep)}
+.kicker{font-size:.78rem;font-weight:800;letter-spacing:.12em;text-transform:uppercase;color:var(--lake)}
+.card{border:1px solid rgba(24,53,47,.12);border-radius:1.4rem;background:#fffdf8;box-shadow:0 14px 40px rgba(20,62,58,.07)}
+.wave{background:radial-gradient(circle at 15% 20%,rgba(255,255,255,.22),transparent 24%),linear-gradient(135deg,#0b545a,#0d7776 55%,#527b4d)}
+.hero-pattern{background-image:linear-gradient(rgba(6,51,57,.54),rgba(6,51,57,.78)),radial-gradient(circle at 72% 28%,rgba(255,255,255,.22),transparent 22%),repeating-radial-gradient(ellipse at 50% 100%,transparent 0 26px,rgba(255,255,255,.08) 27px 29px);background-color:#0b5c64}
+.prose-tamil h2{font-size:1.55rem;font-weight:800;color:var(--deep);margin-top:2.2rem}.prose-tamil h3{font-size:1.18rem;font-weight:800;color:var(--deep);margin-top:1.7rem}.prose-tamil p,.prose-tamil li{color:#35504a}.prose-tamil ul{padding-left:1.4rem;list-style:disc}.prose-tamil a{text-decoration:underline;text-underline-offset:3px;color:#0d686d}
+input[type="checkbox"]{accent-color:#0d6d70}

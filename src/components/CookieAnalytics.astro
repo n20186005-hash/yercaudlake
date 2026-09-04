@@ -1,0 +1,14 @@
+<script is:inline>
+  (() => {
+    const KEY='yercaud-cookie-consent';
+    const load=()=>{
+      if(document.querySelector('script[data-ga4]')) return;
+      window.dataLayer=window.dataLayer||[];
+      window.gtag=function(){window.dataLayer.push(arguments)};
+      window.gtag('js',new Date()); window.gtag('config','G-HXM22WWPKP',{anonymize_ip:true});
+      const s=document.createElement('script'); s.async=true; s.dataset.ga4='true'; s.src='https://www.googletagmanager.com/gtag/js?id=G-HXM22WWPKP'; document.head.appendChild(s);
+    };
+    try{const v=JSON.parse(localStorage.getItem(KEY)||'null'); if(v?.analytics===true) load();}catch{}
+    window.addEventListener('yercaud-consent-updated',e=>{if(e.detail?.analytics===true) load();});
+  })();
+</script>

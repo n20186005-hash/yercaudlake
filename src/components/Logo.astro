@@ -1,0 +1,9 @@
+---
+const { compact=false }=Astro.props;
+---
+<div class="flex items-center gap-3">
+  <span class="grid h-11 w-11 shrink-0 place-items-center rounded-full bg-[#0d6d70] shadow-sm" aria-hidden="true">
+    <svg viewBox="0 0 64 64" class="h-8 w-8" fill="none"><path d="M9 38c10-7 19-7 28 0s17 7 22 1" stroke="#fff" stroke-width="4" stroke-linecap="round"/><path d="M12 45c10-5 19-5 27 0s15 5 21 1" stroke="#d9f0e6" stroke-width="3" stroke-linecap="round"/><path d="M20 34V20h24v14" stroke="#f6d27a" stroke-width="4" stroke-linejoin="round"/><path d="M16 20h32L42 13H22l-6 7Z" fill="#f6d27a"/></svg>
+  </span>
+  <span class:list={["leading-tight",compact&&"hidden sm:block"]}><strong class="block text-[1rem] text-[#0b4148]">ஏற்காடு ஏரி</strong><small class="block text-[.72rem] font-semibold text-[#537a4c]">படகு இல்லம் பயண வழிகாட்டி</small></span>
+</div>

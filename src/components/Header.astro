@@ -1,0 +1,12 @@
+---
+import Logo from './Logo.astro';
+---
+<header class="sticky top-0 z-50 border-b border-[#174c48]/10 bg-[#fffdf8]/94 backdrop-blur-xl">
+  <div class="container-shell flex min-h-18 items-center justify-between gap-5 py-3">
+    <a href="/" class="focus-ring rounded-lg no-underline" aria-label="முகப்புப் பக்கம்"><Logo compact /></a>
+    <nav class="hidden items-center gap-5 text-sm font-bold xl:flex" aria-label="முதன்மை வழிசெலுத்தல்">
+      <a href="/#அறிமுகம்" class="hover:text-[#0d6d70]">அறிமுகம்</a><a href="/#திட்டமிடல்" class="hover:text-[#0d6d70]">பயணத் திட்டம்</a><a href="/#போக்குவரத்து" class="hover:text-[#0d6d70]">போக்குவரத்து</a><a href="/#சுற்றுப்புறம்" class="hover:text-[#0d6d70]">சுற்றுப்புறம்</a><a href="/#கேள்விகள்" class="hover:text-[#0d6d70]">கேள்விகள்</a>
+    </nav>
+    <a href="https://maps.app.goo.gl/DnvJDBDKXe8s1Rmi9" target="_blank" rel="noopener noreferrer" class="focus-ring rounded-full bg-[#0d6d70] px-4 py-2 text-sm font-extrabold text-white no-underline hover:bg-[#0b5358]">வரைபடம்</a>
+  </div>
+</header>

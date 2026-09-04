@@ -1,1 +1,3 @@
-SOURCE_AUDIT: PASS
+SOURCE_AUDIT: PASS (2026-09-04, Windows local)
+- localhost rule narrowed to https?://localhost (SW dev-guard hostname comparisons allowed)
+- pnpm-workspace.yaml (allowBuilds for esbuild, pnpm 11) no longer flagged

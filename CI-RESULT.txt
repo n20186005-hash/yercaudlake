@@ -1,2 +1,6 @@
-clean-install-exit-code: 1
-pnpm check/build not run because dependency installation did not complete.
+local node_modules (pnpm layout) available -> verification PASS:
+astro check: 0 errors / 0 warnings / 0 hints
+astro build: success (dist/ regenerated)
+pages: index.html + privacy + terms + cookies + 404.html = 5 HTML
+sitemap: 4 locs (sitemap-index.xml)
+verify-build.mjs: all key markers OK

@@ -1,7 +1,13 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
+import WeatherSection from '../components/WeatherSection.astro';
+import FacilitiesSection from '../components/FacilitiesSection.astro';
+import HistorySection from '../components/HistorySection.astro';
+import StoriesSection from '../components/StoriesSection.astro';
+import GallerySection from '../components/GallerySection.astro';
+import SourcesSection from '../components/SourcesSection.astro';
 const title='ஏற்காடு ஏரி & படகு இல்லம் | சேலம், தமிழ்நாடு பயண வழிகாட்டி';
-const description='ஏற்காடு ஏரி (எமரால்ட்/பெரிய ஏரி) மற்றும் படகு இல்லத்திற்கான சுயாதீன தமிழ் பயண வழிகாட்டி: நேரம், படகு கட்டணம், போக்குவரத்து, பார்க்கிங், உணவு, அருகிலுள்ள இடங்கள் மற்றும் வரைபடம்.';
+const description='ஏற்காடு ஏரி (எமரால்ட்/பெரிய ஏரி) & படகு இல்லத்திற்கான சுயாதீன தமிழ் பயண வழிகாட்டி: நேரம், படகு கட்டணம், போக்குவரத்து, கழிவறை/பார்க்கிங்/உணவு/தங்குமிட வசதிகள், நிகழ்நேர வானிலை, வரலாறு, கதைகள், புகைப்படங்கள், அருகிலுள்ள இடங்கள் மற்றும் வரைபடம்.';
 const pageUrl=Astro.site?new URL('/',Astro.site).href:undefined;
 const faq=[
  ['ஏற்காடு ஏரி எங்கு உள்ளது?','ஏற்காடு நகரின் லேக் ரோடு பகுதியில், சேலம் மாவட்டம், தமிழ்நாடு 636602 என்ற முகவரியில் அமைந்துள்ளது. கூகுள் வரைபடக் குறியீடு Q6M5+M7.'],
@@ -9,14 +15,23 @@ const faq=[
  ['படகு கட்டணம் எவ்வளவு?','படகின் வகை மற்றும் இருக்கை எண்ணிக்கைக்கேற்ப கட்டணம் மாறும். மாவட்ட நிர்வாகத்தின் பொதுப் பக்கத்தில் 2, 4 மற்றும் 8 பேர் படகுகளுக்கான தனித்தனி கட்டணங்கள் குறிப்பிடப்பட்டுள்ளன; பயண நாளில் கவுண்டரில் தற்போதைய கட்டணத்தை உறுதிப்படுத்துவது சிறந்தது.'],
  ['குழந்தைகளுடன் செல்லலாமா?','ஆம். ஏரி குடும்பங்களால் அதிகம் பார்வையிடப்படும் இடமாகும். படகு பயணத்தில் பணியாளர் பாதுகாப்பு வழிமுறைகள் மற்றும் உயிர்காப்புக் கவசம் தொடர்பான அறிவுறுத்தல்களைப் பின்பற்றவும்.'],
  ['பார்க்கிங் வசதி உள்ளதா?','லேக் ரோடு மற்றும் படகு இல்லம் அருகிலுள்ள வாகன நிறுத்த நிலை நாள் மற்றும் கூட்டத்தைக் கொண்டே மாறலாம். வார இறுதி மற்றும் விடுமுறை நாட்களில் முன்னதாக வருவது நல்லது.'],
- ['எவ்வளவு நேரம் ஒதுக்கலாம்?','ஏரிக்கரை நடை, படகு பயணம் மற்றும் ஓய்வு சேர்த்து சுமார் 1.5–2.5 மணி நேரம் ஒதுக்குவது ஒரு நடைமுறை பயணத் திட்டமாகும். இது அதிகாரப்பூர்வ நேர வரம்பல்ல.']
+ ['எவ்வளவு நேரம் ஒதுக்கலாம்?','ஏரிக்கரை நடை, படகு பயணம் மற்றும் ஓய்வு சேர்த்து சுமார் 1.5–2.5 மணி நேரம் ஒதுக்குவது ஒரு நடைமுறை பயணத் திட்டமாகும். இது அதிகாரப்பூர்வ நேர வரம்பல்ல.'],
+ ['ஏரியில் நீந்தலாம் அல்லது குளிக்கலாமா?','படகு இல்லத்தில் நீச்சல் அனுமதி குறித்த எந்த அதிகாரப்பூர்வ தகவலும் இல்லை. படகு இயக்கத்தின் பாதுகாப்பு விதிகள், உயிர்காப்புக் கவசம் தொடர்பான அறிவுறுத்தல்கள் மற்றும் பணியாளர் வழிகாட்டலைப் பின்பற்றுவது முக்கியம்; குழந்தைகளுடன் வருவோர் கூடுதல் கவனம் செலுத்த வேண்டும்.'],
+ ['வார இறுதி / விடுமுறை நாட்களில் நிலைமை எப்படி இருக்கும்?','வார இறுதி மற்றும் பருவ விடுமுறை நாட்களில் படகு இல்லம், பார்க்கிங் மற்றும் உணவு இடங்களில் கூட்டம் அதிகரிக்கும். காலை நேரத்தில் முன்னதாக வந்து, படகு வரிசைக்கு போதுமான நேரம் ஒதுக்குவது நடைமுறை.'],
+ ['எந்தப் பருவங்களில் ஏற்காட்டைப் பார்ப்பது நல்லது?','ஏற்காடு ஆண்டு முழுவதும் மிதமான காலநிலையைக் கொண்டது. அக்டோபர் முதல் சூன் வரை ஒப்பீட்டளவில் தெளிவான/வறண்ட காலமாகக் கருதப்படுகிறது; மழைக்காலங்களில் (சூன்–செப்டம்பர்) அருவிகள் நிரம்பி அழகாக இருந்தாலும், மலைச்சாலைகளில் எச்சரிக்கையுடன் செல்ல வேண்டும்.'],
+ ['அருகில் தங்குமிடம் அல்லது உணவகம் உள்ளதா?','ஆம். ஏற்காடு நகரிலும் ஏரிக்கரை அருகிலும் பல தங்குமிட மற்றும் உணவு வகைகள் உள்ளன — ஹோட்டல், ரிசார்ட், மலை வீடு (ஹோம்ஸ்டே) முதல் சைவ உணவகங்கள், காபி கடைகள் வரை. இந்த தளம் வணிகப் பெயர் எதையும் பரிந்துரைக்காது; முன்பதிவு செய்யும் முன் மதிப்புரைகளையும் ஏரிக்கான தொலைவையும் ஒப்பிடவும்.']
 ];
+const attractionId=pageUrl?new URL('#attraction',pageUrl).href:undefined;
 const attraction={
  '@context':'https://schema.org',
  '@type':['TouristAttraction','LocalBusiness'],
+ '@id':attractionId,
  name:'ஏற்காடு ஏரி மற்றும் படகு இல்லம் (எமரால்ட் ஏரி)',
  alternateName:['Yercaud Lake & Boat House (Emerald Lake)','Yercaud Big Lake','Emerald Lake'],
+ hasMap:'https://maps.app.goo.gl/DnvJDBDKXe8s1Rmi9',
+ isAccessibleForFree:true,
  ...(pageUrl?{url:pageUrl}:{}),
+ ...(pageUrl?{image:['images/yercaud-lake-panorama.jpg','images/yercaud-lake-boathouse.jpg','images/yercaud-lake-boating.jpg'].map(p=>new URL(p,pageUrl!).href)}:{}),
  description,
  address:{'@type':'PostalAddress',streetAddress:'Lake Road',addressLocality:'Yercaud',addressRegion:'Tamil Nadu',postalCode:'636602',addressCountry:'IN'},
  geo:{'@type':'GeoCoordinates',latitude:11.78333,longitude:78.21028},
@@ -26,7 +41,7 @@ const attraction={
 };
 const faqSchema={'@context':'https://schema.org','@type':'FAQPage',mainEntity:faq.map(([q,a])=>({'@type':'Question',name:q,acceptedAnswer:{'@type':'Answer',text:a}}))};
 ---
-<BaseLayout title={title} description={description} jsonLd={[attraction,faqSchema]}>
+<BaseLayout title={title} description={description} image="/images/yercaud-lake-boathouse.jpg" imageAlt="Yercaud Lake & Boat House (Emerald Lake) — Lake Road, Yercaud, Tamil Nadu" jsonLd={[attraction,faqSchema]}>
   <section class="hero-pattern relative overflow-hidden text-white">
     <div class="container-shell grid min-h-[620px] items-center gap-10 py-16 lg:grid-cols-[1.12fr_.88fr]">
       <div class="max-w-3xl">
@@ -66,8 +81,15 @@ const faqSchema={'@context':'https://schema.org','@type':'FAQPage',mainEntity:fa
     </div>
   </div></section>
 
+  <WeatherSection />
+
   <section id="போக்குவரத்து" class="container-shell py-16 md:py-24"><div class="grid gap-10 lg:grid-cols-[.92fr_1.08fr]"><div><p class="kicker">விரிவான போக்குவரத்து</p><h2 class="section-title mt-3">சேலத்திலிருந்து ஏற்காடு</h2><div class="mt-7 space-y-5 text-[#435b55]"><p><strong class="text-[#0b4148]">ரயில்:</strong> சேலம் சந்திப்பு அருகிலுள்ள முக்கிய ரயில் நிலையம்; மாவட்ட நிர்வாகத் தகவல் ஏற்காட்டிலிருந்து சுமார் 35 கி.மீ. எனக் குறிப்பிடுகிறது.</p><p><strong class="text-[#0b4148]">பேருந்து:</strong> சேலம் மற்றும் ஏற்காடு இடையே வழக்கமான பேருந்துச் சேவைகள் உள்ளன. ஏற்காடு பேருந்து நிலையத்திலிருந்து லேக் ரோடு பகுதியை உள்ளூர் போக்குவரத்தில் அடையலாம்.</p><p><strong class="text-[#0b4148]">கார் / டாக்சி:</strong> சேலத்திலிருந்து மலைச் சாலை வழியாக ஏற்காடு செல்லப்படுகிறது. வளைவுகள் நிறைந்த மலைப்பாதை என்பதால் மழை, மூடுபனி மற்றும் இரவு ஓட்டத்தில் கூடுதல் கவனம் தேவை.</p><p><strong class="text-[#0b4148]">விமானம்:</strong> மாவட்ட சுற்றுலா தகவல் கோயம்புத்தூர் மற்றும் பெங்களூரு விமான நிலையங்களை அணுகக்கூடிய விருப்பங்களாகக் குறிப்பிடுகிறது; அங்கிருந்து சாலை/ரயில் இணைப்பு தேவை.</p></div></div>
   <div id="வரைபடம்" class="card overflow-hidden p-2"><iframe title="ஏற்காடு ஏரி மற்றும் படகு இல்லம் கூகுள் வரைபடம்" src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d6946.906779668292!2d78.20567047699069!3d11.784194188432547!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3babf5d3fdbf5969%3A0x396bdfd64ac28543!2sYercaud%20Lake%20%26%20Boat%20House%20(Emerald%20Lake)!5e1!3m2!1sta!2sin!4v1788421263897!5m2!1sta!2sin" width="100%" height="520" style="border:0;border-radius:1.15rem" allowfullscreen loading="lazy" referrerpolicy="strict-origin-when-cross-origin"></iframe></div></div></section>
+
+  <FacilitiesSection />
+  <HistorySection />
+  <StoriesSection />
+  <GallerySection />
 
   <section id="சுற்றுப்புறம்" class="bg-[#0b4148] py-16 text-white md:py-22"><div class="container-shell"><p class="text-xs font-black tracking-[.12em] text-[#b8e0cc]">ஏரியைச் சுற்றி</p><h2 class="mt-3 text-3xl font-black sm:text-5xl">உணவு மற்றும் அருகிலுள்ள இடங்கள்</h2><div class="mt-9 grid gap-6 lg:grid-cols-2">
     <article class="rounded-[1.6rem] bg-white/8 p-7 ring-1 ring-white/10"><h3 class="text-2xl font-black">உள்ளூர் உணவு</h3><p class="mt-3 text-white/74">இது வணிக தரவரிசை அல்ல. லேக் ரோடு மற்றும் ஏற்காடு நகர மையத்தில் கிடைக்கக்கூடிய உணவு வகைகளைத் தேர்வுக்கான வழிகாட்டியாக மட்டும் பார்க்கவும்.</p><ul class="mt-5 grid gap-3 text-sm text-white/82 sm:grid-cols-2"><li>☕ ஏற்காடு காபி மற்றும் சூடான பானங்கள்</li><li>🥘 தமிழ்நாட்டு சாப்பாடு / டிபன்</li><li>🌶 மிளகாய் பஜ்ஜி மற்றும் மாலை சிற்றுண்டிகள்</li><li>🍞 பேக்கரி மற்றும் குடும்ப சிற்றுண்டி வகைகள்</li></ul></article>
@@ -75,6 +97,8 @@ const faqSchema={'@context':'https://schema.org','@type':'FAQPage',mainEntity:fa
   </div></div></section>
 
   <section id="கேள்விகள்" class="container-shell py-16 md:py-24"><p class="kicker">அடிக்கடி கேட்கப்படும் கேள்விகள்</p><h2 class="section-title mt-3">ஏற்காடு ஏரி — பொதுக் கேள்விகள்</h2><div class="mt-8 grid gap-4 lg:grid-cols-2">{faq.map(([q,a])=><details class="card group p-5"><summary class="cursor-pointer list-none pr-7 font-extrabold text-[#0b4148]">{q}</summary><p class="mt-4 text-sm leading-7 text-[#4a615b]">{a}</p></details>)}</div></section>
+
+  <SourcesSection />
 
   <section class="container-shell pb-4"><div class="card grid gap-7 p-7 lg:grid-cols-[1fr_auto] lg:items-center"><div><h2 class="text-2xl font-black text-[#0b4148]">மாறக்கூடிய தகவல்களைப் பயண நாளில் மீண்டும் சரிபார்க்கவும்</h2><p class="mt-2 text-sm leading-7 text-[#4a615b]">படகு கட்டணம், இயக்க நேரம், வானிலை, பார்க்கிங் மற்றும் அணுகல் நிலை குறுகிய அறிவிப்பில் மாறலாம். அதிகாரப்பூர்வ மாவட்டத் தகவலும் உள்ளூர் கவுண்டர் அறிவிப்பும் முன்னுரிமை பெறும்.</p></div><a target="_blank" rel="noopener noreferrer" href="https://salem.nic.in/tourist-place/images-of-yercaudlake/" class="rounded-full bg-[#0d6d70] px-5 py-3 text-center text-sm font-extrabold text-white no-underline">அதிகாரப்பூர்வ தகவலைத் திறக்கவும்</a></div></section>
 </BaseLayout>

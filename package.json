@@ -14,7 +14,9 @@
     "build": "astro build",
     "preview": "astro preview",
     "deploy": "pnpm dlx wrangler@4.125.0 deploy",
-    "audit:source": "node scripts/audit-source.mjs"
+    "audit:source": "node scripts/audit-source.mjs",
+    "images:opt": "powershell -NoProfile -ExecutionPolicy Bypass -File scripts/optimize-images.ps1",
+    "icons:gen": "node scripts/generate-icons.mjs"
   },
   "dependencies": {
     "@astrojs/check": "0.9.10",

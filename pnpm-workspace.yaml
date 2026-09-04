@@ -1,0 +1,8 @@
+# pnpm 11 settings (see https://pnpm.io/settings).
+# If the `packages` field is omitted, only the root package is included
+# in the workspace — this repo is a single-package project.
+
+# Allow esbuild (transitive dep of astro/vite) to run its install script.
+# Without this, pnpm 11 aborts `pnpm install` with ERR_PNPM_IGNORED_BUILDS.
+allowBuilds:
+  esbuild: true

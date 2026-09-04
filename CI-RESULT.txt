@@ -1,0 +1,2 @@
+clean-install-exit-code: 1
+pnpm check/build not run because dependency installation did not complete.

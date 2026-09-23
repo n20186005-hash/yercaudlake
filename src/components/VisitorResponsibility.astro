@@ -1,0 +1,96 @@
+---
+import { type Locale, sec, pick } from '../i18n';
+interface Props { locale?: Locale }
+const { locale = 'ta' } = Astro.props;
+// Visitor responsibility & science-based guidance — neutral, no commercial recommendations.
+const itemsTa = [
+  {
+    icon: '💧', title: 'நீர் தரம் & ஏரி பாதுகாப்பு',
+    points: [
+      'ஏற்காடு ஏரி ஒரு நீர்நிலை — நீச்சல் / குளியல் அதிகாரப்பூர்வமாக அனுமதிக்கப்படுவதில்லை; படகு இயக்கம் மட்டுமே அங்கீகரிக்கப்பட்ட படகு இல்லம் வழியாக.',
+      'நீர்நிலையில் அல்லது அருகில் பிளாஸ்டிக் / கழிவுகளை வீச வேண்டாம்; நீர் தரத்தைப் பாதுகாக்க உதவுங்கள்.',
+      'மழைக்காலங்களில் (ஜூன்–செப்) நீர்மட்டம் உயரும்; கரைப் பகுதிகளில் எச்சரிக்கையாக இருங்கள்.'
+    ]
+  },
+  {
+    icon: '🐒', title: 'வனவிலங்குகள் & தாவரங்கள்',
+    points: [
+      'மலைப் பகுதியில் குரங்குகள், பறவைகள் மற்றும் பூச்சிகள் உள்ளன — விலங்குகளுக்கு உணவு அளிக்க வேண்டாம் (ஆரோக்கியம் & நடத்தை பாதிப்பு).',
+      'பறவைகளையும் தாவரங்களையும் தொந்தரவு செய்யாமல் தூரத்தில் இருந்து பார்க்கவும்.',
+      'பருவமழைக் காலங்களில் ஈரப்பசை (leeches) பாதைகளில் இருக்கலாம் — மூடிய காலணிகள் & காலுறைகள் பரிந்துரைக்கப்படுகின்றன.'
+    ]
+  },
+  {
+    icon: '♻️', title: 'பூஜ்ஜியக் கழிவு (Zero Waste)',
+    points: [
+      'உங்கள் கழிவுகளைத் திரும்பவும் எடுத்துச் செல்லுங்கள்; கிடைக்கும் குப்பைத் தொட்டிகளைப் பயன்படுத்துங்கள்.',
+      'ஒற்றைப் பயன்பாட்டு பிளாஸ்டிக்கைத் தவிர்த்து, மறுபயன்பாட்டுத் தண்ணீர் பாட்டில்களை நிரப்பிப் பயன்படுத்துங்கள்.',
+      'காட்சிஇடங்கள் & பாதைகளை அப்படியே விட்டுச் செல்லுங்கள் — வரும் பயணிகளுக்கு.'
+    ]
+  },
+  {
+    icon: '⚠️', title: 'பாதுகாப்பு & மலை வழிகாட்டுதல்',
+    points: [
+      'மலைச்சாலை (ghat) வளைவுகளில் மூடுபனி, மழை மற்றும் இரவுப் பயணங்களில் வேகத்தைக் குறைத்துச் செல்லுங்கள்.',
+      'படகுப் பயணத்தில் உயிர்காப்புக் கவசம் & பணியாளர் வழிகாட்டுதலைப் பின்பற்றுங்கள்; குழந்தைகளைக் கண்காணியுங்கள்.',
+      'காட்டுப் பாதைகளில் மட்டுமே நடந்து, அவசரத் தொடர்புகளை முன்கூட்டியே குறித்துவையுங்கள்.'
+    ]
+  }
+];
+const itemsEn = [
+  {
+    icon: '💧', title: 'Water quality & lake care',
+    points: [
+      'Yercaud Lake is a waterbody — swimming / bathing is not officially allowed; only authorised boat-house boating is permitted.',
+      'Do not throw plastic / waste into or near the waterbody; help protect water quality.',
+      'In the monsoon (Jun–Sep) water levels rise; be careful near the banks.'
+    ]
+  },
+  {
+    icon: '🐒', title: 'Wildlife & plants',
+    points: [
+      'The hills have monkeys, birds and insects — do not feed animals (harm to health & behaviour).',
+      'Observe birds and plants from a distance without disturbing them.',
+      'Leeches may be on trails in the rainy season — closed shoes & socks are advised.'
+    ]
+  },
+  {
+    icon: '♻️', title: 'Zero Waste',
+    points: [
+      'Take your waste back with you; use the bins provided.',
+      'Avoid single-use plastic; refill reusable water bottles.',
+      'Leave viewpoints & trails as you found them — for the travellers who come after.'
+    ]
+  },
+  {
+    icon: '⚠️', title: 'Safety & hill guidance',
+    points: [
+      'On ghat curves, slow down in fog, rain and at night.',
+      'Follow life-jacket & staff guidance on the boat ride; watch children.',
+      'Walk only on marked trails and note emergency contacts in advance.'
+    ]
+  }
+];
+const items = locale === 'en' ? itemsEn : itemsTa;
+const kicker = pick(locale, 'அறிவியல் & பார்வையாளர் பொறுப்பு', 'Science & visitor responsibility');
+const heading = pick(locale, 'ஏரியையும் மலையையும் பாதுகாப்பாக அனுபவிப்பது', 'Enjoying the lake & hills responsibly');
+const intro = pick(locale,
+  'இது வணிகப் பரிந்துரை அல்ல — இயற்கை, வனவிலங்குகள் மற்றும் பாதுகாப்பு குறித்த நடுநிலையான வழிகாட்டுதல் மட்டுமே. இறுதித் தகவலுக்கு அதிகாரப்பூர்வ அறிவிப்புகளையும் உள்ளூர் வழிகாட்டுதல்களையும் பின்பற்றவும்.',
+  'This is not a commercial recommendation — only neutral guidance about nature, wildlife and safety. For final information, follow official notices and local guidance.');
+---
+<section id={sec(locale, 'responsibility')} class="bg-[#0b4148] py-16 text-white md:py-24">
+  <div class="container-shell">
+    <p class="text-xs font-black tracking-[.12em] text-[#b8e0cc]">{kicker}</p>
+    <h2 class="mt-3 text-3xl font-black sm:text-5xl">{heading}</h2>
+    <p class="mt-4 max-w-3xl text-sm leading-7 text-white/74">{intro}</p>
+
+    <div class="mt-9 grid gap-5 md:grid-cols-2 xl:grid-cols-4">
+      {items.map((it) => (
+        <article class="rounded-[1.6rem] bg-white/8 p-7 ring-1 ring-white/10">
+          <div class="flex items-center gap-3"><span class="text-3xl" aria-hidden="true">{it.icon}</span><h3 class="text-xl font-black">{it.title}</h3></div>
+          <ul class="mt-4 space-y-3 text-sm leading-7 text-white/82">{it.points.map((p) => <li class="flex gap-2"><span class="text-[#9fe0c4]">✓</span><span>{p}</span></li>)}</ul>
+        </article>
+      ))}
+    </div>
+  </div>
+</section>

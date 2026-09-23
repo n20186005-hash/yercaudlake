@@ -1,5 +1,8 @@
 ---
-const facilities = [
+import { type Locale, sec, pick } from '../i18n';
+interface Props { locale?: Locale }
+const { locale = 'ta' } = Astro.props;
+const facilitiesTa = [
   {
     icon: '🚻', title: 'கழிவறைகள் (WC)',
     text: 'படகு இல்ல வளாகம் மற்றும் ஏரிக்கரைப் பகுதியில் பொது கழிவறை வசதியை எதிர்பார்க்கலாம். நாள் நேரம், பராமரிப்பு மற்றும் நெரிசலைப் பொறுத்து நிலை மாறலாம்; சில சமயங்களில் காத்திருப்பு அல்லது சிறு கட்டணம் இருக்கலாம்.'
@@ -10,7 +13,7 @@ const facilities = [
   },
   {
     icon: '🍛', title: 'உணவு & பானங்கள்',
-    text: 'ஏரிக்கரை மற்றும் ஏற்காடு நகரில் தென்னிந்திய சைவ உணவு, இட்லி/தோசை போன்ற டிபன் வகைகள், காபி–தேநீர் கடைகள், சிற்றுண்டி மற்றும் பேக்கரிகள் உள்ளன. பயணத்தின் போது குடிநீர் பாட்டில் எடுத்துச் செல்வது நல்லது.'
+    text: 'ஏரிக்கரை மற்றும் ஏற்காடு நகரில் தென்னிந்திய சைவ உணவு, இட்லி/தோசை போன்ற டிபன் வகைகள், காப்பி–தேநீர் கடைகள், சிற்றுண்டி மற்றும் பேக்கரிகள் உள்ளன. பயணத்தின் போது குடிநீர் பாட்டில் எடுத்துச் செல்வது நல்லது.'
   },
   {
     icon: '🛏️', title: 'தங்குமிடங்கள்',
@@ -31,14 +34,71 @@ const facilities = [
   {
     icon: '💊', title: 'மருந்தகம் & மருத்துவம்',
     text: 'ஏற்காடு நகரில் மருந்தகங்களும் அடிப்படை சுகாதார வசதியும் உள்ளன. அவசர மருத்துவத் தேவைக்கு அருகிலுள்ள பெரிய மையம் சேலம்; பயணத்தின் போது முக்கிய அவசரத் தொடர்புகளைக் குறித்துக்கொள்வது நல்லது.'
+  },
+  {
+    icon: '📶', title: 'இணையம் & தொலைபேசி வலைப்பின்னல்',
+    text: 'நகர் மையம் & ஏரிக்கரைப் பகுதியில் செல்பேசி வலைப்பின்னல் கிடைக்கும்; ஆழமான மலைப் பாதைகளில் 4G சிக்னல் துண்டிக்கப்படலாம். மலைச்சாலைக்கு முன் வழிசெலுத்தலை (offline map) பதிவிறக்கம் செய்துகொள்வது பாதுகாப்பானது.'
+  },
+  {
+    icon: '♿', title: 'மாற்றுத்திறன் அணுகல்',
+    text: 'ஏரிக்கரை பேவ்டு (paved) நடைப்பாதை, படகு இல்லம் மற்றும் அண்ணா பூங்கா ஆகியவை சக்கர நாற்காலிக்கு ஏற்ற வகையில் அமைந்துள்ளன. வாகனம் மூலம் அணுகக்கூடிய காட்சிஇடங்களும் உள்ளன; ஆழமான பாதைகள் & அருவிகளில் அணுகல் குறைவாக இருக்கலாம்.'
   }
 ];
-const allText = 'இது வணிகப் பட்டியல் அல்ல — வசதி வகைகள் மட்டுமே கீழே தரப்படுகின்றன. குறிப்பிட்ட கடை, ஹோட்டல் அல்லது நிறுவனப் பெயர் எதுவும் பரிந்துரைக்கப்படவில்லை; தேர்வும் முடிவும் பயணியின் பொறுப்பு.';
+const facilitiesEn = [
+  {
+    icon: '🚻', title: 'Toilets (WC)',
+    text: 'Public toilets can be expected at the boat-house complex and lakeside. Condition varies with time of day, maintenance and crowding; sometimes there is a wait or a small fee.'
+  },
+  {
+    icon: '🅿️', title: 'Parking',
+    text: 'Parking is available near Lake Road and the boat house for two- and four-wheelers; it can fill up on weekends and holidays, so arriving earlier is practical.'
+  },
+  {
+    icon: '🍛', title: 'Food & drinks',
+    text: 'Lakeside and in Yercaud town you’ll find South Indian vegetarian food, tiffin items like idli/dosa, coffee–tea stalls, snacks and bakeries. Carry a bottle of drinking water on your trip.'
+  },
+  {
+    icon: '🛏️', title: 'Stays',
+    text: 'Yercaud town has hotels, resorts and homestays of various types. Compare distance to the lake, season and reviews before booking; no specific business is recommended here.'
+  },
+  {
+    icon: '🛒', title: 'Groceries',
+    text: 'Daily-needs items, vegetables, fruit, snacks and drinking water are available in town. It is convenient to stock up before trips that leave the lake area.'
+  },
+  {
+    icon: '⛽', title: 'Fuel & EV charging',
+    text: 'Fuel stations are along the Salem–Yercaud road and in town. EV charging in the hills may be limited; it is safer to fully charge in Salem before climbing up.'
+  },
+  {
+    icon: '🏧', title: 'ATM & cash',
+    text: 'Bank and ATM facilities are in the town centre. There may be no ATM lakeside, so carry a little cash.'
+  },
+  {
+    icon: '💊', title: 'Pharmacy & medical',
+    text: 'Yercaud town has pharmacies and basic healthcare. For emergencies the nearest major centre is Salem; note key emergency numbers while travelling.'
+  },
+  {
+    icon: '📶', title: 'Internet & phone network',
+    text: 'Mobile network is available in the town centre and lakeside; 4G signal can drop on deep hill trails. Download an offline map before the ghat road for safety.'
+  },
+  {
+    icon: '♿', title: 'Accessible',
+    text: 'The lakeside paved walkway, boat house and Anna Park are wheelchair-friendly. Vehicle-accessible viewpoints exist; deeper trails and waterfalls may have limited access.'
+  }
+];
+const facilities = locale === 'en' ? facilitiesEn : facilitiesTa;
+const allText = pick(locale,
+  'இது வணிகப் பட்டியல் அல்ல — வசதி வகைகள் மட்டுமே கீழே தரப்படுகின்றன. குறிப்பிட்ட கடை, ஹோட்டல் அல்லது நிறுவனப் பெயர் எதுவும் பரிந்துரைக்கப்படவில்லை; தேர்வும் முடிவும் பயணியின் பொறுப்பு.',
+  'This is not a commercial listing — only facility types are listed below. No specific shop, hotel or business is recommended; the choice and decision rest with the visitor.');
+const kicker = pick(locale, 'பயண வசதிகள்', 'Visitor facilities');
+const heading = pick(locale, 'ஏரிக்கரை & ஏற்காடு நகரில் தேவையானவை', 'What you need at the lakeside & Yercaud town');
+const footnote = pick(locale,
+  'சில காலங்களில் பராமரிப்பு, விடுமுறை அல்லது பருவநிலை காரணமாக வசதிகளின் செயல்பாடு மாறலாம். பயண நாளில் உள்ளூரில் மீண்டும் உறுதிப்படுத்தவும்.',
+  'At some times facilities may operate differently due to maintenance, holidays or weather. Reconfirm locally on the day of travel.');
 ---
-
-<section id="வசதிகள்" class="container-shell py-16 md:py-24">
-  <p class="kicker">பயண வசதிகள்</p>
-  <h2 class="section-title mt-3">ஏரிக்கரை & ஏற்காடு நகரில் தேவையானவை</h2>
+<section id={sec(locale, 'facilities')} class="container-shell py-16 md:py-24">
+  <p class="kicker">{kicker}</p>
+  <h2 class="section-title mt-3">{heading}</h2>
   <p class="mt-4 max-w-3xl text-sm leading-7 text-[#48605a]">{allText}</p>
   <div class="mt-9 grid gap-5 sm:grid-cols-2 xl:grid-cols-4">
     {facilities.map((f) => (
@@ -49,5 +109,5 @@ const allText = 'இது வணிகப் பட்டியல் அல்
       </article>
     ))}
   </div>
-  <p class="mt-6 rounded-2xl bg-[#eaf4ee] px-5 py-4 text-xs leading-6 text-[#35504a]">சில காலங்களில் பராமரிப்பு, விடுமுறை அல்லது பருவநிலை காரணமாக வசதிகளின் செயல்பாடு மாறலாம். பயண நாளில் உள்ளூரில் மீண்டும் உறுதிப்படுத்தவும்.</p>
+  <p class="mt-6 rounded-2xl bg-[#eaf4ee] px-5 py-4 text-xs leading-6 text-[#35504a]">{footnote}</p>
 </section>

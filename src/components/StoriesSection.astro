@@ -1,5 +1,8 @@
 ---
-const stories = [
+import { type Locale, sec, pick } from '../i18n';
+interface Props { locale?: Locale }
+const { locale = 'ta' } = Astro.props;
+const storiesTa = [
   {
     badge: 'பெயர்க் கதை', badgeClass: 'bg-[#f4d98d]/90 text-[#4a3410]',
     title: '“யேரி–காடு” — பெயருக்குப் பின்னால்',
@@ -12,7 +15,7 @@ const stories = [
   },
   {
     badge: 'வாழ்க்கை முறை', badgeClass: 'bg-[#e3d9f2] text-[#3a2a5c]',
-    title: 'மலை வீடுகளும் தோட்ட வாழ்க்கையும்',
+    title: 'மலை வீடுகளும் தோட்ட வாழ்கையும்',
     text: 'தோட்டக்கால மரபின் தொடர்ச்சியாக ஏற்காட்டில் இன்றும் காபி, தேயிலை, பழ மரங்கள் மற்றும் மசாலாப் பயிர்கள் பரவலாகக் காணப்படுகின்றன. பழங்கால மலை வீடுகளும் (பங்களாக்கள்) தோட்ட வாசல்களும் அந்த வாழ்க்கை முறையை நினைவுபடுத்துகின்றன. பல பயணிகள் வெறும் ஏரியோடு நின்றுவிடாமல், தோட்டங்களுக்கு இடையேயான சாலைகளிலும் நடைபயணம் செய்கின்றனர்.'
   },
   {
@@ -26,13 +29,45 @@ const stories = [
     text: 'மழைக்காலங்களில் கிளியூர் அருவி உச்சக் காட்சியை அளிக்கும். ஏரிக்கரையிலிருந்து தொடங்கும் நடைப் பாதை, பருவம் மற்றும் பாதுகாப்பு நிலையைப் பொறுத்து மாறுபடும். மழைக்காலத்தில் மலைச்சாலைகள் வழுக்கும் என்பதால் உள்ளூர் வழிகாட்டுதல்களைப் பின்பற்றி, நிலையை முன்கூட்டியே கேட்டறிந்து செல்வது பாதுகாப்பானது.'
   }
 ];
+const storiesEn = [
+  {
+    badge: 'Name story', badgeClass: 'bg-[#f4d98d]/90 text-[#4a3410]',
+    title: '“Yeri–Kaadu” — behind the name',
+    text: 'The name Yercaud is widely said to come from “yeri” (lake) + “kaadu” (forest). On one side a clear lake, all around dense forest — together they gave this hill place its name and identity. Being a natural lake makes the waterbody distinctive.'
+  },
+  {
+    badge: 'Historical note', badgeClass: 'bg-[#cde9d8] text-[#143d2c]',
+    title: 'Why “Emerald” Lake?',
+    text: 'The Big Lake is also called “Emerald Lake”. Colonial-era travellers are said to have given it this name seeing the green of the surrounding trees and the soft green sheen of the water. So Yercaud’s lake is not just a waterbody but a symbol of the hill experience.'
+  },
+  {
+    badge: 'Lifestyle', badgeClass: 'bg-[#e3d9f2] text-[#3a2a5c]',
+    title: 'Plantation life & hill bungalows',
+    text: 'Continuing the plantation tradition, coffee, tea, fruit trees and spice crops are still common around Yercaud. Old hill bungalows and plantation gates recall that way of life. Many travellers walk the roads between plantations, not stopping only at the lake.'
+  },
+  {
+    badge: 'Cinema hills', badgeClass: 'bg-[#f6d9d3] text-[#5c2418]',
+    title: 'Backdrop of Tamil films',
+    text: 'Yercaud’s lake, roads and hill scenery have been filming locations for many Tamil films, especially song sequences. So many travellers arrive with the feeling of “that hill lake we saw in pictures”.'
+  },
+  {
+    badge: 'Seasonal note', badgeClass: 'bg-[#cde9ec] text-[#123c44]',
+    title: 'Monsoon beauty — Kiliyur Falls',
+    text: 'In the monsoon, Kiliyur Falls is at its best. The walkway from the lakeside varies with season and safety. Since hill roads get slippery in the monsoon, follow local guidance and ask about conditions in advance.'
+  }
+];
+const stories = locale === 'en' ? storiesEn : storiesTa;
 const badgeBase = 'inline-block rounded-full px-3 py-1 text-xs font-black';
+const kicker = pick(locale, 'கதைகள் & நினைவுகள்', 'Stories & memories');
+const heading = pick(locale, 'ஏரியின் பெயர்களும் உள்ளூர் நினைவுகளும்', 'The lake’s names & local memories');
+const intro = pick(locale,
+  'பின்வரும் குறிப்புகள் மாவட்ட/சுற்றுலா பொதுப் பதிவுகள் மற்றும் பரவலாக நிலவும் விளக்கங்களின் அடிப்படையில் தொகுக்கப்பட்டவை; இவை அதிகாரப்பூர்வ வரலாற்று ஆய்வாகக் கருதப்படக்கூடாது. பயண அனுபவத்திற்கான பின்னணி என்பதோடு மட்டும் பார்க்கவும்.',
+  'The notes below are compiled from district/tourism public records and commonly held explanations; they should not be treated as an official historical study. Read them only as background for the travel experience.');
 ---
-
-<section id="கதைகள்" class="container-shell py-16 md:py-24">
-  <p class="kicker">கதைகள் & நினைவுகள்</p>
-  <h2 class="section-title mt-3">ஏரியின் பெயர்களும் உள்ளூர் நினைவுகளும்</h2>
-  <p class="mt-4 max-w-3xl text-sm leading-7 text-[#48605a]">பின்வரும் குறிப்புகள் மாவட்ட/சுற்றுலா பொதுப் பதிவுகள் மற்றும் பரவலாக நிலவும் விளக்கங்களின் அடிப்படையில் தொகுக்கப்பட்டவை; இவை அதிகாரப்பூர்வ வரலாற்று ஆய்வாகக் கருதப்படக்கூடாது. பயண அனுபவத்திற்கான பின்னணி என்பதோடு மட்டும் பார்க்கவும்.</p>
+<section id={sec(locale, 'stories')} class="container-shell py-16 md:py-24">
+  <p class="kicker">{kicker}</p>
+  <h2 class="section-title mt-3">{heading}</h2>
+  <p class="mt-4 max-w-3xl text-sm leading-7 text-[#48605a]">{intro}</p>
   <div class="mt-9 grid gap-5 md:grid-cols-2 xl:grid-cols-3">
     {stories.map((s) => (
       <article class="card flex flex-col p-6">

@@ -1,0 +1,149 @@
+---
+import { type Locale, sec, pick } from '../i18n';
+interface Props { locale?: Locale }
+const { locale = 'ta' } = Astro.props;
+// Itineraries — by traveller type + generic half/full day. Type-neutral, no commercial names.
+const byAudienceTa = [
+  {
+    icon: '👨‍👩‍👧', title: 'குடும்பம் (Family)',
+    text: 'எளிய, நிழலான & குழந்தைகளுக்கு ஏற்ற வழி.',
+    steps: [
+      'படகு இல்லத்தில் குடும்பப் படகுச் சவாரி (பாதுகாப்பு உறைகளுடன்).',
+      'அண்ணா பூங்கா — தோட்டப் பகுதி & இளைப்பாறும் இடங்கள்.',
+      'ஏரிக்கரை நடைப்பாதை — மெதுவான நடைப்பயணம்.',
+      'நீர்ச்சத்துக்கான குடிநீர் & உணவு இடைவேளை.'
+    ]
+  },
+  {
+    icon: '📷', title: 'புகைப்படம் & இயற்கை (Photo / Nature)',
+    text: 'வெளிச்சம் & காட்சிகளை மையமாகக் கொண்ட வழி.',
+    steps: [
+      'காலை சூரிய உதயம் ஏரியில் — அமைதியான நீர் & மூடுபனி.',
+      'பகோடா பாயிண்ட் & லேடீஸ் சீட் — மலை & பள்ளத்தாக்குக் காட்சிகள்.',
+      'கிளியூர் அருவி — பருவநிலைக்கேற்ப நீர் வீழ்ச்சி.',
+      'காபித் தோட்டச் சாலைகள் வழியாகச் செல்லும் பயணம் & மாலை ஏரியில் சூரிய அஸ்தமனம்.'
+    ]
+  },
+  {
+    icon: '♿', title: 'மாற்றுத்திறன் / குறைந்த படி (Accessible)',
+    text: 'குறைந்த நடை & வாகனம் சார்ந்த வசதியான வழி.',
+    steps: [
+      'ஏரிக்கரை பேவ்டு (paved) பாதை — சக்கர நாற்காலிக்கு ஏற்றது.',
+      'படகு இல்லம் & அண்ணா பூங்கா — அருகிலுள்ள வாகன நிறுத்தம்.',
+      'வாகனம் மூலம் அணுகக்கூடிய காட்சிஇடங்கள் (பகோடா பாயிண்ட், லேடீஸ் சீட்).',
+      'ஏரிக்கரை அமர்விடம் & உணவு — இடைவேளைக்கு.'
+    ]
+  }
+];
+const routesTa = [
+  {
+    icon: '🌗', title: 'அரை நாள் (Half-day)',
+    steps: [
+      'காலை 9:00 — வருகை & படகு இல்லம்.',
+      '9:30–10:30 — படகுச் சவாரி.',
+      '10:30–11:30 — ஏரிக்கரை நடை + அண்ணா பூங்கா.',
+      '11:30–12:30 — உணவு / காபி இடைவேளை.',
+      '13:00 — மதியம் புறப்படல்.'
+    ]
+  },
+  {
+    icon: '🌕', title: 'முழு நாள் (Full-day)',
+    steps: [
+      'காலை 8:30 — வருகை & படகுச் சவாரி.',
+      '9:30–11:00 — கிளியூர் அருவி நடைப்பயணம்.',
+      '11:00–12:30 — பகோடா பாயிண்ட் & லேடீஸ் சீட் காட்சிகள்.',
+      '12:30–13:30 — மதிய உணவு.',
+      '13:30–15:00 — காபித் தோட்டச் சாலை வழிப் பயணம்.',
+      '16:30–17:30 — மாலை ஏரிக்கரை & சூரிய அஸ்தமனப் படகுச் சவாரி.',
+      '18:00 — புறப்படல்.'
+    ]
+  }
+];
+const byAudienceEn = [
+  {
+    icon: '👨‍👩‍👧', title: 'Family',
+    text: 'Simple, shaded & child-friendly route.',
+    steps: [
+      'Family boat ride at the boat house (with life jackets).',
+      'Anna Park — garden area & rest spots.',
+      'Lakeside walkway — slow stroll.',
+      'Water & food break.'
+    ]
+  },
+  {
+    icon: '📷', title: 'Photo / Nature',
+    text: 'Route centred on light & views.',
+    steps: [
+      'Sunrise at the lake in the morning — calm water & fog.',
+      'Pagoda Point & Ladies Seat — hill & valley views.',
+      'Kiliyur Falls — water flow by season.',
+      'Drive through coffee-plantation roads & sunset at the lake in the evening.'
+    ]
+  },
+  {
+    icon: '♿', title: 'Accessible',
+    text: 'Low-walk, vehicle-friendly comfortable route.',
+    steps: [
+      'Lakeside paved path — wheelchair-friendly.',
+      'Boat house & Anna Park — nearby parking.',
+      'Vehicle-accessible viewpoints (Pagoda Point, Ladies Seat).',
+      'Lakeside seating & food — for a break.'
+    ]
+  }
+];
+const routesEn = [
+  {
+    icon: '🌗', title: 'Half-day',
+    steps: [
+      '09:00 — arrive & boat house.',
+      '09:30–10:30 — boat ride.',
+      '10:30–11:30 — lakeside walk + Anna Park.',
+      '11:30–12:30 — food / coffee break.',
+      '13:00 — leave by noon.'
+    ]
+  },
+  {
+    icon: '🌕', title: 'Full-day',
+    steps: [
+      '08:30 — arrive & boat ride.',
+      '09:30–11:00 — Kiliyur Falls walk.',
+      '11:00–12:30 — Pagoda Point & Ladies Seat views.',
+      '12:30–13:30 — lunch.',
+      '13:30–15:00 — coffee-plantation road drive.',
+      '16:30–17:30 — evening lakeside & sunset boat ride.',
+      '18:00 — depart.'
+    ]
+  }
+];
+const byAudience = locale === 'en' ? byAudienceEn : byAudienceTa;
+const routes = locale === 'en' ? routesEn : routesTa;
+const kicker = pick(locale, 'இயக்கத் திட்டங்கள்', 'Itineraries');
+const heading = pick(locale, 'உங்களுக்கேற்ற வழி & பொதுவான அட்டவணை', 'A route for you & a general plan');
+const intro = pick(locale,
+  'பயணக் குழு & நேரத்திற்கேற்ப வழிகள் இங்கே. அனைத்தும் வகை அடிப்படையிலானவை; குறிப்பிட்ட நிறுவனப் பெயர்கள் பரிந்துரைக்கப்படவில்லை.',
+  'Routes by travel group & time are below. All are type-based; no specific business is recommended.');
+---
+<section id={sec(locale, 'itineraries')} class="container-shell py-16 md:py-24">
+  <p class="kicker">{kicker}</p>
+  <h2 class="section-title mt-3">{heading}</h2>
+  <p class="mt-4 max-w-3xl text-sm leading-7 text-[#48605a]">{intro}</p>
+
+  <div class="mt-9 grid gap-5 md:grid-cols-3">
+    {byAudience.map((a) => (
+      <article class="card p-6">
+        <div class="flex items-center gap-3"><span class="grid h-11 w-11 place-items-center rounded-2xl bg-[#0d6d70]/10 text-2xl" aria-hidden="true">{a.icon}</span><h3 class="text-lg font-black leading-snug text-[#0b4148]">{a.title}</h3></div>
+        <p class="mt-3 text-sm leading-7 text-[#48605a]">{a.text}</p>
+        <ol class="mt-4 space-y-2 text-sm leading-7 text-[#48605a]">{a.steps.map((s) => <li class="flex gap-2"><span class="mt-2 text-[#0d6d70]">▸</span><span>{s}</span></li>)}</ol>
+      </article>
+    ))}
+  </div>
+
+  <div class="mt-8 grid gap-5 md:grid-cols-2">
+    {routes.map((r) => (
+      <article class="card p-6">
+        <div class="flex items-center gap-3"><span class="grid h-11 w-11 place-items-center rounded-2xl bg-[#0d6d70]/10 text-2xl" aria-hidden="true">{r.icon}</span><h3 class="text-lg font-black text-[#0b4148]">{r.title}</h3></div>
+        <ol class="mt-4 space-y-2 text-sm leading-7 text-[#48605a]">{r.steps.map((s) => <li class="flex gap-2"><span class="mt-2 text-[#0d6d70]">▸</span><span>{s}</span></li>)}</ol>
+      </article>
+    ))}
+  </div>
+</section>

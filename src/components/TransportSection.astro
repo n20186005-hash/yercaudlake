@@ -1,0 +1,137 @@
+---
+import { type Locale, sec, pick } from '../i18n';
+interface Props { locale?: Locale }
+const { locale = 'ta' } = Astro.props;
+// How to reach Yercaud Lake & Boat House — neutral, type-based guidance only (no commercial names).
+const modesTa = [
+  {
+    icon: '✈️', title: 'விமானம் (Air)',
+    steps: [
+      'அருகிலுள்ள வானூர்தி நிலையங்கள்: சேலம் (SXV, ~35 கி.மீ — வாராந்திர/சில இணைப்புகள்), கோயம்புத்தூர் (CJB, ~170 கி.மீ), பெங்களூரு (BLR, ~220 கி.மீ).',
+      'வானூர்தி நிலையத்திலிருந்து முன்பதிவு டாக்சி / கேப் மூலம் ஏற்காடு செல்லவும்.',
+      'சேலத்திலிருந்து ~1.5 மணி; கோயம்புத்தூரிலிருந்து ~4–5 மணி; பெங்களூரிலிருந்து ~5–6 மணி பயணம்.'
+    ]
+  },
+  {
+    icon: '🚆', title: 'ரயில் (Rail)',
+    steps: [
+      'முக்கிய ரயில் நிலையம்: சேலம் சந்திப்பு (Salem Junction, ~35 கி.மீ) — தமிழ்நாடு & கர்நாடகா இணைப்புகள் பல.',
+      'சேலம் சந்திப்பிலிருந்து அரசுப் பேருந்து (TNSTC) / டாக்சி / ஆட்டோ மூலம் ஏற்காடு செல்லலாம்.',
+      'மாவட்ட நிர்வாகத் தகவல்படி ஏற்காட்டிலிருந்து சேலம் ~35 கி.மீ தொலைவில் உள்ளது.'
+    ]
+  },
+  {
+    icon: '🚌', title: 'பேருந்து (Bus)',
+    steps: [
+      'தமிழ்நாடு அரசுப் போக்குவரத்துக் (TNSTC) நிறுவனப் பேருந்துகள் சேலம்–ஏற்காடு இடையே அடிக்கடி இயக்கப்படுகின்றன.',
+      'கோயம்புத்தூர், பெங்களூரு ஆகியவற்றிலிருந்தும் மாநிலப் பேருந்துகள் கிடைக்கும்.',
+      'ஏற்காடு பேருந்து நிலையத்திலிருந்து லேக் ரோடு / படகு இல்லம் ~1–2 கி.மீ — ஆட்டோ அல்லது நடைப்பயணம்.'
+    ]
+  },
+  {
+    icon: '🚕', title: 'டாக்சி / கேப் (Taxi / Cab)',
+    steps: [
+      'சேலம், கோயம்புத்தூர் அல்லது பெங்களூரிலிருந்து நேரடி டாக்சி / செயலி அடிப்படையிலான கேப் முன்பதிவு செய்யலாம்.',
+      'ரயில் நிலையம் / வானூர்தி நிலையம் / பேருந்து நிலையம் ஆகியவற்றில் முன்பணம் (prepaid) டாக்சி மையங்கள் பொதுவாக உள்ளன.',
+      'மலைப்பாதை ஏறுவதற்கு முன் ஓட்டுநருடன் கட்டணம் & நேரத்தை உறுதிப்படுத்தவும்.'
+    ]
+  },
+  {
+    icon: '🛺', title: 'உள்ளூர் போக்குவரத்து (Local)',
+    steps: [
+      'ஏற்காடு நகரில் ஆட்டோ ரிக்ஷா & பகிர்வு டாக்சி வசதிகள் உள்ளன.',
+      'ஏரி, அண்ணா பூங்கா, படகு இல்லம் ஆகியவை லேக் ரோடு பகுதியில் ஒருவருக்கொருவர் அருகிலேயே உள்ளன — நடந்து செல்லலாம்.',
+      'பகோடா பாயிண்ட், லேடீஸ் சீட் போன்ற காட்சிஇடங்களுக்கு ஆட்டோ / கேப் பரிந்துரைக்கப்படுகிறது.'
+    ]
+  },
+  {
+    icon: '🚗', title: 'சொந்த வாகனம் (Driving)',
+    steps: [
+      'சேலம்–ஏற்காடு மலைச்சாலை ~35 கி.மீ; வளைவுகள் நிறைந்த காட் (ghat) பாதை (~18 முட்களம் / hairpin bends).',
+      'மலை ஏறுவதற்கு முன் சேலத்திலேயே எரிபொருள் / EV சார்ஜிங்கை நிரப்பவும் (மேல் பகுதியில் நிலையங்கள் குறைவு).',
+      'மூடுபனி, மழை மற்றும் இரவுப் பயணங்களில் வேகத்தைக் குறைத்து, வளைவுகளில் எச்சரிக்கையாகச் செல்லவும்.'
+    ]
+  }
+];
+const modesEn = [
+  {
+    icon: '✈️', title: 'Flight (Air)',
+    steps: [
+      'Nearest airports: Salem (SXV, ~35 km — limited weekly/some connections), Coimbatore (CJB, ~170 km), Bengaluru (BLR, ~220 km).',
+      'From the airport, take a pre-booked taxi / cab to Yercaud.',
+      'About 1.5 hr from Salem; 4–5 hr from Coimbatore; 5–6 hr from Bengaluru.'
+    ]
+  },
+  {
+    icon: '🚆', title: 'Train (Rail)',
+    steps: [
+      'Main station: Salem Junction (Salem Junction, ~35 km) — many Tamil Nadu & Karnataka connections.',
+      'From Salem Junction you can take a government bus (TNSTC) / taxi / auto to Yercaud.',
+      'Per district administration info, Yercaud is about 35 km from Salem.'
+    ]
+  },
+  {
+    icon: '🚌', title: 'Bus',
+    steps: [
+      'Tamil Nadu government (TNSTC) buses run frequently between Salem and Yercaud.',
+      'State buses are also available from Coimbatore and Bengaluru.',
+      'From Yercaud bus stand, Lake Road / boat house is ~1–2 km — auto or walk.'
+    ]
+  },
+  {
+    icon: '🚕', title: 'Taxi / Cab',
+    steps: [
+      'You can pre-book a direct taxi / app-based cab from Salem, Coimbatore or Bengaluru.',
+      'Prepaid taxi counters are usually available at the railway / airport / bus stations.',
+      'Confirm fare & time with the driver before the ghat climb.'
+    ]
+  },
+  {
+    icon: '🛺', title: 'Local transport',
+    steps: [
+      'Yercaud town has auto-rickshaws & shared taxis.',
+      'The lake, Anna Park and boat house are close to each other on Lake Road — walkable.',
+      'Auto / cab is recommended for viewpoints like Pagoda Point and Ladies Seat.'
+    ]
+  },
+  {
+    icon: '🚗', title: 'Driving',
+    steps: [
+      'Salem–Yercaud ghat road ~35 km; winding ghat road (~18 hairpin bends).',
+      'Fill fuel / EV charge in Salem before climbing (fewer stations up top).',
+      'Slow down in fog, rain and at night; be careful on curves.'
+    ]
+  }
+];
+const modes = locale === 'en' ? modesEn : modesTa;
+const kicker = pick(locale, 'விரிவான போக்குவரத்து', 'Getting here');
+const heading = pick(locale, 'ஏற்காட்டை அடைய — விமானம், ரயில், பேருந்து, டாக்சி', 'Reaching Yercaud — flight, train, bus, taxi');
+const intro = pick(locale,
+  'ஏற்காடு சேலம் மாவட்டத்தின் செவராய் மலைப்பகுதியில் அமைந்துள்ளது. கீழே ஒவ்வொரு பயண முறைக்குமான படிநிலை வழிகாட்டி உள்ளது; விலை & நேரம் பருவத்திற்கேற்ப மாறலாம், பயண நாளில் உறுதிப்படுத்தவும்.',
+  'Yercaud is in the Shevaroy Hills of Salem district. Step-by-step guidance for each travel mode is below; fare & time vary by season, so confirm on the day of travel.');
+const mapTitle = pick(locale, 'ஏற்காடு ஏரி மற்றும் படகு இல்லம் கூகுள் வரைபடம்', 'Google Maps of Yercaud Lake & Boat House');
+const mapNote = pick(locale,
+  'வரைபடம் Google Maps ஐச் சுட்டுகிறது; இறுதித் தூரம் & பாதைக்கு அதிகாரப்பூர்வ வரைபடத்தையும் உள்ளூர் அறிவுறுத்தல்களையும் பின்பற்றவும்.',
+  'The map points to Google Maps; follow the official map and local guidance for final distance & route.');
+---
+<section id={sec(locale, 'transport')} class="container-shell py-16 md:py-24">
+  <p class="kicker">{kicker}</p>
+  <h2 class="section-title mt-3">{heading}</h2>
+  <p class="mt-4 max-w-3xl text-sm leading-7 text-[#48605a]">{intro}</p>
+
+  <div class="mt-9 grid gap-5 md:grid-cols-2 xl:grid-cols-3">
+    {modes.map((m) => (
+      <article class="card p-6">
+        <div class="flex items-center gap-3"><span class="grid h-11 w-11 place-items-center rounded-2xl bg-[#0d6d70]/10 text-2xl" aria-hidden="true">{m.icon}</span><h3 class="text-lg font-black leading-snug text-[#0b4148]">{m.title}</h3></div>
+        <ul class="mt-4 space-y-3 text-sm leading-7 text-[#48605a]">
+          {m.steps.map((s) => <li class="flex gap-2"><span class="mt-2 text-[#0d6d70]">▪</span><span>{s}</span></li>)}
+        </ul>
+      </article>
+    ))}
+  </div>
+
+  <div id={sec(locale, 'map')} class="mt-10 card overflow-hidden p-2">
+    <iframe title={mapTitle} src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d6946.906779668292!2d78.20567047699069!3d11.784194188432547!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3babf5d3fdbf5969%3A0x396bdfd64ac28543!2sYercaud%20Lake%20%26%20Boat%20House%20(Emerald%20Lake)!5e1!3m2!1sta!2sin!4v1788421263897!5m2!1sta!2sin" width="100%" height="520" style="border:0;border-radius:1.15rem" allowfullscreen loading="lazy" referrerpolicy="strict-origin-when-cross-origin"></iframe>
+  </div>
+  <p class="mt-3 text-xs leading-6 text-[#5b706a]">{mapNote}</p>
+</section>

@@ -1,5 +1,8 @@
 ---
-const sources = [
+import { type Locale, sec, pick } from '../i18n';
+interface Props { locale?: Locale }
+const { locale = 'ta' } = Astro.props;
+const sourcesTa = [
   { org: 'சேலம் மாவட்ட நிர்வாகம்', type: 'அதிகாரப்பூர்வம்', desc: 'Yercaud Lake (Boat House) சுற்றுலா இடப் பக்கம் — நேரம் & படகு தகவல்', url: 'https://salem.nic.in/tourist-place/images-of-yercaudlake/' },
   { org: 'சேலம் மாவட்டம் — Yercaud Lake', type: 'அதிகாரப்பூர்வம்', desc: 'அதிகாரப்பூர்வ புகைப்படத் தொகுப்பு (மாவட்ட நிர்வாகம்)', url: 'https://salem.nic.in/gallery/yercaudlake/' },
   { org: 'தமிழ்நாடு சுற்றுலாத்துறை', type: 'அரசு', desc: 'தமிழ்நாடு மாநில சுற்றுலாத் தகவல் நுழைவாயில்', url: 'https://www.tamilnadutourism.tn.gov.in/' },
@@ -7,18 +10,43 @@ const sources = [
   { org: 'தமிழ்நாடு அரசு', type: 'அரசு', desc: 'தமிழ்நாடு மாநில அரசின் அதிகாரப்பூர்வ இணையதளம்', url: 'https://www.tn.gov.in/' },
   { org: 'Yercaud — விக்கிப்பீடியா', type: 'குறிப்பு மூலம்', desc: 'ஏற்காட்டின் பொதுவான வரலாறு & புவியியல் (ஆங்கிலம்)', url: 'https://en.wikipedia.org/wiki/Yercaud' }
 ];
-const standards = [
+const sourcesEn = [
+  { org: 'Salem District Administration', type: 'Official', desc: 'Yercaud Lake (Boat House) tourist-place page — timings & boating info', url: 'https://salem.nic.in/tourist-place/images-of-yercaudlake/' },
+  { org: 'Salem District — Yercaud Lake', type: 'Official', desc: 'Official photo gallery (district administration)', url: 'https://salem.nic.in/gallery/yercaudlake/' },
+  { org: 'Tamil Nadu Tourism', type: 'Government', desc: 'Tamil Nadu state tourism information gateway', url: 'https://www.tamilnadutourism.tn.gov.in/' },
+  { org: 'Ministry of Tourism, India', type: 'Government', desc: 'Government of India Ministry of Tourism', url: 'https://tourism.gov.in/' },
+  { org: 'Government of Tamil Nadu', type: 'Government', desc: 'Official website of the Government of Tamil Nadu', url: 'https://www.tn.gov.in/' },
+  { org: 'Yercaud — Wikipedia', type: 'Reference', desc: 'General history & geography of Yercaud (English)', url: 'https://en.wikipedia.org/wiki/Yercaud' }
+];
+const standardsTa = [
   'வணிக விளம்பரம், ஸ்பான்சர் அல்லது தரவரிசை இல்லை; இட வகைகள் மட்டுமே நடுநிலையாகத் தரப்படுகின்றன.',
   'தகவல்கள் அதிகாரப்பூர்வ / அரசு மூலங்களுடன் ஒப்பிட்டு தயாரிக்கப்படுகின்றன.',
   'உள்ளடக்கத்தின் கடைசி புதுப்பிப்பு: 2026-09-04.',
   'படகு கட்டணம், நேரம், வானிலை மற்றும் அணுகல் நிலை மாறக்கூடும் — பயண நாளில் உள்ளூர் கவுண்டர்/அதிகாரப்பூர்வ அறிவிப்பு முன்னுரிமை.'
 ];
+const standardsEn = [
+  'No commercial advertising, sponsorship or ranking; only location types are given neutrally.',
+  'Information is compiled against official / government sources.',
+  'Last content update: 2026-09-04.',
+  'Boat fare, timings, weather and access can change — local counter / official notice takes priority on the day of travel.'
+];
+const sources = locale === 'en' ? sourcesEn : sourcesTa;
+const standards = locale === 'en' ? standardsEn : standardsTa;
+const kicker = pick(locale, 'ஆதாரங்கள் &amp; நம்பகத்தன்மை', 'Sources &amp; trust');
+const heading = pick(locale, 'தகவல் மூலங்கள்', 'Information sources');
+const intro = pick(locale,
+  'இந்த சுயாதீன, இலாப நோக்கமற்ற தளத்தில் உள்ள தகவல்கள் கீழுள்ள அதிகாரப்பூர்வ / அரசு மூலங்களுடன் ஒப்பிட்டு தயாரிக்கப்பட்டவை. வணிகப் பரிந்துரைகள் ஏதும் இல்லை.',
+  'The information on this independent, non-profit site is compiled against the official / government sources below. No commercial recommendations are made.');
+const standardsHeading = pick(locale, 'தலையங்கத் தரத் தரநிலைகள்', 'Editorial quality standards');
+const rightsNote = pick(locale,
+  'பட உரிமை: இத்தளத்தின் புகைப்படங்களின் பதிப்புரிமையும் உரிமைகளும் அசல் புகைப்படக் கலைஞர்களுக்கே சொந்தமானவை; திறந்த உரிமப் படங்களின் மூலம் &amp; உரிமம் திட்ட ஆவணத்தில் பதிவு செய்யப்பட்டுள்ளது.',
+  'Image rights: the copyright and related rights of the photographs on this site belong to their original photographers; the source & licence of openly licensed images are recorded in the project’s photo documentation.');
+const linkLabel = pick(locale, 'மூலம் ↗', 'source ↗');
 ---
-
-<section id="ஆதாரங்கள்" class="container-shell py-16 md:py-24">
-  <p class="kicker">ஆதாரங்கள் &amp; நம்பகத்தன்மை</p>
-  <h2 class="section-title mt-3">தகவல் மூலங்கள்</h2>
-  <p class="mt-4 max-w-3xl text-sm leading-7 text-[#48605a]">இந்த சுயாதீன, இலாப நோக்கமற்ற தளத்தில் உள்ள தகவல்கள் கீழுள்ள அதிகாரப்பூர்வ / அரசு மூலங்களுடன் ஒப்பிட்டு தயாரிக்கப்பட்டவை. வணிகப் பரிந்துரைகள் ஏதும் இல்லை.</p>
+<section id={sec(locale, 'sources')} class="container-shell py-16 md:py-24">
+  <p class="kicker" set:html={kicker}></p>
+  <h2 class="section-title mt-3">{heading}</h2>
+  <p class="mt-4 max-w-3xl text-sm leading-7 text-[#48605a]" set:html={intro}></p>
 
   <div class="mt-9 grid gap-5 sm:grid-cols-2 xl:grid-cols-3">
     {sources.map((s) => (
@@ -36,12 +64,12 @@ const standards = [
   </div>
 
   <div class="card mt-8 p-7">
-    <h3 class="text-xl font-black text-[#0b4148]">தலையங்கத் தரத் தரநிலைகள்</h3>
+    <h3 class="text-xl font-black text-[#0b4148]">{standardsHeading}</h3>
     <ul class="mt-4 grid gap-3 sm:grid-cols-2">
       {standards.map((t) => (
         <li class="flex gap-3 text-sm leading-6 text-[#48605a]"><span class="mt-1 text-[#0d6d70]">✓</span><span>{t}</span></li>
       ))}
     </ul>
-    <p class="mt-5 border-t border-[#0d6d70]/10 pt-4 text-xs leading-6 text-[#5b706a]">பட உரிமை: இத்தளத்தின் புகைப்படங்களின் பதிப்புரிமையும் உரிமைகளும் அசல் புகைப்படக் கலைஞர்களுக்கே சொந்தமானவை; திறந்த உரிமப் படங்களின் மூலம் &amp; உரிமம் திட்ட ஆவணத்தில் பதிவு செய்யப்பட்டுள்ளது.</p>
+    <p class="mt-5 border-t border-[#0d6d70]/10 pt-4 text-xs leading-6 text-[#5b706a]" set:html={rightsNote}></p>
   </div>
 </section>

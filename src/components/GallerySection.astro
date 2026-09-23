@@ -1,10 +1,13 @@
 ---
-const panorama = {
+import { type Locale, sec, pick } from '../i18n';
+interface Props { locale?: Locale }
+const { locale = 'ta' } = Astro.props;
+const panoramaTa = {
   src: '/images/yercaud-lake-panorama.jpg', w: 1600, h: 365,
   alt: 'ஏற்காடு ஏரியின் முழுக் காட்சி', cap: 'பெரிய ஏரியின் அகலப் பார்வை',
   lic: 'CC BY-SA', url: 'https://commons.wikimedia.org/wiki/File:Yercaud_Lake_Panorama.jpg'
 };
-const photos = [
+const photosTa = [
   { src: '/images/yercaud-lake-boathouse.jpg', alt: 'ஏற்காடு ஏரியில் உள்ள படகு இல்லம்', cap: 'ஏரிக்கரையில் படகு இல்லம்', lic: 'Public Domain', url: 'https://commons.wikimedia.org/wiki/File:Boat_House_at_Yercaud_Lake.jpg' },
   { src: '/images/yercaud-lake-boating.jpg', alt: 'ஏற்காடு ஏரியில் படகு சவாரி', cap: 'ஏரியில் படகு சவாரி', lic: 'CC0', url: 'https://commons.wikimedia.org/wiki/File:Yercaud_lake_boating.jpg' },
   { src: '/images/yercaud-lake-portrait.jpg', alt: 'ஏற்காடு ஏரி மற்றும் படகு இல்லத்தின் முன்புறக் காட்சி', cap: 'மரங்களுக்கு இடையே படகு இல்லம்', lic: 'CC0', url: 'https://commons.wikimedia.org/wiki/File:Boat_house_in_yercaud.jpg' },
@@ -12,18 +15,42 @@ const photos = [
   { src: '/images/yercaud-anna-park.jpg', alt: 'அண்ணா பூங்கா, ஏற்காடு', cap: 'அண்ணா பூங்கா — தோட்டப் பகுதி', lic: 'CC BY-SA 4.0', url: 'https://commons.wikimedia.org/wiki/File:Anna_park-1-yercaud-salem-India.JPG' },
   { src: '/images/yercaud-pagoda-point.jpg', alt: 'பகோடா பாயிண்ட் காட்சி, ஏற்காடு', cap: 'பகோடா பாயிண்ட் — மலைக் காட்சி', lic: 'CC0', url: 'https://commons.wikimedia.org/wiki/File:Yercaud_pagoda_point_view.jpg' }
 ];
+const panoramaEn = {
+  src: '/images/yercaud-lake-panorama.jpg', w: 1600, h: 365,
+  alt: 'Panoramic view of Yercaud Lake', cap: 'Wide view of the Big Lake',
+  lic: 'CC BY-SA', url: 'https://commons.wikimedia.org/wiki/File:Yercaud_Lake_Panorama.jpg'
+};
+const photosEn = [
+  { src: '/images/yercaud-lake-boathouse.jpg', alt: 'The boat house at Yercaud Lake', cap: 'Boat house by the lakeside', lic: 'Public Domain', url: 'https://commons.wikimedia.org/wiki/File:Boat_House_at_Yercaud_Lake.jpg' },
+  { src: '/images/yercaud-lake-boating.jpg', alt: 'Boat ride on Yercaud Lake', cap: 'Boat ride on the lake', lic: 'CC0', url: 'https://commons.wikimedia.org/wiki/File:Yercaud_lake_boating.jpg' },
+  { src: '/images/yercaud-lake-portrait.jpg', alt: 'Front view of Yercaud Lake & Boat House', cap: 'Boat house among the trees', lic: 'CC0', url: 'https://commons.wikimedia.org/wiki/File:Boat_house_in_yercaud.jpg' },
+  { src: '/images/yercaud-kiliyur-falls.jpg', alt: 'Kiliyur Falls, Yercaud', cap: 'Kiliyur Falls', lic: 'CC0', url: 'https://commons.wikimedia.org/wiki/File:Kiliyur_falls_yercaud.jpg' },
+  { src: '/images/yercaud-anna-park.jpg', alt: 'Anna Park, Yercaud', cap: 'Anna Park — garden area', lic: 'CC BY-SA 4.0', url: 'https://commons.wikimedia.org/wiki/File:Anna_park-1-yercaud-salem-India.JPG' },
+  { src: '/images/yercaud-pagoda-point.jpg', alt: 'Pagoda Point view, Yercaud', cap: 'Pagoda Point — hill view', lic: 'CC0', url: 'https://commons.wikimedia.org/wiki/File:Yercaud_pagoda_point_view.jpg' }
+];
+const panorama = locale === 'en' ? panoramaEn : panoramaTa;
+const photos = locale === 'en' ? photosEn : photosTa;
+const kicker = pick(locale, 'புகைப்படத் தொகுப்பு', 'Photo gallery');
+const heading = pick(locale, 'ஏற்காடு ஏரியைப் பார்வையில் பாருங்கள்', 'See Yercaud Lake in pictures');
+const intro = pick(locale,
+  'ஏரி, படகு இல்லம், அருகிலுள்ள தோட்டங்கள் மற்றும் பார்வை இடங்களின் திறந்த உரிமப் படங்கள். ஒவ்வொரு படமும் அதன் மூலத் தொடர்புடன் காட்டப்படுகிறது; பதிப்புரிமை அசல் புகைப்படக் கலைஞருக்கே உரியது.',
+  'Openly licensed photos of the lake, boat house, nearby plantations and viewpoints. Each photo is shown with its source link; copyright belongs to the original photographer.');
+const srcLabel = pick(locale, 'விக்கிமீடியா மூலம் ↗', 'via Wikimedia ↗');
+const srcLabel2 = pick(locale, 'மூலம் ↗', 'source ↗');
+const rightsNote = pick(locale,
+  'பட உரிமை மற்றும் மூல விவரங்களுக்கு திட்டத்தின் புகைப்பட ஆவணத்தைப் பார்க்கவும். அனைத்து படங்களும் விக்கிமீடியா காமன்ஸ் திறந்த உரிமங்களின் கீழ் பகிரப்படுகின்றன.',
+  'For image rights and source details, see the project’s photo documentation. All photos are shared under Wikimedia Commons open licences.');
 ---
-
-<section id="புகைப்படங்கள்" class="container-shell py-16 md:py-24">
-  <p class="kicker">புகைப்படத் தொகுப்பு</p>
-  <h2 class="section-title mt-3">ஏற்காடு ஏரியைப் பார்வையில் பாருங்கள்</h2>
-  <p class="mt-4 max-w-3xl text-sm leading-7 text-[#48605a]">ஏரி, படகு இல்லம், அருகிலுள்ள தோட்டங்கள் மற்றும் பார்வை இடங்களின் திறந்த உரிமப் படங்கள். ஒவ்வொரு படமும் அதன் மூலத் தொடர்புடன் காட்டப்படுகிறது; பதிப்புரிமை அசல் புகைப்படக் கலைஞருக்கே உரியது.</p>
+<section id={sec(locale, 'gallery')} class="container-shell py-16 md:py-24">
+  <p class="kicker">{kicker}</p>
+  <h2 class="section-title mt-3">{heading}</h2>
+  <p class="mt-4 max-w-3xl text-sm leading-7 text-[#48605a]">{intro}</p>
 
   <figure class="mt-9 overflow-hidden rounded-3xl ring-1 ring-[#0d6d70]/15">
     <img src={panorama.src} alt={panorama.alt} width={panorama.w} height={panorama.h} loading="lazy" decoding="async" class="h-auto w-full object-cover" />
     <figcaption class="flex flex-wrap items-center justify-between gap-2 bg-[#fffdf8] px-5 py-3 text-xs text-[#48605a]">
       <span>{panorama.cap} · {panorama.lic}</span>
-      <a href={panorama.url} target="_blank" rel="noopener noreferrer" class="font-bold text-[#0d6d70] no-underline hover:underline">விக்கிமீடியா மூலம் ↗</a>
+      <a href={panorama.url} target="_blank" rel="noopener noreferrer" class="font-bold text-[#0d6d70] no-underline hover:underline">{srcLabel}</a>
     </figcaption>
   </figure>
 
@@ -33,11 +60,11 @@ const photos = [
         <img src={p.src} alt={p.alt} loading="lazy" decoding="async" class="h-auto w-full object-cover" />
         <figcaption class="flex flex-wrap items-center justify-between gap-2 bg-[#fffdf8] px-4 py-3 text-xs text-[#48605a]">
           <span>{p.cap} · {p.lic}</span>
-          <a href={p.url} target="_blank" rel="noopener noreferrer" class="font-bold text-[#0d6d70] no-underline hover:underline">மூலம் ↗</a>
+          <a href={p.url} target="_blank" rel="noopener noreferrer" class="font-bold text-[#0d6d70] no-underline hover:underline">{srcLabel2}</a>
         </figcaption>
       </figure>
     ))}
   </div>
 
-  <p class="mt-4 text-xs leading-6 text-[#5b706a]">பட உரிமை மற்றும் மூல விவரங்களுக்கு திட்டத்தின் புகைப்பட ஆவணத்தைப் பார்க்கவும். அனைத்து படங்களும் விக்கிமீடியா காமன்ஸ் திறந்த உரிமங்களின் கீழ் பகிரப்படுகின்றன.</p>
+  <p class="mt-4 text-xs leading-6 text-[#5b706a]">{rightsNote}</p>
 </section>

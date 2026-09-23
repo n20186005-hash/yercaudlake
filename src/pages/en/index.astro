@@ -1,0 +1,114 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import WeatherSection from '../../components/WeatherSection.astro';
+import FacilitiesSection from '../../components/FacilitiesSection.astro';
+import HistorySection from '../../components/HistorySection.astro';
+import StoriesSection from '../../components/StoriesSection.astro';
+import GallerySection from '../../components/GallerySection.astro';
+import SourcesSection from '../../components/SourcesSection.astro';
+import TransportSection from '../../components/TransportSection.astro';
+import SeasonalStrategy from '../../components/SeasonalStrategy.astro';
+import Itineraries from '../../components/Itineraries.astro';
+import VisitorResponsibility from '../../components/VisitorResponsibility.astro';
+const title = 'Yercaud Lake & Boat House (Emerald Lake) — Timings, Boating & Entry Fee';
+const description = 'Plan your visit to Yercaud Lake (Emerald Lake) in Salem, Tamil Nadu. Find boat-house timings, boating charges, entry fee, how to reach, weather and nearby attractions.';
+const pageUrl = Astro.site ? new URL('/en/', Astro.site).href : undefined;
+const faq = [
+  ['Which district is Yercaud in?', 'Yercaud Lake and Boat House are in Salem District, Tamil Nadu, India — a hill station in the Shevaroy Hills.'],
+  ['Is there a separate entry fee for the lake?', 'There is generally no separate entry fee to visit the lakeside; the charge applies only to the boat ride (by boat type). Confirm at the local counter on the day of travel.'],
+  ['Where is Yercaud Lake located?', 'It is on Lake Road in Yercaud town, Salem District, Tamil Nadu 636602. Google Maps Plus Code Q6M5+C7.'],
+  ['When is boating available?', 'Per the district administration’s public info, lake / boat-house hours are 9:00 AM to 5:30 PM. This can change with weather, maintenance or local decisions.'],
+  ['What are the boating charges?', 'Fare varies by boat type and seating. The district administration’s public page lists separate fares for 2, 4 and 8 person boats; confirm the current fare at the counter on the day.'],
+  ['Can we go with children?', 'Yes. The lake is widely visited by families. Follow staff safety guidance and life-jacket instructions on the boat ride; watch children.'],
+  ['Is parking available?', 'Vehicle parking near Lake Road and the boat house varies by day and crowd; arriving earlier on weekends and holidays is practical.'],
+  ['How much time to spend?', 'Lakeside walk + boat ride + rest adds up to about 1.5–2.5 hours — a practical plan. This is not an official time limit.'],
+  ['Can you swim or bathe in the lake?', 'No official info allows swimming at the boat house. Follow boat-operation safety rules, life-jacket guidance and staff direction; extra care with children.'],
+  ['What is it like on weekends / holidays?', 'On weekends and school / holiday seasons the boat house, parking and food spots get crowded. Come earlier in the morning and allow enough time for the boat queue.'],
+  ['Which seasons are best to visit Yercaud?', 'Yercaud has a mild climate year-round. Oct–Jun is relatively clear / dry; in the monsoon (Jun–Sep) the falls are full but hill roads need care.'],
+  ['Are there stays or restaurants nearby?', 'Yes. Yercaud town and lakeside have many stay and food options — hotels, resorts, homestays to veg restaurants and coffee stalls. This site recommends no business by name; compare reviews and distance to the lake before booking.'],
+  ['How to reach Yercaud Lake?', 'Yercaud is ~35 km from Salem via a ghat road. Nearest airport Salem (SXV); also Coimbatore (CJB) and Bengaluru (BLR). Salem Junction is the main railhead; TNSTC buses and taxis run to Yercaud.']
+];
+const attractionId = Astro.site ? new URL('#attraction', Astro.site).href : undefined;
+const attraction = {
+  '@context': 'https://schema.org',
+  '@type': ['TouristAttraction', 'LocalBusiness'],
+  '@id': attractionId,
+  name: 'Yercaud Lake and Boat House (Emerald Lake)',
+  alternateName: ['Yercaud Lake', 'Yercaud Lake & Boat House (Emerald Lake)', 'Yercaud Big Lake', 'Emerald Lake'],
+  hasMap: 'https://maps.app.goo.gl/DnvJDBDKXe8s1Rmi9',
+  isAccessibleForFree: true,
+  ...(pageUrl ? { url: pageUrl } : {}),
+  ...(pageUrl ? { image: ['images/yercaud-lake-panorama.jpg', 'images/yercaud-lake-boathouse.jpg', 'images/yercaud-lake-boating.jpg'].map((p) => new URL(p, pageUrl!).href) } : {}),
+  description,
+  address: { '@type': 'PostalAddress', streetAddress: 'Lake Road', addressLocality: 'Yercaud', addressRegion: 'Tamil Nadu', postalCode: '636602', addressCountry: 'IN' },
+  geo: { '@type': 'GeoCoordinates', latitude: 11.78333, longitude: 78.21028 },
+  openingHoursSpecification: [{ '@type': 'OpeningHoursSpecification', dayOfWeek: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'], opens: '09:00', closes: '17:30' }],
+  aggregateRating: { '@type': 'AggregateRating', ratingValue: '4.1', reviewCount: '23794', bestRating: '5' },
+  sameAs: ['https://maps.app.goo.gl/DnvJDBDKXe8s1Rmi9', 'https://salem.nic.in/tourist-place/images-of-yercaudlake/']
+};
+const faqSchema = { '@context': 'https://schema.org', '@type': 'FAQPage', mainEntity: faq.map(([q, a]) => ({ '@type': 'Question', name: q, acceptedAnswer: { '@type': 'Answer', text: a } })) };
+---
+<BaseLayout title={title} description={description} image="/images/yercaud-lake-boathouse.jpg" imageAlt="Yercaud Lake & Boat House (Emerald Lake) — Lake Road, Yercaud, Tamil Nadu" jsonLd={[attraction, faqSchema]} locale="en" path="/">
+  <section class="hero-pattern relative overflow-hidden text-white">
+    <div class="container-shell grid min-h-[620px] items-center gap-10 py-16 lg:grid-cols-[1.12fr_.88fr]">
+      <div class="max-w-3xl">
+        <p class="mb-5 inline-flex rounded-full border border-white/30 bg-white/10 px-4 py-2 text-sm font-extrabold">Salem District · Shevaroy Hills</p>
+        <h1 class="text-4xl font-black leading-[1.13] tracking-[-.035em] sm:text-6xl">Yercaud Lake<br /><span class="text-[#f5d98d]"> &amp; Boat House</span></h1>
+        <p class="mt-6 max-w-2xl text-lg leading-8 text-white/86">Practical information to quietly enjoy the lake’s main waterbody, also called Emerald Lake or the Big Lake.</p>
+        <div class="mt-7 flex flex-wrap gap-3 text-sm font-bold"><span class="rounded-full bg-white/12 px-4 py-2">★ 4.1 · 23,794 reviews</span><span class="rounded-full bg-white/12 px-4 py-2">Q6M5+C7 · Yercaud</span></div>
+        <div class="mt-8 flex flex-wrap gap-3"><a href="#map" class="rounded-full bg-[#f4cc6b] px-5 py-3 font-extrabold text-[#18352f] no-underline">View map</a><a href="#planning" class="rounded-full border border-white/35 px-5 py-3 font-extrabold text-white no-underline">Plan your trip</a></div>
+      </div>
+      <div class="glass rounded-[2rem] p-6 text-[#173d3b] shadow-2xl">
+        <div class="grid gap-4 sm:grid-cols-2">
+          <div class="rounded-2xl bg-white/75 p-5"><div class="text-2xl">◷</div><p class="mt-2 text-xs font-black text-[#0d6d70]">General hours</p><p class="mt-1 text-lg font-black">09:00–17:30</p><p class="mt-1 text-xs text-[#4d635e]">District admin public info</p></div>
+          <div class="rounded-2xl bg-white/75 p-5"><div class="text-2xl">⛵</div><p class="mt-2 text-xs font-black text-[#0d6d70]">Key experience</p><p class="mt-1 text-lg font-black">Lake boat ride</p><p class="mt-1 text-xs text-[#4d635e]">Confirm weather / operation</p></div>
+          <div class="rounded-2xl bg-white/75 p-5"><div class="text-2xl">⌖</div><p class="mt-2 text-xs font-black text-[#0d6d70]">Address</p><p class="mt-1 font-extrabold">Lake Road, Yercaud</p><p class="mt-1 text-xs text-[#4d635e]">Tamil Nadu 636602</p></div>
+          <div class="rounded-2xl bg-white/75 p-5"><div class="text-2xl">◌</div><p class="mt-2 text-xs font-black text-[#0d6d70]">Suggested time</p><p class="mt-1 text-lg font-black">1.5–2.5 hr</p><p class="mt-1 text-xs text-[#4d635e]">Lake + boat + rest</p></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="about" class="container-shell py-16 md:py-24">
+    <div class="grid gap-10 lg:grid-cols-[1fr_.9fr] lg:items-start">
+      <div><p class="kicker">Heart of Yercaud</p><h2 class="section-title mt-3">Get to know the Big Lake</h2><div class="mt-6 space-y-5 text-[#415a54]">
+        <p>The Salem District Administration lists the Big Lake of Yercaud as a key tourist spot. Among South Indian hill-station lakes it is distinctive as a natural lake, and its lakeside recreation area is noted in the public info.</p>
+        <p>The boat house is the landmark experience of the lakeside. Before you travel, it is good to confirm the time, weather and boat-operation status via the local counter or an official source.</p>
+      </div><div class="mt-7 flex flex-wrap gap-3"><a target="_blank" rel="noopener noreferrer" href="https://salem.nic.in/tourist-place/images-of-yercaudlake/" class="rounded-full bg-[#0d6d70] px-5 py-3 text-sm font-extrabold text-white no-underline">Salem district info</a><a target="_blank" rel="noopener noreferrer" href="https://salem.nic.in/gallery/yercaudlake/" class="rounded-full border border-[#0d6d70]/25 px-5 py-3 text-sm font-extrabold text-[#0d6d70] no-underline">Official photo gallery</a></div></div>
+      <aside class="card overflow-hidden p-6"><div class="wave rounded-2xl p-6 text-white"><p class="text-sm font-extrabold text-white/75">Location</p><p class="mt-2 text-2xl font-black">11.78333° N<br />78.21028° E</p><div class="mt-5 h-px bg-white/20"></div><p class="mt-5 text-sm leading-7 text-white/80">Yercaud · Salem District · Tamil Nadu · India</p></div><p class="mt-5 text-sm leading-7 text-[#4a615b]">Place name, address, coordinates, Google Maps link and official district info are set to clearly point to one tourist spot.</p></aside>
+    </div>
+  </section>
+
+  <section id="planning" class="bg-[#eaf4ee] py-16 md:py-22"><div class="container-shell"><p class="kicker">Trip planning</p><h2 class="section-title mt-3">Know before you go</h2>
+    <div class="mt-9 grid gap-5 md:grid-cols-2 xl:grid-cols-4">
+      <article class="card p-6"><div class="text-3xl">🎟</div><h3 class="mt-4 text-xl font-black text-[#0b4148]">Fee / boating cost</h3><p class="mt-3 text-sm leading-7 text-[#48605a]">Fare varies by boat type and seating. The district public info lists 2-person ₹80, 4-person ₹110, 8-person ₹320. This can change; confirm at the counter on the day.</p></article>
+      <article class="card p-6"><div class="text-3xl">☀</div><h3 class="mt-4 text-xl font-black text-[#0b4148]">Best time</h3><p class="mt-3 text-sm leading-7 text-[#48605a]">A clear sky in the morning or evening is comfortable for the lakeside walk and boat ride. Boating may be affected by heavy rain or fog.</p></article>
+      <article class="card p-6"><div class="text-3xl">🅿</div><h3 class="mt-4 text-xl font-black text-[#0b4148]">Parking</h3><p class="mt-3 text-sm leading-7 text-[#48605a]">Parking near Lake Road / boat house varies by time. Crowds rise on weekends and holidays; arriving earlier is practical.</p></article>
+      <article class="card p-6"><div class="text-3xl">⏱</div><h3 class="mt-4 text-xl font-black text-[#0b4148]">Time to spend</h3><p class="mt-3 text-sm leading-7 text-[#48605a]">Lakeside + boat + a short nearby rest can be planned for 1.5–2.5 hours. Add nearby park / viewpoints for a half day.</p></article>
+    </div>
+  </div></section>
+
+  <WeatherSection locale="en" />
+
+  <TransportSection locale="en" />
+
+  <FacilitiesSection locale="en" />
+  <SeasonalStrategy locale="en" />
+  <Itineraries locale="en" />
+  <HistorySection locale="en" />
+  <StoriesSection locale="en" />
+  <GallerySection locale="en" />
+
+  <section id="nearby" class="bg-[#0b4148] py-16 text-white md:py-22"><div class="container-shell"><p class="text-xs font-black tracking-[.12em] text-[#b8e0cc]">Around the lake</p><h2 class="mt-3 text-3xl font-black sm:text-5xl">Food & nearby places</h2><div class="mt-9 grid gap-6 lg:grid-cols-2">
+    <article class="rounded-[1.6rem] bg-white/8 p-7 ring-1 ring-white/10"><h3 class="text-2xl font-black">Local food</h3><p class="mt-3 text-white/74">This is not a commercial ranking. Use the food options around Lake Road and Yercaud town centre only as a guide.</p><ul class="mt-5 grid gap-3 text-sm text-white/82 sm:grid-cols-2"><li>☕ Yercaud coffee and hot drinks</li><li>🥘 Tamil Nadu meals / tiffin</li><li>🌶 Chilli bhajji and evening snacks</li><li>🍞 Bakery and family snack options</li></ul></article>
+    <article class="rounded-[1.6rem] bg-white/8 p-7 ring-1 ring-white/10"><h3 class="text-2xl font-black">Nearby attractions</h3><ul class="mt-5 space-y-4 text-sm text-white/82"><li><strong class="text-white">Anna Park:</strong> a garden area to pair with the lake.</li><li><strong class="text-white">Kiliyur Falls:</strong> a natural spot to check by season and trail condition.</li><li><strong class="text-white">Pagoda Point:</strong> a popular hill viewpoint.</li><li><strong class="text-white">Ladies Seat:</strong> a viewpoint over hills and valley.</li></ul></article>
+  </div></div></section>
+
+  <VisitorResponsibility locale="en" />
+
+  <section id="faq" class="container-shell py-16 md:py-24"><p class="kicker">Frequently asked questions</p><h2 class="section-title mt-3">Yercaud Lake — common questions</h2><div class="mt-8 grid gap-4 lg:grid-cols-2">{faq.map(([q, a]) => <details class="card group p-5"><summary class="cursor-pointer list-none pr-7 font-extrabold text-[#0b4148]">{q}</summary><p class="mt-4 text-sm leading-7 text-[#4a615b]">{a}</p></details>)}</div></section>
+
+  <SourcesSection locale="en" />
+
+  <section class="container-shell pb-4"><div class="card grid gap-7 p-7 lg:grid-cols-[1fr_auto] lg:items-center"><div><h2 class="text-2xl font-black text-[#0b4148]">Reconfirm changing info on the day of travel</h2><p class="mt-2 text-sm leading-7 text-[#4a615b]">Boat fare, operation hours, weather, parking and access can change on short notice. The official district info and local counter take priority.</p></div><a target="_blank" rel="noopener noreferrer" href="https://salem.nic.in/tourist-place/images-of-yercaudlake/" class="rounded-full bg-[#0d6d70] px-5 py-3 text-center text-sm font-extrabold text-white no-underline">Open official info</a></div></section>
+</BaseLayout>

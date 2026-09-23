@@ -1,5 +1,8 @@
 ---
-const blocks = [
+import { type Locale, sec, pick } from '../i18n';
+interface Props { locale?: Locale }
+const { locale = 'ta' } = Astro.props;
+const blocksTa = [
   {
     icon: '🏞️', title: 'ஏரி + காடு = ஏற்காடு',
     text: '“ஏற்காடு” என்பது “ஏரி” (யேரி) + “காடு” என்னும் சொற்களின் இணைப்பாகப் பொதுவாக விளக்கப்படுகிறது — அதாவது ஏரியைச் சூழ்ந்த காடு. செவராய் மலைத்தொடரில் அமைந்துள்ள இந்த இயற்கை ஏரி, மலை வாசஸ்தலத்திற்கே அடையாளமாக இருக்கிறது. மாவட்ட நிர்வாகம் இதனை “பெரிய ஏரி” என்றும் அதிகாரப்பூர்வமாகக் குறிப்பிடுகிறது.'
@@ -19,14 +22,57 @@ const blocks = [
   {
     icon: '🌤️', title: '“மினி ஊட்டி” என்னும் அடைமொழி',
     text: 'மிதமான காலநிலையும் பசுமையான தோற்றமும் காரணமாக ஏற்காடு சில சமயம் “மினி ஊட்டி” அல்லது “சிறிய ஊட்டி” என்று அன்புடன் அழைக்கப்படுகிறது. ஊட்டியின் கூட்ட நெரிசல் இல்லாமல் ஒரு நாள் அல்லது வார இறுதி ஓய்வுக்கு ஏற்ற மலை இடமாக இது கருதப்படுகிறது.'
+  },
+  {
+    icon: '🏛️', title: 'காலனித்துவ மலைவாசஸ்தலம்',
+    text: '19-ஆம் நூற்றாண்டில் பிரிட்டிஷ் காலனித்துவ காலத்தில் ஏற்காடு ஒரு மலைவாசஸ்தலமாக (hill station) மேம்படுத்தப்பட்டது. மிதமான தட்பவெப்ப நிலைக்காகக் கோடைக்காலத் தங்குமிடமாக இது பயன்படுத்தப்பட்டது; தோட்டங்கள், தேவாலயங்கள் மற்றும் மலை வீடுகள் (பங்களாக்கள்) அந்தக் காலகட்டத்தின் தடயங்களாக இன்றும் உள்ளன. சேலம் சமவெளியிலிருந்து மலைக்கு சாலை இணைப்பும் அப்போது உருவாக்கப்பட்டது.'
+  },
+  {
+    icon: '🚤', title: 'ஏரியின் பராமரிப்பும் படகு இல்லமும்',
+    text: 'இயற்கையான நீர்நிலையாக இருந்த ஏரி, பொதுப் பணித் துறை / வனத் துறை மூலம் பராமரிக்கப்படும் நிரந்தர ஏரியாக (perennial lake) இன்றும் உள்ளது. ஏரிக்கரையில் அமைந்துள்ள படகு இல்லம் மாவட்ட நிர்வாகம் / சுற்றுலாத் துறையின் கீழ் இயங்குகிறது; இது ஏற்காட்டின் முக்கிய பொழுதுபோக்கு மையமாகத் தொடர்கிறது. காலனித்துவ காலப் பயணிகள் இந்த ஏரியை “எமரால்டு (Emerald)” என்று அழைத்ததாகவும் பொதுப் பதிவுகள் கூறுகின்றன.'
   }
 ];
+const blocksEn = [
+  {
+    icon: '🏞️', title: 'Lake + forest = Yercaud',
+    text: '“Yercaud” is commonly explained as a combination of “yeri” (lake) + “kaadu” (forest) — the forest that surrounds the lake. This natural lake in the Shevaroy range is the identity of the hill station. The district administration also officially refers to it as the “Big Lake”.'
+  },
+  {
+    icon: '⛰️', title: 'Shevaroy Hills elevation',
+    text: 'Yercaud town sits at about 1,515 m (around 4,970 ft) above sea level. Part of Tamil Nadu’s Eastern Ghats, the hill is known for its sprawling gardens, forests and viewpoints. Even in summer, cool breeze prevails in the evenings.'
+  },
+  {
+    icon: '☕', title: 'History of coffee plantations',
+    text: 'In the 19th century, coffee and plantation crops expanded in this region. Public records state that European planters established coffee estates on the Shevaroy slopes, later joined by trade in tea, vegetables, fruit and spices. Even today, plantations around Yercaud welcome travellers.'
+  },
+  {
+    icon: '⛵', title: 'The boat house & lake life',
+    text: 'This lake has long been the central attraction of Yercaud. The boat house operates boat services under the Salem district administration; families, friend groups and solo travellers alike enjoy floating on its tree-lined calm waters.'
+  },
+  {
+    icon: '🌤️', title: 'The “Mini Ooty” nickname',
+    text: 'Because of its mild climate and green look, Yercaud is sometimes affectionately called “Mini Ooty” or “Little Ooty”. Without Ooty’s crowds, it is considered a good hill getaway for a day or weekend.'
+  },
+  {
+    icon: '🏛️', title: 'Colonial hill station',
+    text: 'In the 19th century, during British colonial rule, Yercaud was developed as a hill station. Used as a summer retreat for its moderate climate; plantations, churches and bungalows from that era remain traces today. The road link from the Salem plain to the hills was also built then.'
+  },
+  {
+    icon: '🚤', title: 'Lake upkeep & the boat house',
+    text: 'Once a natural waterbody, the lake is today a perennial lake maintained by the Public Works / Forest department. The lakeside boat house runs under the district administration / tourism; it remains Yercaud’s key recreation centre. Colonial-era travellers are said to have called this lake “Emerald”, per public records.'
+  }
+];
+const blocks = locale === 'en' ? blocksEn : blocksTa;
+const kicker = pick(locale, 'வரலாறு & தன்மை', 'History & nature');
+const heading = pick(locale, 'செவராய் மலைச் சரிவில் ஒரு இயற்கை ஏரி', 'A natural lake on the Shevaroy slope');
+const footnote = pick(locale,
+  'மேற்கண்ட குறிப்புகள் சேலம் மாவட்ட நிர்வாகம், தமிழ்நாடு சுற்றுலா வெளியீடுகள் மற்றும் பொதுப் பதிவுகளிலிருந்து தொகுக்கப்பட்டவை; அதிகாரப்பூர்வ வரலாற்று ஆய்வு நூலாக இது கருதப்படக்கூடாது.',
+  'The notes above are compiled from Salem district administration, Tamil Nadu tourism publications and public records; they should not be treated as an official historical research volume.');
 ---
-
-<section id="வரலாறு" class="bg-[#eaf4ee] py-16 md:py-24">
+<section id={sec(locale, 'history')} class="bg-[#eaf4ee] py-16 md:py-24">
   <div class="container-shell">
-    <p class="kicker">வரலாறு & தன்மை</p>
-    <h2 class="section-title mt-3">செவராய் மலைச் சரிவில் ஒரு இயற்கை ஏரி</h2>
+    <p class="kicker">{kicker}</p>
+    <h2 class="section-title mt-3">{heading}</h2>
     <div class="mt-9 grid gap-5 md:grid-cols-2 xl:grid-cols-3">
       {blocks.map((b) => (
         <article class="card p-6">
@@ -35,6 +81,6 @@ const blocks = [
         </article>
       ))}
     </div>
-    <p class="mt-6 text-xs leading-6 text-[#5b706a]">மேற்கண்ட குறிப்புகள் சேலம் மாவட்ட நிர்வாகம், தமிழ்நாடு சுற்றுலா வெளியீடுகள் மற்றும் பொதுப் பதிவுகளிலிருந்து தொகுக்கப்பட்டவை; அதிகாரப்பூர்வ வரலாற்று ஆய்வு நூலாக இது கருதப்படக்கூடாது.</p>
+    <p class="mt-6 text-xs leading-6 text-[#5b706a]">{footnote}</p>
   </div>
 </section>

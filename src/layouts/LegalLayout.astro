@@ -1,5 +1,6 @@
 ---
 import BaseLayout from './BaseLayout.astro';
-const {title,description}=Astro.props;
+interface Props { title: string; description: string; noindex?: boolean }
+const { title, description, noindex = true } = Astro.props;
 ---
-<BaseLayout title={title} description={description}><section class="container-shell py-12 md:py-16"><a href="/" class="mb-7 inline-block text-sm font-bold text-[#0d6d70] no-underline">← முகப்புக்கு திரும்பவும்</a><article class="card prose-tamil mx-auto max-w-4xl p-6 md:p-10"><slot/></article></section></BaseLayout>
+<BaseLayout title={title} description={description} noindex={noindex}><section class="container-shell py-12 md:py-16"><a href="/" class="mb-7 inline-block text-sm font-bold text-[#0d6d70] no-underline">← முகப்புக்கு திரும்பவும்</a><article class="card prose-tamil mx-auto max-w-4xl p-6 md:p-10"><slot/></article></section></BaseLayout>

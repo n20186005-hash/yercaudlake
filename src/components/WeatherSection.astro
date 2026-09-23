@@ -1,9 +1,21 @@
 ---
-interface Props { lat?: number; lon?: number }
-const { lat = 11.78333, lon = 78.21028 } = Astro.props;
-const qp = `latitude=${lat}&longitude=${lon}&current=temperature_2m,relative_humidity_2m,apparent_temperature,is_day,weather_code,wind_speed_10m&daily=weather_code,temperature_2m_max,temperature_2m_min,precipitation_probability_max&timezone=Asia%2FKolkata&wind_speed_unit=kmh&forecast_days=5`;
-const API = 'https://api.open-meteo.com/v1/forecast?' + qp;
-// Build-time optional snapshot (silently skipped offline; the live page falls back to browser-side refresh)
+import { GEO } from '../data/site';
+import { buildAdvice, renderCurrent, renderDays, renderAdvice } from '../lib/weather';
+import { type Locale, sec, pick } from '../i18n';
+interface Props { locale?: Locale; lat?: number; lon?: number }
+const { locale = 'ta', lat = GEO.latitude, lon = GEO.longitude } = Astro.props;
+// Build-time optional snapshot (server-side only; silently skipped offline).
+// The live page refreshes via /api/weather (server-side Worker + edge cache).
+const qp = new URLSearchParams({
+  latitude: String(lat),
+  longitude: String(lon),
+  current: 'temperature_2m,relative_humidity_2m,apparent_temperature,is_day,weather_code,wind_speed_10m',
+  daily: 'weather_code,temperature_2m_max,temperature_2m_min,precipitation_probability_max,uv_index_max',
+  timezone: 'Asia/Kolkata',
+  wind_speed_unit: 'kmh',
+  forecast_days: '7'
+});
+const API = 'https://api.open-meteo.com/v1/forecast?' + qp.toString();
 let init: Record<string, any> | null = null;
 try {
   const r = await fetch(API, { signal: AbortSignal.timeout(4000) });
@@ -12,154 +24,125 @@ try {
     if (j && j.current && j.daily) init = j;
   }
 } catch {}
-const WMO: Record<number, { t: string; i: string }> = {
-  0: { t: 'வானம் தெளிவு', i: '☀️' }, 1: { t: 'பெரும்பாலும் தெளிவு', i: '🌤️' },
-  2: { t: 'ஓரளவு மேகம்', i: '⛅' }, 3: { t: 'மேகமூட்டம்', i: '☁️' },
-  45: { t: 'மூடுபனி', i: '🌫️' }, 48: { t: 'பனிமூட்டம்', i: '🌫️' },
-  51: { t: 'லேசான தூறல்', i: '🌦️' }, 53: { t: 'தூறல்', i: '🌦️' }, 55: { t: 'அடர்ந்த தூறல்', i: '🌧️' },
-  56: { t: 'உறைபனி தூறல்', i: '🌧️' }, 57: { t: 'உறைபனி தூறல்', i: '🌧️' },
-  61: { t: 'லேசான மழை', i: '🌦️' }, 63: { t: 'மிதமான மழை', i: '🌧️' }, 65: { t: 'பலத்த மழை', i: '🌧️' },
-  66: { t: 'உறைபனி மழை', i: '🌧️' }, 67: { t: 'உறைபனி மழை', i: '🌧️' },
-  71: { t: 'லேசான பனி', i: '🌨️' }, 73: { t: 'மிதமான பனி', i: '🌨️' }, 75: { t: 'பனிப்பொழிவு', i: '❄️' }, 77: { t: 'பனித்துகள்', i: '❄️' },
-  80: { t: 'லேசான மழை பொழிவு', i: '🌦️' }, 81: { t: 'மழை பொழிவு', i: '🌧️' }, 82: { t: 'பலத்த மழை பொழிவு', i: '⛈️' },
-  85: { t: 'பனி மழை', i: '🌨️' }, 86: { t: 'பனி மழை', i: '🌨️' },
-  95: { t: 'இடியுடன் கூடிய மழை', i: '⛈️' }, 96: { t: 'இடி & ஆலங்கட்டி', i: '⛈️' }, 99: { t: 'இடி & ஆலங்கட்டி', i: '⛈️' }
-};
-function codeInfo(c: number) { return WMO[c] || { t: 'மாறுபட்ட வானிலை', i: '🌤️' }; }
-const TA_DAY = ['ஞாயிறு', 'திங்கள்', 'செவ்வாய்', 'புதன்', 'வியாழன்', 'வெள்ளி', 'சனி'];
-const TA_MON = ['ஜன', 'பிப்', 'மார்', 'ஏப்', 'மே', 'ஜூன்', 'ஜூலை', 'ஆக', 'செப்', 'அக்', 'நவ', 'டிச'];
-function dayLabel(d: string) {
-  try { const dt = new Date(d + 'T12:00:00'); return { d: TA_DAY[dt.getDay()], m: dt.getDate() + ' ' + TA_MON[dt.getMonth()] }; }
-  catch { return { d: '', m: '' }; }
-}
-function fmtC(v: number) { return Math.round(v) + '°'; }
-const cur = init?.current as Record<string, number> | undefined;
-const days = init?.daily as { time: string[]; weather_code: number[]; temperature_2m_max: number[]; temperature_2m_min: number[]; precipitation_probability_max: (number | null)[] } | undefined;
-const hasInit = !!(cur && days);
+const advice = init ? buildAdvice(init) : null;
+const hasInit = !!init;
+const ph = '<div class="rounded-2xl bg-white/10 p-4 text-center ring-1 ring-white/15"><p class="text-white/50">—</p></div>';
+const kicker = pick(locale, 'நிகழ்நேர வானிலை', 'Live weather');
+const h2 = pick(locale, 'ஏற்காடு — இப்போது &amp; 7 நாள் முன்னறிவிப்பு', 'Yercaud — now &amp; 7-day forecast');
+const intro = pick(locale,
+  'ஏரிப்படகு, காலை நடை அல்லது அருவிப் பயணத்தைத் திட்டமிடும் முன் இந்த நேரடி வானிலை உதவியாக இருக்கும். “வானிலை எப்படி இருக்கும், குடை எடுத்துச் செல்ல வேண்டுமா” என்பதை நீங்களே புரிந்துகொள்ள வேண்டாம் — கீழே உங்களுக்கான செயல் பரிந்துரைகள் தானாக வரும்.',
+  'This live weather helper is useful before planning a boat ride, a morning walk or a waterfall trip. You don’t have to work out “what will the weather be like, should I carry an umbrella” yourself — practical suggestions appear for you below.');
+const loading = pick(locale,
+  'வானிலைத் தரவு ஏற்றப்படுகிறது…',
+  'Loading weather data…');
+const loadingSub = pick(locale,
+  'இணைய இணைப்பு இருந்தால் தானாக புதுப்பிக்கப்படும்.',
+  'It refreshes automatically when you are online.');
+const note = pick(locale,
+  'வானிலைத் தரவு தானாக புதுப்பிக்கப்படுகிறது · படகு இயக்கம் அதிகாரப்பூர்வ அறிவிப்பைப் பொறுத்தது.',
+  'Weather data refreshes automatically · boat operations depend on the official notice.');
+const pending = pick(locale, 'வானிலை கிடைத்தவுடன் பரிந்துரைகள் காட்டப்படும்.', 'Suggestions will appear once the weather is available.');
+const errMain = pick(locale,
+  'வானிலைத் தரவை இப்போது பெற முடியவில்லை.',
+  'Could not fetch weather data right now.');
+const errSub = pick(locale,
+  'சிறிது நேரம் கழித்து மீண்டும் முயற்சிக்கவும்.',
+  'Please try again in a little while.');
+const stampSuffix = pick(locale,
+  ' · மலை வானிலை வேகமாக மாறலாம்.',
+  ' · hill weather can change quickly.');
+const localeTag = locale === 'en' ? 'en-IN' : 'ta-IN';
 ---
-
-<section id="வானிலை" class="relative overflow-hidden bg-[#0b4148] py-16 text-white md:py-22">
+<section id={sec(locale, 'weather')} class="relative overflow-hidden bg-[#0b4148] py-16 text-white md:py-22">
   <div class="container-shell">
     <div class="flex flex-wrap items-end justify-between gap-5">
       <div>
-        <p class="text-xs font-black tracking-[.12em] text-[#b8e0cc]">நிகழ்நேர வானிலை</p>
-        <h2 class="mt-3 text-3xl font-black sm:text-5xl">ஏற்காடு — இப்போது & 5 நாள் முன்னறிவிப்பு</h2>
+        <p class="text-xs font-black tracking-[.12em] text-[#b8e0cc]">{kicker}</p>
+        <h2 class="mt-3 text-3xl font-black sm:text-5xl" set:html={h2}></h2>
       </div>
-      <a href="https://open-meteo.com/" target="_blank" rel="noopener noreferrer" class="rounded-full border border-white/25 px-4 py-2 text-xs font-extrabold text-white/85 no-underline">தரவு: Open-Meteo ↗</a>
     </div>
-    <p class="mt-4 max-w-3xl text-sm leading-7 text-white/72">ஏரிப்படகு, காலை நடை அல்லது அருவிப் பயணத்தைத் திட்டமிடும் முன் இந்த நேரடி வானிலை உதவியாக இருக்கும். மலை வானிலை வேகமாக மாறலாம்; அதிகாரப்பூர்வ வானிலை அறிவிப்புகளையும் கவனிக்கவும்.</p>
+    <p class="mt-4 max-w-3xl text-sm leading-7 text-white/72">{intro}</p>
 
     <div class="mt-8 grid gap-5 lg:grid-cols-[1fr_1.35fr]">
       <!-- 当前天气 -->
       <div id="wx-current" class="rounded-3xl bg-white/10 p-6 ring-1 ring-white/15 backdrop-blur">
         {hasInit ? (
-          <div class="flex h-full flex-col justify-between gap-6">
-            <div class="flex items-center gap-5">
-              <span class="text-6xl leading-none" aria-hidden="true">{codeInfo(cur!.weather_code).i}</span>
-              <div>
-                <div class="text-5xl font-black">{fmtC(cur!.temperature_2m)}</div>
-                <p class="mt-1 font-extrabold text-[#f4d98d]">{codeInfo(cur!.weather_code).t}</p>
-              </div>
-            </div>
-            <dl class="grid grid-cols-3 gap-3 text-sm">
-              <div class="rounded-2xl bg-white/10 p-3"><dt class="text-white/60">உணர்வு</dt><dd class="mt-1 text-lg font-black">{fmtC(cur!.apparent_temperature)}</dd></div>
-              <div class="rounded-2xl bg-white/10 p-3"><dt class="text-white/60">ஈரப்பதம்</dt><dd class="mt-1 text-lg font-black">{Math.round(cur!.relative_humidity_2m)}%</dd></div>
-              <div class="rounded-2xl bg-white/10 p-3"><dt class="text-white/60">காற்று</dt><dd class="mt-1 text-lg font-black">{Math.round(cur!.wind_speed_10m)} km/h</dd></div>
-            </dl>
-          </div>
+          <div class="h-full" set:html={renderCurrent(init)}></div>
         ) : (
-          <div class="flex min-h-40 items-center justify-center text-center text-sm text-white/70">வானிலைத் தரவு ஏற்றப்படுகிறது…<br /><span class="mt-2 block text-xs text-white/45">இணைய இணைப்பு இருந்தால் தானாக புதுப்பிக்கப்படும்.</span></div>
+          <div class="flex min-h-40 items-center justify-center text-center text-sm text-white/70">{loading}<br /><span class="mt-2 block text-xs text-white/45">{loadingSub}</span></div>
         )}
       </div>
 
-      <!-- 5-day forecast -->
-      <div id="wx-days" class="grid gap-3 sm:grid-cols-2 xl:grid-cols-5">
-        {hasInit
-          ? days!.time.map((t, i) => {
-              const lb = dayLabel(t); const ci = codeInfo(days!.weather_code[i]);
-              return (
-                <div class="rounded-2xl bg-white/10 p-4 text-center ring-1 ring-white/15">
-                  <p class="font-extrabold text-[#f4d98d]">{lb.d}</p>
-                  <p class="text-xs text-white/55">{lb.m}</p>
-                  <div class="my-3 text-3xl" aria-hidden="true">{ci.i}</div>
-                  <p class="text-sm leading-5 text-white/80">{ci.t}</p>
-                  <p class="mt-2 font-black">{fmtC(days!.temperature_2m_max[i])} <span class="text-white/55">/ {fmtC(days!.temperature_2m_min[i])}</span></p>
-                  {days!.precipitation_probability_max[i] != null && <p class="mt-1 text-xs text-[#a9e0f2]">☔ {days!.precipitation_probability_max[i]}%</p>}
-                </div>
-              );
-            })
-          : Array.from({ length: 5 }).map(() => (
-              <div class="rounded-2xl bg-white/10 p-4 text-center ring-1 ring-white/15"><p class="text-white/50">—</p></div>
-            ))}
-      </div>
+      <!-- 7-day forecast -->
+      <div id="wx-days" class="grid gap-3 grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-7" set:html={hasInit ? renderDays(init) : ph.repeat(7)}></div>
     </div>
 
-    <p id="wx-note" class="mt-4 text-xs text-white/50">வானிலைத் தரவு தானாக புதுப்பிக்கப்படுகிறது · படகு இயக்கம் அதிகாரப்பூர்வ அறிவிப்பைப் பொறுத்தது.</p>
+    <!-- 智能建议 -->
+    <div id="wx-advice" class="mt-8" set:html={advice ? renderAdvice(advice) : ''}></div>
+
+    <p id="wx-note" class="mt-4 text-xs text-white/50">{note}</p>
   </div>
 
   <script is:inline type="application/json" id="weather-init" set:html={JSON.stringify(init)}></script>
 </section>
 
-<script is:inline>
-  (() => {
-    const $cur = document.getElementById('wx-current');
-    const $days = document.getElementById('wx-days');
-    if (!$cur || !$days) return;
-    const KEY = 'yercaud-weather-v1';
-    const TTL = 30 * 60 * 1000;
-    const API = 'https://api.open-meteo.com/v1/forecast?latitude=11.78333&longitude=78.21028&current=temperature_2m,relative_humidity_2m,apparent_temperature,is_day,weather_code,wind_speed_10m&daily=weather_code,temperature_2m_max,temperature_2m_min,precipitation_probability_max&timezone=Asia%2FKolkata&wind_speed_unit=kmh&forecast_days=5';
-    const TA_DAY = ['ஞாயிறு', 'திங்கள்', 'செவ்வாய்', 'புதன்', 'வியாழன்', 'வெள்ளி', 'சனி'];
-    const TA_MON = ['ஜன', 'பிப்', 'மார்', 'ஏப்', 'மே', 'ஜூன்', 'ஜூலை', 'ஆக', 'செப்', 'அக்', 'நவ', 'டிச'];
-    const WMO = {
-      0: ['வானம் தெளிவு', '☀️'], 1: ['பெரும்பாலும் தெளிவு', '🌤️'], 2: ['ஓரளவு மேகம்', '⛅'], 3: ['மேகமூட்டம்', '☁️'],
-      45: ['மூடுபனி', '🌫️'], 48: ['பனிமூட்டம்', '🌫️'], 51: ['லேசான தூறல்', '🌦️'], 53: ['தூறல்', '🌦️'],
-      55: ['அடர்ந்த தூறல்', '🌧️'], 56: ['உறைபனி தூறல்', '🌧️'], 57: ['உறைபனி தூறல்', '🌧️'],
-      61: ['லேசான மழை', '🌦️'], 63: ['மிதமான மழை', '🌧️'], 65: ['பலத்த மழை', '🌧️'], 66: ['உறைபனி மழை', '🌧️'], 67: ['உறைபனி மழை', '🌧️'],
-      71: ['லேசான பனி', '🌨️'], 73: ['மிதமான பனி', '🌨️'], 75: ['பனிப்பொழிவு', '❄️'], 77: ['பனித்துகள்', '❄️'],
-      80: ['லேசான மழை பொழிவு', '🌦️'], 81: ['மழை பொழிவு', '🌧️'], 82: ['பலத்த மழை பொழிவு', '⛈️'],
-      85: ['பனி மழை', '🌨️'], 86: ['பனி மழை', '🌨️'], 95: ['இடியுடன் கூடிய மழை', '⛈️'], 96: ['இடி & ஆலங்கட்டி', '⛈️'], 99: ['இடி & ஆலங்கட்டி', '⛈️']
-    };
-    const info = (c) => WMO[c] || ['மாறுபட்ட வானிலை', '🌤️'];
-    const note = document.getElementById('wx-note');
-    let init = null;
-    try { const el = document.getElementById('weather-init'); if (el) init = JSON.parse(el.textContent || 'null'); } catch {}
-    function stamp() {
-      try { note.textContent = 'கடைசி புதுப்பிப்பு: ' + new Date().toLocaleString('ta-IN', { day: '2-digit', month: 'short', hour: '2-digit', minute: '2-digit' }) + ' · தரவு: Open-Meteo · மலை வானிலை வேகமாக மாறலாம்.'; } catch {}
+<script>
+  import { renderCurrent, renderDays, buildAdvice, renderAdvice } from '../lib/weather';
+  const $cur = document.getElementById('wx-current');
+  const $days = document.getElementById('wx-days');
+  const $advice = document.getElementById('wx-advice');
+  const $note = document.getElementById('wx-note');
+  const KEY = 'yercaud-weather-v1';
+  const TTL = 30 * 60 * 1000;
+  const WX = '/api/weather';
+  const ph = '<div class="rounded-2xl bg-white/10 p-4 text-center ring-1 ring-white/15"><p class="text-white/50">—</p></div>';
+  const isEn = (document.documentElement.lang || '').startsWith('en');
+  const S = {
+    errMain: isEn ? 'Could not fetch weather data right now.' : 'வானிலைத் தரவை இப்போது பெற முடியவில்லை.',
+    errSub: isEn ? 'Please try again in a little while.' : 'சிறிது நேரம் கழித்து மீண்டும் முயற்சிக்கவும்.',
+    pending: isEn ? 'Suggestions will appear once the weather is available.' : 'வானிலை கிடைத்தவுடன் பரிந்துரைகள் காட்டப்படும்.',
+    stampSuffix: isEn ? ' · hill weather can change quickly.' : ' · மலை வானிலை வேகமாக மாறலாம்.',
+    localeTag: isEn ? 'en-IN' : 'ta-IN'
+  };
+
+  let init = null;
+  try { const el = document.getElementById('weather-init'); if (el) init = JSON.parse(el.textContent || 'null'); } catch {}
+
+  function stamp() {
+    try {
+      $note.textContent = (isEn ? 'Last updated: ' : 'கடைசி புதுப்பிப்பு: ') + new Date().toLocaleString(S.localeTag, { day: '2-digit', month: 'short', hour: '2-digit', minute: '2-digit' }) + S.stampSuffix;
+    } catch {}
+  }
+  function renderAll(d) {
+    if (!$cur || !$days || !$advice) return;
+    if (!d || !d.current || !d.daily) {
+      $cur.innerHTML = '<div class="flex min-h-40 items-center justify-center text-center text-sm text-white/70">' + S.errMain + '<br/><span class="mt-2 block text-xs text-white/45">' + S.errSub + '</span></div>';
+      $advice.innerHTML = '';
+      return;
     }
-    function render(d) {
-      if (!d || !d.current || !d.daily) {
-        $cur.innerHTML = '<div class="flex min-h-40 items-center justify-center text-center text-sm text-white/70">வானிலைத் தரவை இப்போது பெற முடியவில்லை.<br/><span class="mt-2 block text-xs text-white/45">சிறிது நேரம் கழித்து மீண்டும் முயற்சிக்கவும்.</span></div>';
-        return;
-      }
-      const c = d.current; const ci = info(c.weather_code);
-      $cur.innerHTML = '<div class="flex h-full flex-col justify-between gap-6"><div class="flex items-center gap-5"><span class="text-6xl leading-none">' + ci[1] + '</span><div><div class="text-5xl font-black">' + Math.round(c.temperature_2m) + '°</div><p class="mt-1 font-extrabold text-[#f4d98d]">' + ci[0] + '</p></div></div><dl class="grid grid-cols-3 gap-3 text-sm"><div class="rounded-2xl bg-white/10 p-3"><dt class="text-white/60">உணர்வு</dt><dd class="mt-1 text-lg font-black">' + Math.round(c.apparent_temperature) + '°</dd></div><div class="rounded-2xl bg-white/10 p-3"><dt class="text-white/60">ஈரப்பதம்</dt><dd class="mt-1 text-lg font-black">' + Math.round(c.relative_humidity_2m) + '%</dd></div><div class="rounded-2xl bg-white/10 p-3"><dt class="text-white/60">காற்று</dt><dd class="mt-1 text-lg font-black">' + Math.round(c.wind_speed_10m) + ' km/h</dd></div></dl></div>';
-      const dl = d.daily;
-      $days.innerHTML = dl.time.map((t, i) => {
-        const dt = new Date(t + 'T12:00:00');
-        const lb = (isNaN(dt.getTime()) ? '' : TA_DAY[dt.getDay()] + ' · ' + dt.getDate() + ' ' + TA_MON[dt.getMonth()]);
-        const ii = info(dl.weather_code[i]);
-        const pr = dl.precipitation_probability_max[i];
-        return '<div class="rounded-2xl bg-white/10 p-4 text-center ring-1 ring-white/15"><p class="font-extrabold text-[#f4d98d]">' + lb + '</p><div class="my-3 text-3xl">' + ii[1] + '</div><p class="text-sm leading-5 text-white/80">' + ii[0] + '</p><p class="mt-2 font-black">' + Math.round(dl.temperature_2m_max[i]) + '° <span class="text-white/55">/ ' + Math.round(dl.temperature_2m_min[i]) + '°</span></p>' + (pr != null ? '<p class="mt-1 text-xs text-[#a9e0f2]">☔ ' + pr + '%</p>' : '') + '</div>';
-      }).join('');
-      stamp();
-    }
-    render(init);
-    (async () => {
-      try {
-        const r = await fetch(API, { signal: AbortSignal.timeout(8000) });
-        if (r.ok) {
-          const j = await r.json();
-          if (j && j.current && j.daily) {
-            try { localStorage.setItem(KEY, JSON.stringify({ at: Date.now(), data: j })); } catch {}
-            render(j);
-          }
+    $cur.innerHTML = '<div class="h-full">' + renderCurrent(d) + '</div>';
+    $days.innerHTML = renderDays(d) || ph.repeat(7);
+    $advice.innerHTML = renderAdvice(buildAdvice(d));
+    stamp();
+  }
+
+  if (init) renderAll(init);
+  else if ($advice) $advice.innerHTML = '<p class="text-white/55">' + S.pending + '</p>';
+
+  (async () => {
+    try {
+      const r = await fetch(WX, { signal: AbortSignal.timeout(8000) });
+      if (r.ok) {
+        const j = await r.json();
+        if (j && j.current && j.daily) {
+          try { localStorage.setItem(KEY, JSON.stringify({ at: Date.now(), data: j })); } catch {}
+          renderAll(j);
+          return;
         }
-      } catch {
-        let cached = null;
-        try { const v = JSON.parse(localStorage.getItem(KEY) || 'null'); if (v && v.data && Date.now() - v.at < TTL) cached = v.data; } catch {}
-        if (cached && !init) render(cached);
-        else if (!init) render(null);
       }
-    })();
+    } catch {}
+    let cached = null;
+    try { const v = JSON.parse(localStorage.getItem(KEY) || 'null'); if (v && v.data && Date.now() - v.at < TTL) cached = v.data; } catch {}
+    if (cached && !init) renderAll(cached);
   })();
 </script>

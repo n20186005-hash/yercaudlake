@@ -1,18 +1,51 @@
 ---
 import Logo from './Logo.astro';
+import { type Locale, sec, pick } from '../i18n';
+interface Props { locale?: Locale }
+const { locale = 'ta' } = Astro.props;
+const p1 = pick(locale,
+  'இந்த இணையதளம் ஒரு சுயாதீன, இலாப நோக்கமற்ற பயணிகள் தகவல் வழிகாட்டி திட்டமாகும். எந்த அரசு அமைப்பு அல்லது அதிகாரப்பூர்வ நிறுவனத்துடனும் நிர்வாகத் தொடர்பு இல்லை.',
+  'This website is an independent, non-profit visitor information guide. It has no administrative affiliation with any government body or official institution.');
+const p2 = pick(locale,
+  'இத்தளத்தின் சுற்றுலா தகவல்கள் சேலம் மாவட்ட நிர்வாகம், தமிழ்நாடு சுற்றுலாத்துறை மற்றும் இந்திய அரசின் சுற்றுலா அமைச்சகம் வெளியிட்ட பொதுத் தகவல்களுடன் ஒப்பிட்டு தயாரிக்கப்பட்டவை; எந்த வணிக பரிந்துரையும் இதில் இல்லை.',
+  'The travel information here is compiled against public details published by the Salem District Administration, Tamil Nadu Tourism and India’s Ministry of Tourism; no commercial recommendations are made.');
+const p3 = pick(locale,
+  'பட உரிமை: இத்தளத்தில் காட்டப்படும் புகைப்படங்களின் பதிப்புரிமையும் தொடர்புடைய உரிமைகளும் அவற்றின் அசல் புகைப்படக் கலைஞர்களுக்கே சொந்தமானவை. திறந்த உரிமம் கொண்ட படங்களின் மூலமும் உரிமமும் திட்ட ஆவணத்தில் பதிவு செய்யப்பட்டுள்ளது.',
+  'Image rights: the copyright and related rights of the photographs shown on this site belong to their original photographers. The source and licence of openly licensed images are recorded in the project’s photo documentation.');
+const travelH = pick(locale, 'பயணத் தகவல்', 'Travel info');
+const legalH = pick(locale, 'சட்டத் தகவல்', 'Legal');
+const srcH = pick(locale, 'அதிகாரப்பூர்வ ஆதாரங்கள்', 'Official sources');
+const copy = pick(locale, '© 2026 ஏற்காடு ஏரி பயண வழிகாட்டி. அனைத்து உரிமைகளும் பாதுகாக்கப்பட்டவை.', '© 2026 Yercaud Lake Visitor Guide. All rights reserved.');
+const travelLinks = [
+  { label: pick(locale, 'ஏரி அறிமுகம்', 'Lake introduction'), id: sec(locale, 'intro') },
+  { label: pick(locale, 'வசதிகள்', 'Facilities'), id: sec(locale, 'facilities') },
+  { label: pick(locale, 'வரலாறு & கதைகள்', 'History & stories'), id: sec(locale, 'history') },
+  { label: pick(locale, 'நிகழ்நேர வானிலை', 'Live weather'), id: sec(locale, 'weather') },
+  { label: pick(locale, 'புகைப்படத் தொகுப்பு', 'Photo gallery'), id: sec(locale, 'gallery') },
+  { label: pick(locale, 'பொதுக் கேள்விகள்', 'FAQ'), id: sec(locale, 'faq') }
+];
+const base = locale === 'en' ? '/en' : '';
 ---
 <footer class="mt-20 bg-[#0b3436] text-[#f9f5e9]">
   <div class="container-shell grid gap-10 py-14 lg:grid-cols-[1.2fr_.8fr]">
     <div><Logo/><div class="mt-6 max-w-3xl space-y-3 text-sm leading-7 text-white/75">
-      <p>இந்த இணையதளம் ஒரு சுயாதீன, இலாப நோக்கமற்ற பயணிகள் தகவல் வழிகாட்டி திட்டமாகும். எந்த அரசு அமைப்பு அல்லது அதிகாரப்பூர்வ நிறுவனத்துடனும் நிர்வாகத் தொடர்பு இல்லை.</p>
-      <p>இத்தளத்தின் சுற்றுலா தகவல்கள் சேலம் மாவட்ட நிர்வாகம், தமிழ்நாடு சுற்றுலாத்துறை மற்றும் இந்திய அரசின் சுற்றுலா அமைச்சகம் வெளியிட்ட பொதுத் தகவல்களுடன் ஒப்பிட்டு தயாரிக்கப்பட்டவை; எந்த வணிக பரிந்துரையும் இதில் இல்லை.</p>
-      <p>பட உரிமை: இத்தளத்தில் காட்டப்படும் புகைப்படங்களின் பதிப்புரிமையும் தொடர்புடைய உரிமைகளும் அவற்றின் அசல் புகைப்படக் கலைஞர்களுக்கே சொந்தமானவை. திறந்த உரிமம் கொண்ட படங்களின் மூலமும் உரிமமும் திட்ட ஆவணத்தில் பதிவு செய்யப்பட்டுள்ளது.</p>
+      <p>{p1}</p>
+      <p>{p2}</p>
+      <p>{p3}</p>
     </div></div>
     <div class="grid gap-7 sm:grid-cols-2 lg:grid-cols-3">
-      <div><h2 class="font-extrabold">பயணத் தகவல்</h2><ul class="mt-3 space-y-2 text-sm text-white/72"><li><a href="/#அறிமுகம்">ஏரி அறிமுகம்</a></li><li><a href="/#வசதிகள்">வசதிகள்</a></li><li><a href="/#வரலாறு">வரலாறு & கதைகள்</a></li><li><a href="/#வானிலை">நிகழ்நேர வானிலை</a></li><li><a href="/#புகைப்படங்கள்">புகைப்படத் தொகுப்பு</a></li><li><a href="/#கேள்விகள்">பொதுக் கேள்விகள்</a></li></ul></div>
-      <div><h2 class="font-extrabold">சட்டத் தகவல்</h2><ul class="mt-3 space-y-2 text-sm text-white/72"><li><a href="/privacy/">தனியுரிமைக் கொள்கை</a></li><li><a href="/terms/">சேவை விதிமுறைகள்</a></li><li><a href="/cookies/">குக்கீ அமைப்புகள்</a></li></ul></div>
-      <div><h2 class="font-extrabold">அதிகாரப்பூர்வ ஆதாரங்கள்</h2><ul class="mt-3 space-y-2 text-sm text-white/72"><li><a target="_blank" rel="noopener noreferrer" href="https://salem.nic.in/tourist-place/images-of-yercaudlake/">சேலம் மாவட்ட நிர்வாகம்</a></li><li><a target="_blank" rel="noopener noreferrer" href="https://www.tamilnadutourism.tn.gov.in/">தமிழ்நாடு சுற்றுலாத்துறை</a></li><li><a target="_blank" rel="noopener noreferrer" href="https://tourism.gov.in/">இந்திய சுற்றுலா அமைச்சகம்</a></li></ul></div>
+      <div><h2 class="font-extrabold">{travelH}</h2><ul class="mt-3 space-y-2 text-sm text-white/72">{travelLinks.map((l) => <li><a href={`${base}#${l.id}`}>{l.label}</a></li>)}</ul></div>
+      <div><h2 class="font-extrabold">{legalH}</h2><ul class="mt-3 space-y-2 text-sm text-white/72">
+        <li><a href="/privacy/">{pick(locale, 'தனியுரிமைக் கொள்கை', 'Privacy Policy')}</a></li>
+        <li><a href="/terms/">{pick(locale, 'சேவை விதிமுறைகள்', 'Terms of Service')}</a></li>
+        <li><a href="/cookies/">{pick(locale, 'குக்கீ அமைப்புகள்', 'Cookie Settings')}</a></li>
+      </ul></div>
+      <div><h2 class="font-extrabold">{srcH}</h2><ul class="mt-3 space-y-2 text-sm text-white/72">
+        <li><a target="_blank" rel="noopener noreferrer" href="https://salem.nic.in/tourist-place/images-of-yercaudlake/">{pick(locale, 'சேலம் மாவட்ட நிர்வாகம்', 'Salem District Administration')}</a></li>
+        <li><a target="_blank" rel="noopener noreferrer" href="https://www.tamilnadutourism.tn.gov.in/">{pick(locale, 'தமிழ்நாடு சுற்றுலாத்துறை', 'Tamil Nadu Tourism')}</a></li>
+        <li><a target="_blank" rel="noopener noreferrer" href="https://tourism.gov.in/">{pick(locale, 'இந்திய சுற்றுலா அமைச்சகம்', 'Ministry of Tourism, India')}</a></li>
+      </ul></div>
     </div>
   </div>
-  <div class="border-t border-white/10 py-5 text-center text-xs text-white/55">© 2026 ஏற்காடு ஏரி பயண வழிகாட்டி. அனைத்து உரிமைகளும் பாதுகாக்கப்பட்டவை.</div>
+  <div class="border-t border-white/10 py-5 text-center text-xs text-white/55">{copy}</div>
 </footer>

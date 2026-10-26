@@ -5,113 +5,109 @@ const { locale = 'ta' } = Astro.props;
 // Itineraries — by traveller type + generic half/full day. Type-neutral, no commercial names.
 const byAudienceTa = [
   {
-    icon: '👨‍👩‍👧', title: 'குடும்பம் (Family)',
-    text: 'எளிய, நிழலான & குழந்தைகளுக்கு ஏற்ற வழி.',
-    steps: [
-      'படகு இல்லத்தில் குடும்பப் படகுச் சவாரி (பாதுகாப்பு உறைகளுடன்).',
-      'அண்ணா பூங்கா — தோட்டப் பகுதி & இளைப்பாறும் இடங்கள்.',
-      'ஏரிக்கரை நடைப்பாதை — மெதுவான நடைப்பயணம்.',
-      'நீர்ச்சத்துக்கான குடிநீர் & உணவு இடைவேளை.'
+    "icon": "👨‍👩‍👧",
+    "title": "குடும்பம் (Family)",
+    "text": "உங்கள் குழுவிற்கு ஏற்ற குறுகிய திட்டத்தைத் தேர்ந்தெடுத்து அணுகல், காத்திருப்பு மற்றும் ஓய்வைச் சரிபாருங்கள்.",
+    "steps": [
+      "படகு இயங்கி உங்கள் குழுவிற்கு அனுமதி இருந்தால் பணியாளர் மற்றும் உயிர்காப்பு உடை விதிகளைப் பின்பற்றுங்கள்.",
+      "அண்ணா பூங்காவின் தனி நுழைவு மற்றும் நேரத்தை உறுதிப்படுத்தி விருப்பமாகச் சேருங்கள்.",
+      "தற்போது பயன்படுத்தக்கூடிய ஏரிக்கரைப் பகுதியைத் தேர்ந்தெடுத்து ஓய்வெடுங்கள்."
     ]
   },
   {
-    icon: '📷', title: 'புகைப்படம் & இயற்கை (Photo / Nature)',
-    text: 'வெளிச்சம் & காட்சிகளை மையமாகக் கொண்ட வழி.',
-    steps: [
-      'காலை சூரிய உதயம் ஏரியில் — அமைதியான நீர் & மூடுபனி.',
-      'பகோடா பாயிண்ட் & லேடீஸ் சீட் — மலை & பள்ளத்தாக்குக் காட்சிகள்.',
-      'கிளியூர் அருவி — பருவநிலைக்கேற்ப நீர் வீழ்ச்சி.',
-      'காபித் தோட்டச் சாலைகள் வழியாகச் செல்லும் பயணம் & மாலை ஏரியில் சூரிய அஸ்தமனம்.'
+    "icon": "📷",
+    "title": "புகைப்படம் & இயற்கை (Photo / Nature)",
+    "text": "அனுமதிக்கப்பட்ட காட்சிகளை ஏற்ற வெளிச்சத்தில் தேர்ந்தெடுங்கள்; உதயம் அல்லது அஸ்தமனப் படகு சவாரியை உறுதி எனக் கருதாதீர்கள்.",
+    "steps": [
+      "அணுகலும் புகைப்படமும் அனுமதிக்கப்பட்ட ஏரி அல்லது படகு இல்லக் காட்சிகளைத் தேர்ந்தெடுங்கள்.",
+      "வழி மற்றும் பார்வைத் தெளிவைச் சரிபார்த்து ஒரு காட்சிமுனையைத் தேர்ந்தெடுங்கள்.",
+      "கிளியூர் அருவியைத் தனியான விருப்பப் பயணமாகக் கருதி தற்போதைய பாதை அணுகலைச் சரிபாருங்கள்."
     ]
   },
   {
-    icon: '♿', title: 'மாற்றுத்திறன் / குறைந்த படி (Accessible)',
-    text: 'குறைந்த நடை & வாகனம் சார்ந்த வசதியான வழி.',
-    steps: [
-      'ஏரிக்கரை பேவ்டு (paved) பாதை — சக்கர நாற்காலிக்கு ஏற்றது.',
-      'படகு இல்லம் & அண்ணா பூங்கா — அருகிலுள்ள வாகன நிறுத்தம்.',
-      'வாகனம் மூலம் அணுகக்கூடிய காட்சிஇடங்கள் (பகோடா பாயிண்ட், லேடீஸ் சீட்).',
-      'ஏரிக்கரை அமர்விடம் & உணவு — இடைவேளைக்கு.'
+    "icon": "♿",
+    "title": "மாற்றுத்திறன் / குறைந்த படி (Accessible)",
+    "text": "சக்கர நாற்காலிக்கு ஏற்ற சுற்றுப்பாதை இருப்பதாகக் கருதாமல் உங்கள் உண்மையான தேவைக்கேற்ப திட்டமிடுங்கள்.",
+    "steps": [
+      "வருவதற்கு முன் ஏற்ற நுழைவிடம், பாதை, படி மற்றும் படகில் ஏறுவதைப் பற்றிக் கேளுங்கள்.",
+      "உங்கள் தேவைக்கேற்ப ஓய்வு மற்றும் கழிப்பிட வசதிகளை உறுதி செய்யுங்கள்.",
+      "அணுகல் பொருத்தமில்லையெனில் பாதையைக் குறைக்கவோ மாற்றுத் திட்டம் தேர்வுசெய்யவோ செய்யுங்கள்."
     ]
   }
 ];
 const routesTa = [
   {
-    icon: '🌗', title: 'அரை நாள் (Half-day)',
-    steps: [
-      'காலை 9:00 — வருகை & படகு இல்லம்.',
-      '9:30–10:30 — படகுச் சவாரி.',
-      '10:30–11:30 — ஏரிக்கரை நடை + அண்ணா பூங்கா.',
-      '11:30–12:30 — உணவு / காபி இடைவேளை.',
-      '13:00 — மதியம் புறப்படல்.'
+    "icon": "🌗",
+    "title": "அரை நாள் (Half-day)",
+    "steps": [
+      "வருமுன் தற்போதைய நுழைவு மற்றும் படகு சேவையை உறுதி செய்யுங்கள்.",
+      "படகு கிடைத்தால் மட்டும் தேர்ந்தெடுத்து வரிசை மற்றும் அறிவுரைக்கு நேரம் வையுங்கள்.",
+      "ஏற்ற ஏரிக்கரை நடையை மேற்கொண்டு அண்ணா பூங்காவைத் தனியாக உறுதிப்படுத்திய விருப்பமாக வையுங்கள்.",
+      "மழை, நடக்கும் திறன் மற்றும் ஓய்வுக்கேற்ப மாற்றுங்கள்; இது உறுதியான கால அட்டவணை அல்ல."
     ]
   },
   {
-    icon: '🌕', title: 'முழு நாள் (Full-day)',
-    steps: [
-      'காலை 8:30 — வருகை & படகுச் சவாரி.',
-      '9:30–11:00 — கிளியூர் அருவி நடைப்பயணம்.',
-      '11:00–12:30 — பகோடா பாயிண்ட் & லேடீஸ் சீட் காட்சிகள்.',
-      '12:30–13:30 — மதிய உணவு.',
-      '13:30–15:00 — காபித் தோட்டச் சாலை வழிப் பயணம்.',
-      '16:30–17:30 — மாலை ஏரிக்கரை & சூரிய அஸ்தமனப் படகுச் சவாரி.',
-      '18:00 — புறப்படல்.'
+    "icon": "🌕",
+    "title": "முழு நாள் (Full-day)",
+    "steps": [
+      "ஏரியில் தற்போது திறந்த பகுதிகளை அவசரமின்றிப் பாருங்கள்.",
+      "கூடுதலாக ஒரு குழுவைத் தேர்ந்தெடுங்கள்: அருகிலுள்ள அண்ணா பூங்கா அல்லது ஒரு காட்சிமுனை அல்லது அணுகல் உறுதியான கிளியூர் அருவி.",
+      "அந்தத் தேர்விற்கான போக்குவரத்து, ஓய்வு மற்றும் தனிக் கட்டணத்தைத் திட்டமிடுங்கள்.",
+      "எல்லா இடங்களையும் அல்லது மாலைப் படகையும் ஒரே நாளில் முடிக்கலாம் எனக் கருதாதீர்கள்; திரும்பும் வழியைப் பாருங்கள்."
     ]
   }
 ];
 const byAudienceEn = [
   {
-    icon: '👨‍👩‍👧', title: 'Family',
-    text: 'Simple, shaded & child-friendly route.',
-    steps: [
-      'Family boat ride at the boat house (with life jackets).',
-      'Anna Park — garden area & rest spots.',
-      'Lakeside walkway — slow stroll.',
-      'Water & food break.'
+    "icon": "👨‍👩‍👧",
+    "title": "Family",
+    "text": "Choose a shorter plan for your group; check access, waiting time and rest needs.",
+    "steps": [
+      "If boats operate and your group is eligible, follow staff and life-jacket instructions.",
+      "Consider Anna Park separately after checking entry and hours.",
+      "Choose a currently usable lakeside section and take breaks."
     ]
   },
   {
-    icon: '📷', title: 'Photo / Nature',
-    text: 'Route centred on light & views.',
-    steps: [
-      'Sunrise at the lake in the morning — calm water & fog.',
-      'Pagoda Point & Ladies Seat — hill & valley views.',
-      'Kiliyur Falls — water flow by season.',
-      'Drive through coffee-plantation roads & sunset at the lake in the evening.'
+    "icon": "📷",
+    "title": "Photo / Nature",
+    "text": "Choose permitted views in suitable light; do not assume sunrise or sunset boating.",
+    "steps": [
+      "Select lake or boat-house views where access and photography are permitted.",
+      "Choose one viewpoint after checking its route and visibility.",
+      "Treat Kiliyur Falls as a separate, conditional trip; check current trail access."
     ]
   },
   {
-    icon: '♿', title: 'Accessible',
-    text: 'Low-walk, vehicle-friendly comfortable route.',
-    steps: [
-      'Lakeside paved path — wheelchair-friendly.',
-      'Boat house & Anna Park — nearby parking.',
-      'Vehicle-accessible viewpoints (Pagoda Point, Ladies Seat).',
-      'Lakeside seating & food — for a break.'
+    "icon": "♿",
+    "title": "Accessible",
+    "text": "Plan for your actual mobility needs, not an assumed wheelchair-friendly circuit.",
+    "steps": [
+      "Ask about an appropriate entrance, surfaces, steps and boarding before arrival.",
+      "Confirm rest and toilet arrangements for your own needs.",
+      "Shorten the route or choose an alternative if access is unsuitable."
     ]
   }
 ];
 const routesEn = [
   {
-    icon: '🌗', title: 'Half-day',
-    steps: [
-      '09:00 — arrive & boat house.',
-      '09:30–10:30 — boat ride.',
-      '10:30–11:30 — lakeside walk + Anna Park.',
-      '11:30–12:30 — food / coffee break.',
-      '13:00 — leave by noon.'
+    "icon": "🌗",
+    "title": "Half-day",
+    "steps": [
+      "Confirm current entry and boat service before arrival.",
+      "Choose the boat ride only if available; leave room for queues and staff instructions.",
+      "Take a suitable lakeside walk, with Anna Park optional and separately checked.",
+      "Adjust or shorten for weather, mobility and rest; this is not a fixed timetable."
     ]
   },
   {
-    icon: '🌕', title: 'Full-day',
-    steps: [
-      '08:30 — arrive & boat ride.',
-      '09:30–11:00 — Kiliyur Falls walk.',
-      '11:00–12:30 — Pagoda Point & Ladies Seat views.',
-      '12:30–13:30 — lunch.',
-      '13:30–15:00 — coffee-plantation road drive.',
-      '16:30–17:30 — evening lakeside & sunset boat ride.',
-      '18:00 — depart.'
+    "icon": "🌕",
+    "title": "Full-day",
+    "steps": [
+      "Spend unhurried time at the lake’s currently open areas.",
+      "Choose one extra group: Anna Park nearby, OR a viewpoint, OR Kiliyur Falls if access is confirmed.",
+      "Plan transport, breaks and separate entry charges for that choice.",
+      "Do not assume all attractions or evening boat rides fit one day; check the return route."
     ]
   }
 ];
@@ -119,9 +115,7 @@ const byAudience = locale === 'en' ? byAudienceEn : byAudienceTa;
 const routes = locale === 'en' ? routesEn : routesTa;
 const kicker = pick(locale, 'இயக்கத் திட்டங்கள்', 'Itineraries');
 const heading = pick(locale, 'உங்களுக்கேற்ற வழி & பொதுவான அட்டவணை', 'A route for you & a general plan');
-const intro = pick(locale,
-  'பயணக் குழு & நேரத்திற்கேற்ப வழிகள் இங்கே. அனைத்தும் வகை அடிப்படையிலானவை; குறிப்பிட்ட நிறுவனப் பெயர்கள் பரிந்துரைக்கப்படவில்லை.',
-  'Routes by travel group & time are below. All are type-based; no specific business is recommended.');
+const intro = pick(locale, "இவை விருப்பமான திட்டங்கள்; தற்போதைய அணுகல், காத்திருப்பு, உடல் வசதி மற்றும் ஓய்வுக்கேற்ப குறையுங்கள். எல்லா இடங்களையும் ஒரே நாளில் பார்க்கும் உறுதி அல்ல.", "These are optional plans. Shorten them for current access, queues, mobility and rest; they do not guarantee every attraction in one day.");
 ---
 <section id={sec(locale, 'itineraries')} class="container-shell py-16 md:py-24">
   <p class="kicker">{kicker}</p>

@@ -25,14 +25,14 @@ export function withSiteNameEn(suffix: string): string {
 
 // Geographic / authority facts (single source of truth for JSON-LD & content).
 export const GEO = {
-  latitude: 11.78333,
-  longitude: 78.21028,
-  streetAddress: 'Lake Road',
+  latitude: 11.7841942,
+  longitude: 78.2082454,
+  streetAddress: 'Lake To Ladies Seat Road',
   locality: 'Yercaud',
   region: 'Tamil Nadu',
   postalCode: '636602',
   country: 'IN',
-  plusCode: 'Q6M5+C7',
+  plusCode: '',
   mapsShareUrl: 'https://maps.app.goo.gl/DnvJDBDKXe8s1Rmi9',
   govtTourismUrl: 'https://salem.nic.in/tourist-place/images-of-yercaudlake/'
 };

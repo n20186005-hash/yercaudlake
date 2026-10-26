@@ -10,3 +10,8 @@ body{margin:0;font-family:"Noto Sans Tamil","Latha","Nirmala UI",system-ui,sans-
 .hero-pattern{background-image:linear-gradient(rgba(6,51,57,.54),rgba(6,51,57,.78)),radial-gradient(circle at 72% 28%,rgba(255,255,255,.22),transparent 22%),repeating-radial-gradient(ellipse at 50% 100%,transparent 0 26px,rgba(255,255,255,.08) 27px 29px);background-color:#0b5c64}
 .prose-tamil h2{font-size:1.55rem;font-weight:800;color:var(--deep);margin-top:2.2rem}.prose-tamil h3{font-size:1.18rem;font-weight:800;color:var(--deep);margin-top:1.7rem}.prose-tamil p,.prose-tamil li{color:#35504a}.prose-tamil ul{padding-left:1.4rem;list-style:disc}.prose-tamil a{text-decoration:underline;text-underline-offset:3px;color:#0d686d}
 input[type="checkbox"]{accent-color:#0d6d70}
+
+html[lang="ta-IN"] :is(h1,.section-title){line-height:1.6;}
+.container-shell,:is(#wx-current,#wx-days,#wx-advice){min-width:0;}
+iframe{max-width:100%;}
+@media(max-width:640px){header .container-shell{gap:.5rem;flex-wrap:wrap;}.prose-tamil{overflow-wrap:anywhere;}}

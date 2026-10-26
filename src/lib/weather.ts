@@ -1,8 +1,4 @@
-// Shared weather helpers for Yercaud Lake & Boat House.
-// Used both at build time / server-render (WeatherSection) and in the bundled
-// client script. All user-facing text is Tamil and strictly neutral — never
-// mentions the data source, "free", "API key", etc.
-
+// Validated model and localized rendering shared by the native endpoint, build snapshot and client refresh.
 export const WMO: Record<number, { t: string; i: string }> = {
   0: { t: 'வானம் தெளிவு', i: '☀️' },
   1: { t: 'பெரும்பாலும் தெளிவு', i: '🌤️' },
@@ -26,7 +22,7 @@ export const WMO: Record<number, { t: string; i: string }> = {
   77: { t: 'பனித்துகள்', i: '❄️' },
   80: { t: 'லேசான மழை பொழிவு', i: '🌦️' },
   81: { t: 'மழை பொழிவு', i: '🌧️' },
-  82: { t: 'பலத்த மழை பொழிவு', i: '⛈️' },
+  82: { t: 'பலத்த மழை பொழிவு', i: '🌧️' },
   85: { t: 'பனி மழை', i: '🌨️' },
   86: { t: 'பனி மழை', i: '🌨️' },
   95: { t: 'இடியுடன் கூடிய மழை', i: '⛈️' },
@@ -34,207 +30,80 @@ export const WMO: Record<number, { t: string; i: string }> = {
   99: { t: 'இடி & ஆலங்கட்டி', i: '⛈️' }
 };
 
-export function codeInfo(c: number): { t: string; i: string } {
-  return WMO[c] || { t: 'மாறுபட்ட வானிலை', i: '🌤️' };
+const WMO_EN: Record<string, string> = {
+  '0': 'Clear',
+  '1': 'Mainly clear',
+  '2': 'Partly cloudy',
+  '3': 'Overcast',
+  '45': 'Fog',
+  '48': 'Rime fog',
+  '51': 'Light drizzle',
+  '53': 'Drizzle',
+  '55': 'Dense drizzle',
+  '56': 'Light freezing drizzle',
+  '57': 'Dense freezing drizzle',
+  '61': 'Light rain',
+  '63': 'Rain',
+  '65': 'Heavy rain',
+  '66': 'Light freezing rain',
+  '67': 'Heavy freezing rain',
+  '71': 'Light snow',
+  '73': 'Snow',
+  '75': 'Heavy snow',
+  '77': 'Snow grains',
+  '80': 'Light rain showers',
+  '81': 'Rain showers',
+  '82': 'Violent rain showers',
+  '85': 'Snow showers',
+  '86': 'Heavy snow showers',
+  '95': 'Thunderstorm',
+  '96': 'Thunderstorm with hail',
+  '99': 'Severe thunderstorm with hail'
+};
+export type Locale='ta'|'en';
+export const LAT=11.7841942,LON=78.2082454;
+export const WX_URL=`https://api.open-meteo.com/v1/forecast?latitude=${LAT}&longitude=${LON}&current=temperature_2m,relative_humidity_2m,apparent_temperature,is_day,weather_code,wind_speed_10m&daily=weather_code,temperature_2m_max,temperature_2m_min,precipitation_probability_max,uv_index_max&timezone=Asia%2FKolkata&wind_speed_unit=kmh&forecast_days=7`;
+export const TIMEZONE='Asia/Kolkata', OFFSET=19800, TTL=600000, DEADLINE=4500;
+export interface Forecast {timezone:string;utc_offset_seconds:number;current:{time:string;temperature_2m:number;apparent_temperature:number;relative_humidity_2m:number;weather_code:number;wind_speed_10m:number};daily:{time:string[];weather_code:number[];temperature_2m_max:number[];temperature_2m_min:number[];precipitation_probability_max:(number|null)[];uv_index_max:(number|null)[]}}
+export function validateWeather(data:unknown,now=Date.now()):Forecast {
+ const d=data as Forecast,c=d?.current,x=d?.daily;const n=(v:unknown,lo:number,hi:number)=>typeof v==='number'&&Number.isFinite(v)&&v>=lo&&v<=hi;
+ const today=new Date(now+OFFSET*1000).toISOString().slice(0,10);
+ if(d?.timezone!==TIMEZONE||d.utc_offset_seconds!==OFFSET||!c||!x||typeof c.time!=='string'||!/^\d{4}-\d{2}-\d{2}T([01]\d|2[0-3]):[0-5]\d$/.test(c.time))throw Error('Incomplete forecast');
+ const age=now-Date.parse(c.time+'+05:30');if(!Number.isFinite(age)||age>10800000||age< -900000||c.time.slice(0,10)!==today)throw Error('Stale forecast');
+ for(const [key,lo,hi]of [['temperature_2m',-100,65],['apparent_temperature',-120,80],['relative_humidity_2m',0,100],['wind_speed_10m',0,500]]as const)if(!n(c[key],lo,hi))throw Error('Invalid current number');
+ const code=(v:unknown)=>typeof v==='number'&&Object.hasOwn(WMO_EN,v);if(!code(c.weather_code))throw Error('Invalid WMO');
+ for(const key of ['time','weather_code','temperature_2m_max','temperature_2m_min','precipitation_probability_max','uv_index_max']as const)if(!Array.isArray(x[key])||x[key].length!==7)throw Error('Incomplete seven days');
+ for(let i=0;i<7;i++){const day=new Date(Date.parse(today+'T00:00Z')+i*86400000).toISOString().slice(0,10);if(x.time[i]!==day||!code(x.weather_code[i]))throw Error('Invalid forecast date/code');if(!n(x.temperature_2m_max[i],-100,65)||!n(x.temperature_2m_min[i],-100,65)||x.temperature_2m_min[i]>x.temperature_2m_max[i])throw Error('Invalid temperature');if(x.precipitation_probability_max[i]!==null&&!n(x.precipitation_probability_max[i],0,100))throw Error('Invalid probability');if(x.uv_index_max[i]!==null&&!n(x.uv_index_max[i],0,30))throw Error('Invalid UV');}
+ return d;
 }
 
-// km/h → Beaufort scale (used for "காற்று X நிலை").
-export function kmhToBeaufort(kmh: number): number {
-  const s = Number(kmh) || 0;
-  const limits = [1, 5, 11, 19, 28, 38, 49, 61, 74, 88, 102, 117];
-  let b = 0;
-  for (let i = 0; i < limits.length; i++) {
-    if (s >= limits[i]) b = i + 1;
-    else break;
-  }
-  return b;
+const esc=(v:unknown)=>String(v).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]!));
+export function codeInfo(c:number,locale:Locale='ta'){return {t:locale==='en'?WMO_EN[c]??'Variable weather':WMO[c]?.t??'மாறுபட்ட வானிலை',i:WMO[c]?.i??'☁️'};}
+export function kmhToBeaufort(kmh:number){return [1,6,12,20,29,39,50,62,75,89,103,118,Infinity].findIndex(n=>kmh<n);}
+export function fmtC(n:number){return Math.round(n)+'°';}
+const num=(n:number|null)=>n===null?'—':String(Math.round(n));
+export function dayLabel(day:string,locale:Locale='ta'){const date=new Date(day+'T12:00Z'),tag=locale==='en'?'en-IN':'ta-IN';return {d:new Intl.DateTimeFormat(tag,{weekday:'short',timeZone:'UTC'}).format(date),m:new Intl.DateTimeFormat(tag,{day:'numeric',month:'short',timeZone:'UTC'}).format(date)};}
+export interface Advice{outfit:string[];plan:string[];items:string[];risk:string|null;locale:Locale}
+export function buildAdvice(input:Forecast,locale:Locale='ta'):Advice{
+ const d=validateWeather(input),c=d.current,x=d.daily,en=locale==='en',outfit:string[]=[],plan:string[]=[],items:string[]=[],code=c.weather_code,pop=x.precipitation_probability_max[0],uv=x.uv_index_max[0];let risk:string|null=null;
+ if([95,96,99].includes(code))risk=en?'Thunderstorms in the model: seek substantial shelter; avoid isolated trees, exposed hills and the water. Follow staff and official warnings.':'மாடலில் இடி மழை: உறுதியான கட்டிடத்தில் தஞ்சம் புகுங்கள்; தனி மரம், திறந்த மலைப்பகுதி மற்றும் நீரிலிருந்து விலகுங்கள். பணியாளர் மற்றும் அதிகாரப்பூர்வ எச்சரிக்கைகளைப் பின்பற்றுங்கள்.';
+ else if([65,67,82].includes(code))risk=en?'Heavy rain in the model: wet paths and steps can be slippery. This is not an official closure notice.':'மாடலில் பலத்த மழை: ஈரமான பாதை மற்றும் படிகளில் வழுக்கலாம். இது அதிகாரப்பூர்வ மூடல் அறிவிப்பு அல்ல.';
+ else if(c.wind_speed_10m>=50)risk=en?'Strong wind: avoid exposed edges and follow local instructions. The forecast does not establish whether boats are operating.':'பலத்த காற்று: திறந்த விளிம்புகளைத் தவிர்த்து உள்ளூர் அறிவுரையைப் பின்பற்றுங்கள். படகு இயங்குவதை முன்னறிவிப்பு உறுதி செய்யாது.';
+ if(pop!==null&&pop>=40)outfit.push(en?'Rain probability is elevated; bring rain protection. Probability is not rainfall intensity.':'மழை வாய்ப்பு அதிகம்; மழைப் பாதுகாப்பு எடுத்துச் செல்லுங்கள். வாய்ப்பு சதவீதம் மழையின் தீவிரம் அல்ல.');
+ if(uv!==null&&uv>=6)outfit.push(en?'High daily UV maximum: use sun protection even when cloudy.':'நாளின் அதிகபட்ச UV உயர்வாக உள்ளது; மேகமிருந்தாலும் வெயில் பாதுகாப்பு பயன்படுத்துங்கள்.');
+ if(x.temperature_2m_max[0]>=35)outfit.push(en?'Warm conditions: carry water and shorten exposed walks as needed.':'வெப்பமான நிலை: தண்ணீர் எடுத்துச் சென்று தேவைக்கேற்ப வெயிலில் நடப்பதைக் குறையுங்கள்.');
+ else if(x.temperature_2m_min[0]<=18)outfit.push(en?'Bring an extra layer for cooler periods.':'குளிரான நேரத்திற்குக் கூடுதல் மேலாடை எடுத்துச் செல்லுங்கள்.');
+ if(!outfit.length)outfit.push(en?'Choose clothing and rest breaks for the actual conditions.':'உண்மையான நிலைக்கு ஏற்ற உடை மற்றும் ஓய்வைத் திட்டமிடுங்கள்.');
+ if([51,53,55,56,57,61,63,65,66,67,80,81,82].includes(code))plan.push(en?'Rain is indicated: assess wet paths and use suitable footwear.':'மழை காட்டப்படுகிறது; ஈரப்பாதைகளைப் பார்த்து பொருத்தமான காலணி அணியுங்கள்.');
+ if([45,48].includes(code))plan.push(en?'Fog may reduce visibility; adjust viewpoints and road travel to actual conditions.':'மூடுபனி பார்வையைக் குறைக்கலாம்; காட்சிமுனை மற்றும் சாலைப் பயணத்தை உண்மையான நிலைக்கேற்ப மாற்றுங்கள்.');
+ plan.push(en?'Confirm boat availability and safety instructions directly with the boat house. A forecast is not permission to boat, swim or enter a waterfall route.':'படகு கிடைப்பதும் பாதுகாப்பு அறிவுரையும் படகு இல்லத்திலேயே உறுதி செய்யுங்கள். முன்னறிவிப்பு படகு, நீச்சல் அல்லது அருவிப் பாதைக்கான அனுமதி அல்ல.');
+ items.push(en?'Carry water and suitable walking shoes.':'தண்ணீர் மற்றும் பொருத்தமான நடை காலணி எடுத்துச் செல்லுங்கள்.');
+ return {outfit,plan,items,risk,locale};
 }
-
-const TA_DAY = ['ஞாயிறு', 'திங்கள்', 'செவ்வாய்', 'புதன்', 'வியாழன்', 'வெள்ளி', 'சனி'];
-const TA_MON = ['ஜன', 'பிப்', 'மார்', 'ஏப்', 'மே', 'ஜூன்', 'ஜூலை', 'ஆக', 'செப்', 'அக்', 'நவ', 'டிச'];
-
-export function dayLabel(d: string): { d: string; m: string } {
-  try {
-    const dt = new Date(d + 'T12:00:00');
-    return { d: TA_DAY[dt.getDay()], m: dt.getDate() + ' ' + TA_MON[dt.getMonth()] };
-  } catch {
-    return { d: '', m: '' };
-  }
-}
-
-export function fmtC(v: number): string {
-  return Math.round(v) + '°';
-}
-
-export interface Advice {
-  outfit: string[];
-  plan: string[];
-  items: string[];
-  risk: string | null;
-}
-
-function isRain(c: number): boolean {
-  return [51, 53, 55, 56, 57, 61, 63, 65, 66, 67, 80, 81, 82].includes(c);
-}
-function isStorm(c: number): boolean {
-  return [95, 96, 99].includes(c);
-}
-function isFog(c: number): boolean {
-  return [45, 48].includes(c);
-}
-
-// Derive visitor-executable advice from the forecast.
-// Risk is derived from current conditions (no official alert feed); it is NOT
-// presented as a government warning. The lake/boat + hill-station context is
-// covered (boat pauses, lightning on hills, ghat-road slip, misty viewpoints).
-export function buildAdvice(data: any): Advice {
-  const cur = data?.current;
-  const day = data?.daily;
-  const code: number = cur?.weather_code ?? day?.weather_code?.[0] ?? 0;
-  const tmax: number | undefined = day?.temperature_2m_max?.[0];
-  const tmin: number | undefined = day?.temperature_2m_min?.[0];
-  const precip: number | undefined = day?.precipitation_probability_max?.[0];
-  const uv: number | undefined = day?.uv_index_max?.[0];
-  const wind: number | undefined = cur?.wind_speed_10m;
-  const beaufort = wind != null ? kmhToBeaufort(wind) : 0;
-
-  const outfit: string[] = [];
-  const plan: string[] = [];
-  const items: string[] = [];
-  let risk: string | null = null;
-
-  // --- Risk (top, red; derived from forecast, not an official alert) ---
-  if (isStorm(code)) {
-    risk = '⚠️ மின்னல் / இடியுடன் கூடிய மழை: மலை ஏறுதல், ஏரிப் படகு சவாரி, மரத்தடியில் நிற்பதைத் தவிர்க்கவும்; நீர் விளையாட்டுகள் நிறுத்தப்படலாம்.';
-  } else if (code === 65 || code === 82 || (precip != null && precip >= 80)) {
-    risk = '⚠️ பலத்த மழை: பள்ளத்தாக்கு / தாழ்வான பகுதிகளை விட்டு விலகுங்கள்; ஏரிப் படகு & சவாரிகள் நிறுத்தப்படலாம்.';
-  } else if (beaufort >= 7) {
-    risk = '⚠️ பலத்த காற்று: ஏரிக்கரை விளம்பு / பாறைகளை விட்டு விலகுங்கள்; படகுச் சேவைகள் நிறுத்தப்படலாம்.';
-  } else if (isFog(code)) {
-    risk = '⚠️ மூடுபனி: பார்வைத் திறன் குறைவு — மலைச்சாலை & ஏரிக் காட்சிகளில் மிகவும் எச்சரிக்கையாக இருங்கள்.';
-  }
-
-  // --- Precipitation ---
-  if (precip != null && precip >= 60) {
-    outfit.push('மழை வாய்ப்பு அதிகம்; நீர் புகாத ஆடை / மடித்துக்கொள்ளும் குடையை எடுத்துச் செல்லுங்கள்.');
-    plan.push('மழை வாய்ப்பு இருப்பதால் உட்புற இடங்களை (அண்ணா பூங்கா குடில்கள் போன்றவை) முன்னுரிமைப்படுத்தவும்; படகு சவாரி நிறுத்தப்படலாம்.');
-    items.push('☂️ குடை / மழைக்கோட்');
-  } else if (isRain(code)) {
-    outfit.push('இலேசான மழை — வழுக்கும் பாதைகளில் கவனமாக நடக்கவும்.');
-    plan.push('திறந்தவெளி அனுபவம் குறைவாக இருக்கலாம்; படகுக்குப் பதில் ஏரிக்கரை நடையைத் தேர்வுசெய்யலாம்.');
-    items.push('☂️ மடித்த குடை');
-  }
-
-  if (isStorm(code) || code === 65 || code === 82) {
-    if (!items.includes('☂️ குடை / மழைக்கோட்')) {
-      items.push('🧥 மழைக்கோட் (நீளக் குடை பரிந்துரைக்கப்படவில்லை — காற்று வலுவாக உள்ளது)');
-    }
-  }
-
-  // --- Heat & UV (avoid duplicate sunscreen via if/else-if) ---
-  if (tmax != null && tmax >= 32) {
-    outfit.push('வெப்பம் அதிகம்; இலேசான, காற்றோட்டமான ஆடைகள் அணியவும்.');
-    plan.push('நண்பகல் வெப்பத்தைத் தவிர்த்து காலை / மாலை நேரங்களில் ஏரிக்கரையில் இருங்கள்; படகு நேரத்தைக் குறைக்கவும்.');
-    items.push('🧴 சூரியப் பாதுகாப்பு (SPF), 🕶️ கண்ணாடி, 💧 போதுமான குடிநீர்');
-  } else if (uv != null && uv >= 5) {
-    items.push('🧴 சூரியப் பாதுகாப்பு (SPF), 🕶️ கண்னாடி, 🧢 தொப்பி');
-  } else if (code === 0 || code === 1) {
-    items.push('🧴 சூரியப் பாதுகாப்பு (வெளிச்சம் அதிகம்)');
-  }
-
-  // --- Cold / diurnal range / hill chill ---
-  const diff = tmax != null && tmin != null ? tmax - tmin : 0;
-  if (diff > 8) {
-    outfit.push('பகல்–இரவு வெப்ப வேறுபாடு அதிகம்; அணியும் / கழற்றும் வசதிக்கு ஒரு சிறிய ஜாக்கெட் எடுத்துச் செல்லுங்கள்.');
-  }
-  if (tmax != null && tmax <= 10) {
-    outfit.push('வெப்பநிலை குறைவு; தடித்த ஜாக்கெட் / தலைக்கவசம் அணியவும்.');
-    items.push('🧥 தடித்த ஜாக்கெட்');
-  }
-  if (tmin != null && tmin <= 14) {
-    outfit.push('மலை வெப்பநிலை குளிர்ச்சியாக இருக்கலாம்; ஒரு சிறிய ஜாக்கெட் பயனுள்ளது.');
-  }
-
-  // --- Wind ---
-  if (beaufort >= 5 && beaufort < 7) {
-    plan.push('காற்று சற்று அதிகம்; ஏரிப் படகு / திறந்தவெளிச் சவாரிகள் நிறுத்தப்படலாம்.');
-    items.push('🧢 தொப்பி காற்றில் பறக்கலாம் — இறுக்கமான தலைப்பாகை நல்லது');
-  }
-
-  // --- Clear / cloudy ---
-  if (code === 0 || code === 1) {
-    plan.push('வானம் தெளிவாக உள்ளது; ஏரிக்கரை நடை & சூரிய உதய / அஸ்தமனக் காட்சிகளுக்கு ஏற்றது.');
-  } else if (code === 2 || code === 3) {
-    plan.push('வெளிச்சம் மென்மையானது; புகைப்படம் எடுப்பதற்கும் நீண்ட நேர வெளிச்சுற்றுலாவுக்கும் ஏற்றது.');
-  }
-
-  // --- Defaults ---
-  if (outfit.length === 0) outfit.push('வானிலை சாதாரணம்; வழக்கமான செல்லும் ஆடைகள் போதுமானது.');
-  if (plan.length === 0) plan.push('இன்று வெளிச்சுற்றுலாவுக்கு ஏற்ற நாள்; ஏரிக்கரையில் படகு & நடைப்பயணத்தைத் திட்டமிடலாம்.');
-  if (items.length === 0) items.push('வழக்கமான பயணப் பொருட்கள் போதுமானவை.');
-
-  const uniq = (a: string[]) => Array.from(new Set(a));
-  return { outfit: uniq(outfit), plan: uniq(plan), items: uniq(items), risk };
-}
-
-function block(title: string, arr: string[]): string {
-  return `<div class="rounded-2xl bg-white/10 p-5"><h3 class="font-extrabold text-[#f4d98d]">${title}</h3><ul class="mt-3 space-y-2 text-sm leading-7 text-white/85">${arr
-    .map((x) => `<li class="flex gap-2"><span class="text-[#9fe0c4]">✓</span><span>${x}</span></li>`)
-    .join('')}</ul></div>`;
-}
-
-// Full advice HTML (risk banner + 3 labelled blocks + neutral derivation note).
-export function renderAdvice(a: Advice): string {
-  const risk = a.risk
-    ? `<div class="mb-5 rounded-2xl bg-[#7a1f2b]/40 p-5 ring-1 ring-[#ff9aa6]/40"><p class="font-extrabold leading-7 text-[#ffd5da]">${a.risk}</p></div>`
-    : '';
-  const grid = `<div class="grid gap-5 md:grid-cols-3">${block('உடைப் பரிந்துரை', a.outfit)}${block(
-    'விளையாட்டுத் திட்டம்',
-    a.plan
-  )}${block('உடன் எடுத்துச் செல்வது', a.items)}</div>`;
-  const note =
-    '<p class="mt-5 text-xs leading-6 text-white/45">இது வானிலை முன்னறிவிப்பிலிருந்து பெறப்பட்ட பரிந்துரை; அதிகாரப்பூர்வ வானிலை எச்சரிக்கைகளுக்கு உத்தியோகபூர்வ அறிவிப்புகளைப் பார்க்கவும்.</p>';
-  return risk + grid + note;
-}
-
-export function renderCurrent(d: any): string {
-  const c = d?.current;
-  if (!c) return '';
-  const ci = codeInfo(c.weather_code);
-  const precip = d?.daily?.precipitation_probability_max?.[0];
-  const beaufort = kmhToBeaufort(c.wind_speed_10m);
-  return `<div class="flex h-full flex-col justify-between gap-6">
-    <div class="flex items-center gap-5">
-      <span class="text-6xl leading-none" aria-hidden="true">${ci.i}</span>
-      <div><div class="text-5xl font-black">${fmtC(c.temperature_2m)}</div><p class="mt-1 font-extrabold text-[#f4d98d]">${ci.t}</p></div>
-    </div>
-    <dl class="grid grid-cols-2 gap-3 text-sm sm:grid-cols-4">
-      <div class="rounded-2xl bg-white/10 p-3"><dt class="text-white/60">உணர்வு</dt><dd class="mt-1 text-lg font-black">${fmtC(c.apparent_temperature)}</dd></div>
-      <div class="rounded-2xl bg-white/10 p-3"><dt class="text-white/60">ஈரப்பதம்</dt><dd class="mt-1 text-lg font-black">${Math.round(c.relative_humidity_2m)}%</dd></div>
-      <div class="rounded-2xl bg-white/10 p-3"><dt class="text-white/60">காற்று</dt><dd class="mt-1 text-lg font-black">${Math.round(c.wind_speed_10m)} km/h <span class="text-xs text-white/55">(${beaufort} நிலை)</span></dd></div>
-      <div class="rounded-2xl bg-white/10 p-3"><dt class="text-white/60">மழை வாய்ப்பு</dt><dd class="mt-1 text-lg font-black">${precip != null ? precip + '%' : '—'}</dd></div>
-    </dl>
-  </div>`;
-}
-
-export function renderDays(d: any): string {
-  const dl = d?.daily;
-  if (!dl) return '';
-  return dl.time
-    .map((t: string, i: number) => {
-      const lb = dayLabel(t);
-      const ii = codeInfo(dl.weather_code[i]);
-      const pr = dl.precipitation_probability_max[i];
-      const uv = dl.uv_index_max?.[i];
-      return `<div class="rounded-2xl bg-white/10 p-4 text-center ring-1 ring-white/15">
-        <p class="font-extrabold text-[#f4d98d]">${lb.d}</p>
-        <p class="text-xs text-white/55">${lb.m}</p>
-        <div class="my-3 text-3xl" aria-hidden="true">${ii.i}</div>
-        <p class="text-sm leading-5 text-white/80">${ii.t}</p>
-        <p class="mt-2 font-black">${fmtC(dl.temperature_2m_max[i])} <span class="text-white/55">/ ${fmtC(dl.temperature_2m_min[i])}</span></p>
-        ${pr != null ? `<p class="mt-1 text-xs text-[#a9e0f2]">☔ ${pr}%</p>` : ''}
-        ${uv != null ? `<p class="text-xs text-white/55">☀️ UV ${uv}</p>` : ''}
-      </div>`;
-    })
-    .join('');
-}
+function block(title:string,arr:string[]){return `<div class="min-w-0 rounded-2xl bg-white/10 p-5"><h3 class="font-extrabold text-[#f4d98d]">${esc(title)}</h3><ul class="mt-3 space-y-2 text-sm leading-7 text-white/85">${arr.map(x=>`<li>${esc(x)}</li>`).join('')}</ul></div>`;}
+export function renderAdvice(a:Advice){const en=a.locale==='en';return (a.risk?`<div class="mb-5 rounded-2xl bg-[#7a1f2b]/40 p-5"><p>${esc(a.risk)}</p></div>`:'')+`<div class="grid min-w-0 gap-5 md:grid-cols-3">${block(en?'Clothing':'உடை',a.outfit)}${block(en?'Visit planning':'பயணத் திட்டம்',a.plan)}${block(en?'Bring along':'எடுத்துச் செல்ல',a.items)}</div><p class="mt-5 text-xs leading-6 text-white/55">${en?'Model-derived suggestions, not an official warning or an operating notice.':'மாடலில் இருந்து பெறப்பட்ட ஆலோசனை; அதிகாரப்பூர்வ எச்சரிக்கையோ இயக்க அறிவிப்போ அல்ல.'}</p>`;}
+export function renderCurrent(input:Forecast,locale:Locale='ta'){const d=validateWeather(input),c=d.current,en=locale==='en',ci=codeInfo(c.weather_code,locale),pop=d.daily.precipitation_probability_max[0];return `<div class="flex h-full min-w-0 flex-col justify-between gap-6"><div class="flex flex-wrap items-center gap-5"><span class="text-6xl" aria-hidden="true">${ci.i}</span><div><div class="text-5xl font-black">${fmtC(c.temperature_2m)}C</div><p class="mt-1 font-extrabold text-[#f4d98d]">${esc(ci.t)}</p></div></div><dl class="grid min-w-0 grid-cols-2 gap-3 text-sm">${[[en?'Feels like':'உணர்வு',fmtC(c.apparent_temperature)+'C'],[en?'Humidity':'ஈரப்பதம்',num(c.relative_humidity_2m)+'%'],[en?'Wind':'காற்று',num(c.wind_speed_10m)+' km/h · '+(en?'Beaufort ':'நிலை ')+kmhToBeaufort(c.wind_speed_10m)],[en?'Rain probability':'மழை வாய்ப்பு',num(pop)+(pop===null?'':'%')]].map(([label,value])=>`<div class="min-w-0 rounded-2xl bg-white/10 p-3"><dt class="text-white/60">${label}</dt><dd class="mt-1 font-black">${value}</dd></div>`).join('')}</dl></div>`;}
+export function renderDays(input:Forecast,locale:Locale='ta'){const d=validateWeather(input),x=d.daily,en=locale==='en';return x.time.map((day,i)=>{const label=dayLabel(day,locale),ci=codeInfo(x.weather_code[i],locale),pop=x.precipitation_probability_max[i],uv=x.uv_index_max[i];return `<div class="min-w-0 rounded-2xl bg-white/10 p-4 text-center ring-1 ring-white/15"><p class="font-extrabold text-[#f4d98d]">${label.d}</p><p class="text-xs text-white/55">${label.m}</p><div class="my-3 text-3xl" aria-hidden="true">${ci.i}</div><p class="text-sm leading-6 text-white/80">${esc(ci.t)}</p><p class="mt-2 font-black">${fmtC(x.temperature_2m_max[i])} / ${fmtC(x.temperature_2m_min[i])}</p><p class="mt-1 text-xs text-[#a9e0f2]">${en?'Rain probability':'மழை வாய்ப்பு'}: ${num(pop)}${pop===null?'':'%'}</p><p class="text-xs text-white/55">${en?'Daily UV max':'நாள் UV அதிகபட்சம்'}: ${num(uv)}</p></div>`;}).join('');}
+export async function fetchWeather():Promise<Forecast>{const controller=new AbortController();let timer:ReturnType<typeof setTimeout>|undefined;try{return await Promise.race([(async()=>{const res=await fetch(WX_URL,{signal:controller.signal});if(!res.ok)throw Error('Weather HTTP');const data=validateWeather(await res.json());if(controller.signal.aborted)throw Error('Weather deadline');return data;})(),new Promise<Forecast>((_,reject)=>timer=setTimeout(()=>{controller.abort();reject(Error('Weather deadline'));},DEADLINE))]);}finally{clearTimeout(timer);}}
+let cached:{at:number;data:Forecast}|undefined;
+export async function getWeather():Promise<Forecast|null>{try{if(cached&&Date.now()-cached.at>=0&&Date.now()-cached.at<TTL)return validateWeather(cached.data);const data=await fetchWeather();cached={at:Date.now(),data};return data;}catch{return null;}}

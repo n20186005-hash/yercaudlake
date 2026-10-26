@@ -2,95 +2,125 @@
 import { type Locale, sec, pick } from '../i18n';
 interface Props { locale?: Locale }
 const { locale = 'ta' } = Astro.props;
-// Seasonal travel strategy for Yercaud — based on India Meteorological Department (IMD)
-// 30-year average climate normals. Climatology, not a forecast; verify locally before travel.
+// Condition-based visit planning, not measured climate normals or a forecast.
+// Check actual weather, access and boat-service notices before travelling.
 const seasonsTa = [
   {
-    icon: '🌤️', title: 'கோடை (மார்ச்–மே)',
-    temp: '≈ 15–28°C',
-    weather: 'சமவெளிகள் வெப்பமாக இருக்கும்போதும் ஏற்காடு தட்பவெப்ப நிலையில் மிதமானது; காலை & மாலை ஏரிக்கரை நடைக்கு ஏற்றது.',
-    water: 'ஏரியின் நீர்மட்டம் மிதமானது; படகு இயக்கம் பொதுவாக சீராக உள்ளது.',
-    wildlife: 'பறவைகள் சுறுசுறுப்பாகக் காணப்படும்; மழைக் கால அளவுக்கு ஈரப்பசை (leeches) அரிது.',
-    tip: 'முன்-பருவமழை மழைத்தூறல்கள் அவ்வப்போது வரலாம்; படகுக்கு முன் வானிலையை உறுதிப்படுத்தவும்.'
+    "icon": "🌤️",
+    "title": "வெப்பம் மற்றும் வெயில்",
+    "temp": "தற்போதைய வெப்பநிலை மற்றும் UV",
+    "weather": "மாத சராசரியல்லாமல் தேதியுள்ள முன்னறிவிப்புக்கேற்ப உடை தேர்ந்தெடுங்கள்.",
+    "water": "மழை மட்டும் ஏரி நீர்மட்டம் அல்லது படகு கிடைப்பை உறுதி செய்யாது.",
+    "wildlife": "விலங்குகளைக் கண்டால் உணவளிக்காமல் அமைதியாகப் பாருங்கள்.",
+    "tip": "மேகம் இருந்தாலும் தண்ணீர் மற்றும் வெயில் பாதுகாப்பு வையுங்கள்."
   },
   {
-    icon: '🌧️', title: 'தென்மேற்குப் பருவமழை (ஜூன்–செப்)',
-    temp: '≈ 16–24°C',
-    weather: 'தென்மேற்குப் பருவமழை கனமானது; மலை பசுமையாகவும் மூடுபனியுடனும் இருக்கும்; மலைச்சாலைகள் வழுக்கும்.',
-    water: 'ஏரி நிரம்பியிருக்கும்; கிளியூர் அருவி உச்சக் காட்சியை அளிக்கும்.',
-    wildlife: 'தாவர & விலங்கினச் செழிப்பு அதிகம்; ஈரப்பசை (leeches) பாதைகளில் இருக்கலாம்.',
-    tip: 'படகு இயக்கம் காலநிலைக்கேற்ப நிறுத்தப்படலாம்; மழைக்கோடு & இழுப்படிகளுடன் வாருங்கள்.'
+    "icon": "🌧️",
+    "title": "மழை அல்லது இடி மழை",
+    "temp": "அதிகாரப்பூர்வ எச்சரிக்கை மற்றும் மாடல்",
+    "weather": "ஈரப்பாதை, படி மற்றும் சாலைத் தெளிவை உள்ளூரில் மதிப்பிடுங்கள்.",
+    "water": "படகு அறிவுரையை நேரடியாகக் கேளுங்கள்; முன்னறிவிப்பு இயக்க அறிவிப்பு அல்ல.",
+    "wildlife": "அனுமதிக்கப்பட்ட பாதையில் இருங்கள்; புகைப்படத்திற்காகச் செடிகளுக்குள் செல்லாதீர்கள்.",
+    "tip": "இடி மழையில் உறுதியான கட்டிடத்தில் தஞ்சம் புகுங்கள்."
   },
   {
-    icon: '🍃', title: 'வடகிழக்குப் பருவமழை / பின் மழை (அக்–நவ)',
-    temp: '≈ 14–25°C',
-    weather: 'வடகிழக்குப் பருவமழை லேசான சாரல்களுடன்; மழைக்குப் பிறகு வானம் தெளிவாக, ஒளி புகைப்படத்திற்கு ஏற்றது.',
-    water: 'ஏரி நிலையானது; பசுமை தொடர்கிறது.',
-    wildlife: 'பறவைகள் & பட்டாம்பூச்சிகள் சால்பான காலம்.',
-    tip: 'காட்சிப் புகைப்படம் & குடும்பப் பயணத்திற்கு ஏற்ற பருவம்.'
+    "icon": "🍃",
+    "title": "மூடுபனி அல்லது குறைந்த பார்வை",
+    "temp": "தற்போதைய உள்ளூர் நிலை",
+    "weather": "பார்வைத் தெளிவுக்கேற்ப மலைச் சாலை மற்றும் காட்சிமுனையை மாற்றுங்கள்.",
+    "water": "அமைதியான நீரோ படகிற்கான அனுமதியோ இருப்பதாகக் கருதாதீர்கள்.",
+    "wildlife": "விலங்குகளைத் தொந்தரவு செய்யாமல் தூரம் வையுங்கள்.",
+    "tip": "கூடுதல் நேரம் அல்லது குறுகிய திட்டம் வையுங்கள்."
   },
   {
-    icon: '❄️', title: 'குளிர்காலம் (டிச–பிப்)',
-    temp: '≈ 10–22°C',
-    weather: 'ஆண்டின் குளிரான, தெளிவான காலம்; காலை மூடுபனி & இதமான பகல் — உச்சக் கூட்டம் நேரம்.',
-    water: 'ஏரி அமைதியாக, படகு இயக்கம் சௌகரியமானது.',
-    wildlife: 'தெளிவான காட்சிகள்; காலை பறவைகள் செயல்பாடு நன்றாக இருக்கும்.',
-    tip: 'விடுமுறை நாட்களில் முன்கூட்டியே வாருங்கள்; காலைக் குளிருக்கு சால்பான ஆடைகள் பரிந்துரைக்கப்படுகின்றன.'
+    "icon": "❄️",
+    "title": "குளிரான நேரம்",
+    "temp": "தற்போதைய வெப்பநிலை மற்றும் காற்று",
+    "weather": "தேவைப்பட்டால் மேலாடை வையுங்கள்; தேதி மட்டும் சுகமான நிலைக்கு உறுதி அல்ல.",
+    "water": "தற்போதைய படகேறும் மற்றும் வானிலை விதியைக் கேளுங்கள்.",
+    "wildlife": "உள்ளூர் அறிவிப்பை மதித்து குப்பையை ஏரியில் போடாதீர்கள்.",
+    "tip": "உங்கள் குழு மற்றும் அனுமதி நேரத்திற்கேற்ப நடையை மாற்றுங்கள்."
   }
 ];
 const seasonsEn = [
   {
-    icon: '🌤️', title: 'Summer (Mar–May)',
-    temp: '≈ 15–28°C',
-    weather: 'While the plains are hot, Yercaud’s climate is mild; good for lakeside walks in the morning & evening.',
-    water: 'Lake level is moderate; boating usually runs steadily.',
-    wildlife: 'Birds are active; leeches fewer than in the monsoon.',
-    tip: 'Pre-monsoon showers may come occasionally; confirm weather before boating.'
+    "icon": "🌤️",
+    "title": "Heat and sun",
+    "temp": "Current temperature and UV",
+    "weather": "Choose clothing from the dated forecast, not a monthly average.",
+    "water": "Rainfall alone does not establish lake level or boat availability.",
+    "wildlife": "Observe any wildlife quietly without feeding.",
+    "tip": "Carry water and sun protection, even under cloud."
   },
   {
-    icon: '🌧️', title: 'Southwest Monsoon (Jun–Sep)',
-    temp: '≈ 16–24°C',
-    weather: 'Southwest monsoon is heavy; hills are green with fog; ghat roads are slippery.',
-    water: 'Lake is full; Kiliyur Falls at its best.',
-    wildlife: 'Rich plant & animal life; leeches may be on trails.',
-    tip: 'Boating may stop with weather; come with raincoat & grip.'
+    "icon": "🌧️",
+    "title": "Rain or thunderstorms",
+    "temp": "Official warnings and current model",
+    "weather": "Wet paths, steps and road visibility need local assessment.",
+    "water": "Confirm boat instructions directly; a forecast is not an operating notice.",
+    "wildlife": "Stay on permitted paths; do not enter vegetation for photos.",
+    "tip": "Seek substantial shelter in thunderstorms."
   },
   {
-    icon: '🍃', title: 'NE Monsoon / Post-rain (Oct–Nov)',
-    temp: '≈ 14–25°C',
-    weather: 'NE monsoon with light showers; after rain the sky clears, good for light photography.',
-    water: 'Lake is stable; greenery continues.',
-    wildlife: 'Good season for birds & butterflies.',
-    tip: 'Good season for sightseeing & family trips.'
+    "icon": "🍃",
+    "title": "Fog or poor visibility",
+    "temp": "Current local conditions",
+    "weather": "Adjust hill-road travel and viewpoints to actual visibility.",
+    "water": "Do not infer calm water or permission to boat.",
+    "wildlife": "Keep distance and avoid disturbing animals.",
+    "tip": "Leave more time or choose a shorter plan."
   },
   {
-    icon: '❄️', title: 'Winter (Dec–Feb)',
-    temp: '≈ 10–22°C',
-    weather: 'The year’s coolest, clearest season; morning fog & pleasant days — peak crowd time.',
-    water: 'Lake is calm, boating comfortable.',
-    wildlife: 'Clear views; good morning bird activity.',
-    tip: 'Come early on holidays; warm layers advised for the morning chill.'
+    "icon": "❄️",
+    "title": "Cooler periods",
+    "temp": "Current temperature and wind",
+    "weather": "Bring a layer when needed; dates alone do not guarantee comfort.",
+    "water": "Ask about current boarding and weather rules.",
+    "wildlife": "Follow local signs and keep litter out of the lake.",
+    "tip": "Adapt the walk to your group and permitted hours."
   }
 ];
 const strategyTa = [
-  ['படகு & ஏரிக்கரை நடை', 'அக்–மார்ச் (பின் மழை → கோடை → குளிர்காலம் ஆரம்பம்)'],
-  ['கிளியூர் அருவி உச்சக் காட்சி', 'ஜூலை–செப் (பருவமழை உச்சம்)'],
-  ['புகைப்படம் & காட்சிகள்', 'நவ–பிப் (தெளிவான வானம், மூடுபனி அழகு)'],
-  ['குடும்பம் / முதல் முறை பயணம்', 'டிச–பிப் & அக்–நவ (வசதியான தட்பவெப்பம்)']
+  [
+    "படகு சவாரி",
+    "தற்போதைய படகு இல்ல உறுதி மற்றும் விதிகள்"
+  ],
+  [
+    "அருவிப் பயணம்",
+    "தற்போதைய அணுகல், பாதை நிலை மற்றும் எச்சரிக்கை"
+  ],
+  [
+    "புகைப்படம் மற்றும் காட்சிமுனை",
+    "அனுமதிக்கப்பட்ட அணுகல், உண்மையான தெளிவு மற்றும் வெளிச்சம்"
+  ],
+  [
+    "குடும்பம் அல்லது எளிய நடை",
+    "குழுவின் தேவை, பயன்படுத்தக்கூடிய பாதை மற்றும் ஓய்வு"
+  ]
 ];
 const strategyEn = [
-  ['Boat & lakeside walk', 'Oct–Mar (post-rain → summer → early winter)'],
-  ['Kiliyur Falls peak', 'Jul–Sep (monsoon peak)'],
-  ['Photos & views', 'Nov–Feb (clear sky, fog beauty)'],
-  ['Family / first-time', 'Dec–Feb & Oct–Nov (comfortable climate)']
+  [
+    "Boating",
+    "Current boat-house confirmation and staff rules"
+  ],
+  [
+    "Waterfall trip",
+    "Current access, trail conditions and official warnings"
+  ],
+  [
+    "Photos and viewpoints",
+    "Permitted access, actual visibility and suitable light"
+  ],
+  [
+    "Family or easier walk",
+    "Your group’s needs, usable surfaces and rest"
+  ]
 ];
 const seasons = locale === 'en' ? seasonsEn : seasonsTa;
 const strategy = locale === 'en' ? strategyEn : strategyTa;
 const kicker = pick(locale, 'பருவ வியூகம்', 'Seasonal strategy');
-const heading = pick(locale, 'எந்தப் பருவங்களில் ஏற்காட்டைப் பார்ப்பது?', 'Which seasons to visit Yercaud?');
-const intro = pick(locale,
-  'கீழே உள்ளவை <strong class="text-[#0b4148]">இந்திய வானிலை ஆய்வு மையத்தின் (IMD) 30 ஆண்டு சராசரி காலநிலை புள்ளிவிவரங்களின்</strong> அடிப்படையிலான பருவக்கோட்பாடு (climatology) — இது நிகழ்நேர வானிலை முன்னறிவிப்பு அல்ல. நீர், வனவிலங்குகள் மற்றும் மலைச்சாலை நிலை பயண நாளில் மாறலாம்.',
-  'The following is climatology based on the <strong class="text-[#0b4148]">India Meteorological Department (IMD) 30-year average climate normals</strong> — not a live forecast. Water, wildlife and ghat-road conditions can change on the day of travel.');
+const heading = pick(locale, "உண்மையான வானிலைக்கேற்ப பயணத் திட்டம்", "Plan around actual weather");
+const intro = pick(locale, "கீழே உள்ளவை சாத்தியமான நிலைகளுக்கான நடைமுறைத் தயாரிப்பு; அளவிடப்பட்ட பருவ சராசரியோ நீர்மட்ட முன்னறிவிப்போ அல்ல.", "These are practical responses to possible conditions, not measured seasonal averages or lake-level forecasts.");
 const lWeather = pick(locale, 'வானிலை', 'Weather');
 const lWater = pick(locale, 'நீர் & ஏரி', 'Water & lake');
 const lWildlife = pick(locale, 'வனவிலங்குகள்', 'Wildlife');

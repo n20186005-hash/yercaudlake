@@ -1,43 +1,15 @@
-# ஏற்காடு ஏரி மற்றும் படகு இல்லம் — தமிழ் பயண வழிகாட்டி
+# Yercaud Lake & Boat House visitor guide
 
-சேலம் மாவட்டம், தமிழ்நாட்டில் உள்ள ஏற்காடு ஏரி / பெரிய ஏரி / எமரால்ட் ஏரி மற்றும் படகு இல்லத்திற்கான சுயாதீன, இலாப நோக்கமற்ற தகவல் தளம். வணிகப் பரிந்துரைகள் இல்லை; இட வகைகள் மட்டுமே நடுநிலையாகத் தரப்படுகின்றன.
+Independent visitor information in the existing Tamil and English languages. The lake and the boat-house service have different access considerations. Dated Maps information and district pages are attributed separately; confirm current service, boarding conditions and prices at the relevant counter.
 
-## தொழில்நுட்பம்
-- Astro 7.2.4 (SSG → Cloudflare Workers Static Assets)
-- Tailwind CSS 4.3.3, TypeScript 6.0.3, @astrojs/check 0.9.10, @astrojs/sitemap 3.7.3
-- pnpm 11.23.0 / Node.js 24.19.0 (exact-version lockfile)
-- தரவுத்தளம், உள்நுழைவு, CMS இல்லை
+The original static Astro/Tailwind architecture is retained. Tamil and English homepages, equivalent legal/settings pages and localized error pages are rendered as HTML. The existing native Cloudflare Worker handles `/api/weather` and serves static assets. Its default configuration targets the existing `yercaudlake` project, with the ASSETS binding and Worker-first routing.
 
-## பக்கம்
-- Hero → அறிமுகம் → பயணத் திட்டம் → **நிகழ்நேர வானிலை** → போக்குவரத்து + வரைபடம் → **வசதிகள்** (WC/பார்க்கிங்/உணவு/தங்குமிடம்/பல்பொருள்/எரிபொருள்-EV/ATM/மருந்தகம்) → **வரலாறு** → **கதைகள் & நினைவுகள்** → **புகைப்படத் தொகுப்பு** (7 உண்மைப் படங்கள்) → சுற்றுப்புறம் → FAQ (10) → அதிகாரப்பூர்வத் தகவல்
-- மேலும்: தனியுரிமை / விதிமுறைகள் / குக்கீ பக்கங்கள், 404, GA4 (G-HXM22WWPKP) சம்மத-கதவு, JSON-LD (TouristAttraction + FAQPage)
+Use the exact Node and pnpm versions declared by package.json. Run `pnpm install --frozen-lockfile`, `pnpm check`, `pnpm build`, `pnpm audit:source` and `node scripts/verify-build.mjs`. The normal deployment path is `npx wrangler deploy`; its dry-run form validates the default entry without uploading. Do not change engine declarations or the frozen lockfile to fit another local runtime.
 
-## வானிலைத் தொகுதி
-Open-Meteo (இலவசம், API key இல்லை) பயன்படுத்துகிறது — தற்போதைய நிலை + 5 நாள் முன்னறிவிப்பு. Static asset வழங்கலாக இருப்பதால்:
-1. கட்டுமான நேரத்தில் (build) விருப்பமான ஒரு-முறை snapshot எடுக்கப்படுகிறது (நெட்வொர்க் இல்லாவிட்டால் பாதுகாப்பாக தவிர்க்கப்படும்);
-2. பார்வையாளர் உலாவியில் நேரடி Open-Meteo அழைப்பு நடந்து தரவு 30 நிமிடம் localStorage-இல் cached செய்யப்படும்; பிணையம் இல்லாதபோது cached/static data மீண்டும் காட்டப்படும்.
-மலை வானிலை விரைவாக மாறும் என்பதால் பயண நாளில் அதிகாரப்பூர்வ அறிவிப்புகளையும் சரிபார்க்கவும்.
+Weather uses fixed lake coordinates and an Open-Meteo model, not device geolocation or an on-site observation. Validated current and seven-day data have bounded fetch/body deadlines and a ten-minute native cache. The existing static build snapshot and client refresh remain; recent browser data may be reused with its provider time. A forecast does not establish boat operations, water level, permission to swim or trail access.
 
-## டொமைன்
-உற்பத்தி டொமைன் `SITE_URL` சூழல் மாறி வழியாக `astro.config.ts`-இன் `site` மதிப்புக்கு ஒரே இடத்தில் செல்கிறது. மதிப்பு இல்லாவிட்டாலும் build வடிவமைப்பின் அடிப்படையில் இயங்கும்; absolute canonical/OG URL மற்றும் sitemap அப்போது உருவாக்கப்படாது.
+The existing analytics settings retain opt-in loading, immediate runtime withdrawal, verified complete-choice storage, failure feedback and a single loader after regrant. No consent banner was added. The privacy pages explain maps, weather storage, offline pages and possible separate hosting performance measurement.
 
-## இயக்கம்
-```bash
-corepack enable
-CI=1 corepack pnpm install --frozen-lockfile
-pnpm check
-pnpm build
-```
-Cloudflare வெளியீடு:
-```bash
-pnpm deploy
-```
+Seven existing photographs are retained. `/CREDITS.txt` publishes each author, exact Commons source, licence and resizing/compression notice. Individual licences apply; historical photographs do not establish current conditions.
 
-## படங்கள்
-- உறுதி செய்யப்பட்ட ஏற்காடு உண்மை புகைப்படங்கள் `public/images/`-இல் உள்ளன (7 JPG).
-- மூலம்/ஆசிரியர்/உரிமம்: `PHOTO-SOURCES.md`.
-- இணைய அளவுக்கு மேம்படுத்தப்பட்டவை (1600px / q82, மொத்தம் ~1.5 MB). மறு செயலாக்கம்: `pnpm images:opt` (Windows GDI+; அசல் முழுத் தரப் பதிப்புகள் Wikimedia Commons-இல் உள்ளன).
-- படங்களின் பதிப்புரிமை/உரிமம் அசல் புகைப்படக் கலைஞர்களுக்கே உரியது.
-
-## தனியுரிமை
-GA4 அளவீட்டு அடையாளம் `G-HXM22WWPKP`. பகுப்பாய்வு தேர்வு `/cookies/` பக்கத்தில் அனுமதிக்கப்பட்ட பிறகே Google Analytics script ஏற்றப்படும்.
+Local validation is separate from publication and production acceptance. Verify the deployed revision, HTTP/HTTPS and www entrances, true error status, required assets, both languages and actual mobile/desktop interactions before declaring a release complete.

@@ -1,10 +1,3 @@
-ஏற்காடு உண்மை புகைப்படங்கள் (2026-09-04 நிலவரம்)
-====================================================
-
-இந்த கோப்பகத்தில் ஏற்காடு ஏரி / சுற்றுப்புறத்தின் உறுதி செய்யப்பட்ட உண்மை புகைப்படங்கள் உள்ளன.
-
-- ஒவ்வொரு படத்தின் மூலம் (Wikimedia Commons), ஆசிரியர் மற்றும் உரிமம்: PHOTO-SOURCES.md
-- படங்கள் இணையப் பயன்பாட்டிற்காக மேம்படுத்தப்பட்டுள்ளன: மிக நீளமான பக்கம் 1600px, JPEG quality 82.
-- மீண்டும் மேம்படுத்த: powershell -NoProfile -ExecutionPolicy Bypass -File scripts/optimize-images.ps1
-- மூல முழு தர JPG பதிப்புகள் இந்த சேமிப்பில் இல்லை; அசல் கோப்புகளை Wikimedia Commons-இல் காணலாம்.
-- பதிப்புரிமை & உரிமங்கள் அசல் புகைப்படக் கலைஞர்களுக்கே உரியவை.
+Seven existing Yercaud-area photographs are supplied in this directory.
+Exact source, author, individual licence and resizing/compression information is published at /CREDITS.txt.
+Images depict their capture dates and do not confirm current access, services or water conditions.

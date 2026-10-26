@@ -1,5 +1,5 @@
-/* Yercaud Lake visitor guide — Service Worker (v2026-09-04) */
-const VERSION = 'yercaudlake-v2026-09-04';
+/* Yercaud Lake visitor guide — Service Worker (v2026-10-25) */
+const VERSION = 'yercaudlake-v2026-10-25';
 const CORE = ['/', '/site.webmanifest', '/favicon.svg', '/icon-192.png'];
 
 self.addEventListener('install', (event) => {
@@ -18,7 +18,8 @@ self.addEventListener('activate', (event) => {
 
 self.addEventListener('fetch', (event) => {
   const req = event.request;
-  if (req.method !== 'GET' || req.url.indexOf(self.location.origin) !== 0) return;
+  const url = new URL(req.url);
+  if (req.method !== 'GET' || url.origin !== self.location.origin || url.pathname.startsWith('/api/')) return;
 
   // Navigations: network-first with offline fallback to cached shell.
   if (req.mode === 'navigate') {
@@ -26,11 +27,11 @@ self.addEventListener('fetch', (event) => {
       fetch(req)
         .then((res) => {
           const copy = res.clone();
-          caches.open(VERSION).then((c) => c.put(req, copy));
+          if(res.status===200)caches.open(VERSION).then((c) => c.put(req, copy)).catch(()=>{});
           return res;
         })
         .catch(() =>
-          caches.match(req).then((hit) => hit || caches.match('/'))
+          caches.match(req).then((hit) => hit || new Response('Offline — reconnect to open this page.', {status:503,headers:{'content-type':'text/plain; charset=utf-8'}}))
         )
     );
     return;
@@ -43,7 +44,7 @@ self.addEventListener('fetch', (event) => {
         .then((res) => {
           if (res && res.ok) {
             const copy = res.clone();
-            caches.open(VERSION).then((c) => c.put(req, copy));
+            if(res.status===200)caches.open(VERSION).then((c) => c.put(req, copy)).catch(()=>{});
           }
           return res;
         })

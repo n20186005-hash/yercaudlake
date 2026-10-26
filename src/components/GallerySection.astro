@@ -5,41 +5,42 @@ const { locale = 'ta' } = Astro.props;
 const panoramaTa = {
   src: '/images/yercaud-lake-panorama.jpg', w: 1600, h: 365,
   alt: 'ஏற்காடு ஏரியின் முழுக் காட்சி', cap: 'பெரிய ஏரியின் அகலப் பார்வை',
-  lic: 'CC BY-SA', url: 'https://commons.wikimedia.org/wiki/File:Yercaud_Lake_Panorama.jpg'
+  lic: 'CC BY-SA 4.0', url: 'https://commons.wikimedia.org/wiki/File:Yercaud_Lake_Panorama.jpg'
 };
 const photosTa = [
   { src: '/images/yercaud-lake-boathouse.jpg', alt: 'ஏற்காடு ஏரியில் உள்ள படகு இல்லம்', cap: 'ஏரிக்கரையில் படகு இல்லம்', lic: 'Public Domain', url: 'https://commons.wikimedia.org/wiki/File:Boat_House_at_Yercaud_Lake.jpg' },
-  { src: '/images/yercaud-lake-boating.jpg', alt: 'ஏற்காடு ஏரியில் படகு சவாரி', cap: 'ஏரியில் படகு சவாரி', lic: 'CC0', url: 'https://commons.wikimedia.org/wiki/File:Yercaud_lake_boating.jpg' },
+  { src: '/images/yercaud-lake-boating.jpg', alt: 'ஏற்காடு நீரிலிருந்து ஏரிக் காட்சி', cap: 'நீரிலிருந்து ஏரிக் காட்சி', lic: 'CC0', url: 'https://commons.wikimedia.org/wiki/File:Yercaud_lake_boating.jpg' },
   { src: '/images/yercaud-lake-portrait.jpg', alt: 'ஏற்காடு ஏரி மற்றும் படகு இல்லத்தின் முன்புறக் காட்சி', cap: 'மரங்களுக்கு இடையே படகு இல்லம்', lic: 'CC0', url: 'https://commons.wikimedia.org/wiki/File:Boat_house_in_yercaud.jpg' },
   { src: '/images/yercaud-kiliyur-falls.jpg', alt: 'கிளியூர் அருவி, ஏற்காடு', cap: 'கிளியூர் அருவி', lic: 'CC0', url: 'https://commons.wikimedia.org/wiki/File:Kiliyur_falls_yercaud.jpg' },
-  { src: '/images/yercaud-anna-park.jpg', alt: 'அண்ணா பூங்கா, ஏற்காடு', cap: 'அண்ணா பூங்கா — தோட்டப் பகுதி', lic: 'CC BY-SA 4.0', url: 'https://commons.wikimedia.org/wiki/File:Anna_park-1-yercaud-salem-India.JPG' },
+  { src: '/images/yercaud-anna-park.jpg', alt: 'அண்ணா பூங்கா, ஏற்காடு', cap: 'அண்ணா பூங்கா நுழைவாயில்', lic: 'CC BY-SA 4.0', url: 'https://commons.wikimedia.org/wiki/File:Anna_park-1-yercaud-salem-India.JPG' },
   { src: '/images/yercaud-pagoda-point.jpg', alt: 'பகோடா பாயிண்ட் காட்சி, ஏற்காடு', cap: 'பகோடா பாயிண்ட் — மலைக் காட்சி', lic: 'CC0', url: 'https://commons.wikimedia.org/wiki/File:Yercaud_pagoda_point_view.jpg' }
 ];
 const panoramaEn = {
   src: '/images/yercaud-lake-panorama.jpg', w: 1600, h: 365,
   alt: 'Panoramic view of Yercaud Lake', cap: 'Wide view of the Big Lake',
-  lic: 'CC BY-SA', url: 'https://commons.wikimedia.org/wiki/File:Yercaud_Lake_Panorama.jpg'
+  lic: 'CC BY-SA 4.0', url: 'https://commons.wikimedia.org/wiki/File:Yercaud_Lake_Panorama.jpg'
 };
 const photosEn = [
   { src: '/images/yercaud-lake-boathouse.jpg', alt: 'The boat house at Yercaud Lake', cap: 'Boat house by the lakeside', lic: 'Public Domain', url: 'https://commons.wikimedia.org/wiki/File:Boat_House_at_Yercaud_Lake.jpg' },
   { src: '/images/yercaud-lake-boating.jpg', alt: 'Boat ride on Yercaud Lake', cap: 'Boat ride on the lake', lic: 'CC0', url: 'https://commons.wikimedia.org/wiki/File:Yercaud_lake_boating.jpg' },
   { src: '/images/yercaud-lake-portrait.jpg', alt: 'Front view of Yercaud Lake & Boat House', cap: 'Boat house among the trees', lic: 'CC0', url: 'https://commons.wikimedia.org/wiki/File:Boat_house_in_yercaud.jpg' },
   { src: '/images/yercaud-kiliyur-falls.jpg', alt: 'Kiliyur Falls, Yercaud', cap: 'Kiliyur Falls', lic: 'CC0', url: 'https://commons.wikimedia.org/wiki/File:Kiliyur_falls_yercaud.jpg' },
-  { src: '/images/yercaud-anna-park.jpg', alt: 'Anna Park, Yercaud', cap: 'Anna Park — garden area', lic: 'CC BY-SA 4.0', url: 'https://commons.wikimedia.org/wiki/File:Anna_park-1-yercaud-salem-India.JPG' },
+  { src: '/images/yercaud-anna-park.jpg', alt: 'Anna Park, Yercaud', cap: 'Anna Park entrance', lic: 'CC BY-SA 4.0', url: 'https://commons.wikimedia.org/wiki/File:Anna_park-1-yercaud-salem-India.JPG' },
   { src: '/images/yercaud-pagoda-point.jpg', alt: 'Pagoda Point view, Yercaud', cap: 'Pagoda Point — hill view', lic: 'CC0', url: 'https://commons.wikimedia.org/wiki/File:Yercaud_pagoda_point_view.jpg' }
 ];
+const credits:Record<string,string>={"/images/yercaud-lake-boathouse.jpg":"Mandayamr · Public domain · 2009-10-18","/images/yercaud-lake-boating.jpg":"Manju Thilagavathi · CC0 1.0 · 2024-05-25","/images/yercaud-lake-portrait.jpg":"Divya Chinnasamy · CC0 1.0 · 2023-02-03","/images/yercaud-lake-panorama.jpg":"Mithun Kundu · CC BY-SA 4.0 (one available licence option) · 2010-07-31","/images/yercaud-anna-park.jpg":"Yercaud-elango · CC BY-SA 4.0 · 2015-02-11","/images/yercaud-kiliyur-falls.jpg":"Boopathi Raja123 · CC0 1.0 · 2023-11-20","/images/yercaud-pagoda-point.jpg":"Ranjithkanth Tamilselvan J · CC0 1.0 · 2024-02-26"};
 const panorama = locale === 'en' ? panoramaEn : panoramaTa;
 const photos = locale === 'en' ? photosEn : photosTa;
 const kicker = pick(locale, 'புகைப்படத் தொகுப்பு', 'Photo gallery');
 const heading = pick(locale, 'ஏற்காடு ஏரியைப் பார்வையில் பாருங்கள்', 'See Yercaud Lake in pictures');
 const intro = pick(locale,
-  'ஏரி, படகு இல்லம், அருகிலுள்ள தோட்டங்கள் மற்றும் பார்வை இடங்களின் திறந்த உரிமப் படங்கள். ஒவ்வொரு படமும் அதன் மூலத் தொடர்புடன் காட்டப்படுகிறது; பதிப்புரிமை அசல் புகைப்படக் கலைஞருக்கே உரியது.',
-  'Openly licensed photos of the lake, boat house, nearby plantations and viewpoints. Each photo is shown with its source link; copyright belongs to the original photographer.');
+  'ஏரி, படகு இல்லம், பூங்கா நுழைவு மற்றும் பார்வை இடங்களின் படங்கள். ஒவ்வொரு படத்தின் ஆசிரியர், தேதி, மூலம் மற்றும் தனி உரிமம் அல்லது பொதுக் கள நிலை குறிப்பிடப்பட்டுள்ளது; காட்சிகள் மாறியிருக்கலாம்.',
+  'Photos of the lake, boat house, park entrance and viewpoints. Each file lists its source, author, date and individual licence or public-domain status; scenes may have changed.');
 const srcLabel = pick(locale, 'விக்கிமீடியா மூலம் ↗', 'via Wikimedia ↗');
 const srcLabel2 = pick(locale, 'மூலம் ↗', 'source ↗');
 const rightsNote = pick(locale,
-  'பட உரிமை மற்றும் மூல விவரங்களுக்கு திட்டத்தின் புகைப்பட ஆவணத்தைப் பார்க்கவும். அனைத்து படங்களும் விக்கிமீடியா காமன்ஸ் திறந்த உரிமங்களின் கீழ் பகிரப்படுகின்றன.',
-  'For image rights and source details, see the project’s photo documentation. All photos are shared under Wikimedia Commons open licences.');
+  'ஒவ்வொரு கோப்பின் மூலம், தனி உரிமம் அல்லது பொதுக் கள நிலை மற்றும் அளவு மாற்ற விவரங்களுக்கு வெளியிடப்பட்ட புகைப்பட நன்றிக் குறிப்பைப் பார்க்கவும்.',
+  'See Photograph credits for each file’s source, licence and resizing/compression notice.');
 ---
 <section id={sec(locale, 'gallery')} class="container-shell py-16 md:py-24">
   <p class="kicker">{kicker}</p>
@@ -49,9 +50,9 @@ const rightsNote = pick(locale,
   <figure class="mt-9 overflow-hidden rounded-3xl ring-1 ring-[#0d6d70]/15">
     <img src={panorama.src} alt={panorama.alt} width={panorama.w} height={panorama.h} loading="lazy" decoding="async" class="h-auto w-full object-cover" />
     <figcaption class="flex flex-wrap items-center justify-between gap-2 bg-[#fffdf8] px-5 py-3 text-xs text-[#48605a]">
-      <span>{panorama.cap} · {panorama.lic}</span>
+      <span>{panorama.cap} · {credits[panorama.src]}</span>
       <a href={panorama.url} target="_blank" rel="noopener noreferrer" class="font-bold text-[#0d6d70] no-underline hover:underline">{srcLabel}</a>
-    </figcaption>
+    <a href="/CREDITS.txt" class="underline">{locale==='en'?'Credits and licences':'பட உரிமப் பதிவு'}</a></figcaption>
   </figure>
 
   <div class="mt-5 columns-1 gap-5 sm:columns-2">
@@ -59,9 +60,9 @@ const rightsNote = pick(locale,
       <figure class="mb-5 break-inside-avoid overflow-hidden rounded-3xl ring-1 ring-[#0d6d70]/15">
         <img src={p.src} alt={p.alt} loading="lazy" decoding="async" class="h-auto w-full object-cover" />
         <figcaption class="flex flex-wrap items-center justify-between gap-2 bg-[#fffdf8] px-4 py-3 text-xs text-[#48605a]">
-          <span>{p.cap} · {p.lic}</span>
+          <span>{p.cap} · {credits[p.src]}</span>
           <a href={p.url} target="_blank" rel="noopener noreferrer" class="font-bold text-[#0d6d70] no-underline hover:underline">{srcLabel2}</a>
-        </figcaption>
+        <a href="/CREDITS.txt" class="underline">{locale==='en'?'Credits and licences':'பட உரிமப் பதிவு'}</a></figcaption>
       </figure>
     ))}
   </div>

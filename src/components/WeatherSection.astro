@@ -1,148 +1,24 @@
 ---
-import { GEO } from '../data/site';
-import { buildAdvice, renderCurrent, renderDays, renderAdvice } from '../lib/weather';
-import { type Locale, sec, pick } from '../i18n';
-interface Props { locale?: Locale; lat?: number; lon?: number }
-const { locale = 'ta', lat = GEO.latitude, lon = GEO.longitude } = Astro.props;
-// Build-time optional snapshot (server-side only; silently skipped offline).
-// The live page refreshes via /api/weather (server-side Worker + edge cache).
-const qp = new URLSearchParams({
-  latitude: String(lat),
-  longitude: String(lon),
-  current: 'temperature_2m,relative_humidity_2m,apparent_temperature,is_day,weather_code,wind_speed_10m',
-  daily: 'weather_code,temperature_2m_max,temperature_2m_min,precipitation_probability_max,uv_index_max',
-  timezone: 'Asia/Kolkata',
-  wind_speed_unit: 'kmh',
-  forecast_days: '7'
-});
-const API = 'https://api.open-meteo.com/v1/forecast?' + qp.toString();
-let init: Record<string, any> | null = null;
-try {
-  const r = await fetch(API, { signal: AbortSignal.timeout(4000) });
-  if (r.ok) {
-    const j: Record<string, any> = await r.json();
-    if (j && j.current && j.daily) init = j;
-  }
-} catch {}
-const advice = init ? buildAdvice(init) : null;
-const hasInit = !!init;
-const ph = '<div class="rounded-2xl bg-white/10 p-4 text-center ring-1 ring-white/15"><p class="text-white/50">—</p></div>';
-const kicker = pick(locale, 'நிகழ்நேர வானிலை', 'Live weather');
-const h2 = pick(locale, 'ஏற்காடு — இப்போது &amp; 7 நாள் முன்னறிவிப்பு', 'Yercaud — now &amp; 7-day forecast');
-const intro = pick(locale,
-  'ஏரிப்படகு, காலை நடை அல்லது அருவிப் பயணத்தைத் திட்டமிடும் முன் இந்த நேரடி வானிலை உதவியாக இருக்கும். “வானிலை எப்படி இருக்கும், குடை எடுத்துச் செல்ல வேண்டுமா” என்பதை நீங்களே புரிந்துகொள்ள வேண்டாம் — கீழே உங்களுக்கான செயல் பரிந்துரைகள் தானாக வரும்.',
-  'This live weather helper is useful before planning a boat ride, a morning walk or a waterfall trip. You don’t have to work out “what will the weather be like, should I carry an umbrella” yourself — practical suggestions appear for you below.');
-const loading = pick(locale,
-  'வானிலைத் தரவு ஏற்றப்படுகிறது…',
-  'Loading weather data…');
-const loadingSub = pick(locale,
-  'இணைய இணைப்பு இருந்தால் தானாக புதுப்பிக்கப்படும்.',
-  'It refreshes automatically when you are online.');
-const note = pick(locale,
-  'வானிலைத் தரவு தானாக புதுப்பிக்கப்படுகிறது · படகு இயக்கம் அதிகாரப்பூர்வ அறிவிப்பைப் பொறுத்தது.',
-  'Weather data refreshes automatically · boat operations depend on the official notice.');
-const pending = pick(locale, 'வானிலை கிடைத்தவுடன் பரிந்துரைகள் காட்டப்படும்.', 'Suggestions will appear once the weather is available.');
-const errMain = pick(locale,
-  'வானிலைத் தரவை இப்போது பெற முடியவில்லை.',
-  'Could not fetch weather data right now.');
-const errSub = pick(locale,
-  'சிறிது நேரம் கழித்து மீண்டும் முயற்சிக்கவும்.',
-  'Please try again in a little while.');
-const stampSuffix = pick(locale,
-  ' · மலை வானிலை வேகமாக மாறலாம்.',
-  ' · hill weather can change quickly.');
-const localeTag = locale === 'en' ? 'en-IN' : 'ta-IN';
+import {getWeather,renderCurrent,renderDays,buildAdvice,renderAdvice} from '../lib/weather';
+import {type Locale,sec} from '../i18n';
+interface Props {locale?:Locale}
+const {locale='ta'}=Astro.props,en=locale==='en',init=await getWeather();
+const unavailable=en?'Weather data is unavailable. Check a current official forecast.':'வானிலைத் தகவல் கிடைக்கவில்லை. தற்போதைய அதிகாரப்பூர்வ முன்னறிவிப்பைப் பார்க்கவும்.';
 ---
-<section id={sec(locale, 'weather')} class="relative overflow-hidden bg-[#0b4148] py-16 text-white md:py-22">
-  <div class="container-shell">
-    <div class="flex flex-wrap items-end justify-between gap-5">
-      <div>
-        <p class="text-xs font-black tracking-[.12em] text-[#b8e0cc]">{kicker}</p>
-        <h2 class="mt-3 text-3xl font-black sm:text-5xl" set:html={h2}></h2>
-      </div>
-    </div>
-    <p class="mt-4 max-w-3xl text-sm leading-7 text-white/72">{intro}</p>
-
-    <div class="mt-8 grid gap-5 lg:grid-cols-[1fr_1.35fr]">
-      <!-- 当前天气 -->
-      <div id="wx-current" class="rounded-3xl bg-white/10 p-6 ring-1 ring-white/15 backdrop-blur">
-        {hasInit ? (
-          <div class="h-full" set:html={renderCurrent(init)}></div>
-        ) : (
-          <div class="flex min-h-40 items-center justify-center text-center text-sm text-white/70">{loading}<br /><span class="mt-2 block text-xs text-white/45">{loadingSub}</span></div>
-        )}
-      </div>
-
-      <!-- 7-day forecast -->
-      <div id="wx-days" class="grid gap-3 grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-7" set:html={hasInit ? renderDays(init) : ph.repeat(7)}></div>
-    </div>
-
-    <!-- 智能建议 -->
-    <div id="wx-advice" class="mt-8" set:html={advice ? renderAdvice(advice) : ''}></div>
-
-    <p id="wx-note" class="mt-4 text-xs text-white/50">{note}</p>
-  </div>
-
-  <script is:inline type="application/json" id="weather-init" set:html={JSON.stringify(init)}></script>
+<section id={sec(locale,'weather')} class="relative bg-[#0b4148] py-16 text-white md:py-22">
+<div class="container-shell">
+<p class="text-xs font-black tracking-[.12em] text-[#b8e0cc]">{en?'Weather model':'வானிலை மாடல்'}</p>
+<h2 class="mt-3 text-3xl font-black sm:text-5xl">{en?'Yercaud — now and seven days':'ஏற்காடு — இப்போது மற்றும் ஏழு நாட்கள்'}</h2>
+<p class="mt-4 max-w-3xl text-sm leading-7 text-white/72">{en?'Open-Meteo model for the lake area, not an on-site measurement. Use it for clothing and breaks; confirm boating and route access with staff.':'ஏரிப் பகுதிக்கான Open-Meteo மாடல்; இடத்திலுள்ள நேரடி அளவீடு அல்ல. உடை மற்றும் ஓய்வுக்குப் பயன்படுத்துங்கள்; படகு மற்றும் பாதை அணுகலைப் பணியாளரிடம் உறுதி செய்யுங்கள்.'}</p>
+<div class="mt-8 grid min-w-0 gap-5 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.35fr)]">
+<div id="wx-current" class="min-w-0 rounded-3xl bg-white/10 p-6 ring-1 ring-white/15 backdrop-blur" set:html={init?renderCurrent(init,locale):`<p>${unavailable}</p>`}></div>
+<div id="wx-days" class="grid min-w-0 grid-cols-2 gap-3 sm:grid-cols-3" set:html={init?renderDays(init,locale):''}></div>
+</div>
+<div id="wx-advice" class="mt-8 min-w-0" set:html={init?renderAdvice(buildAdvice(init,locale)):''}></div>
+<p id="wx-note" class="mt-4 text-xs text-white/60">{init?(en?'Provider time: ':'முன்னறிவிப்பு நேரம்: ')+init.current.time.replace('T',' ')+' · Asia/Kolkata (UTC+5:30)':unavailable}</p>
+<noscript><p class="mt-3 text-xs">{en?'Without JavaScript a dated build snapshot cannot refresh. Check a current forecast.':'JavaScript இல்லாமல் தேதியுள்ள கட்டுமானப் பதிவு புதுப்பிக்காது. தற்போதைய முன்னறிவிப்பைப் பார்க்கவும்.'}</p></noscript>
+</div>
+<script is:inline type="application/json" id="weather-init" set:html={JSON.stringify(init).replace(/</g,'\\u003c')}></script>
 </section>
-
-<script>
-  import { renderCurrent, renderDays, buildAdvice, renderAdvice } from '../lib/weather';
-  const $cur = document.getElementById('wx-current');
-  const $days = document.getElementById('wx-days');
-  const $advice = document.getElementById('wx-advice');
-  const $note = document.getElementById('wx-note');
-  const KEY = 'yercaud-weather-v1';
-  const TTL = 30 * 60 * 1000;
-  const WX = '/api/weather';
-  const ph = '<div class="rounded-2xl bg-white/10 p-4 text-center ring-1 ring-white/15"><p class="text-white/50">—</p></div>';
-  const isEn = (document.documentElement.lang || '').startsWith('en');
-  const S = {
-    errMain: isEn ? 'Could not fetch weather data right now.' : 'வானிலைத் தரவை இப்போது பெற முடியவில்லை.',
-    errSub: isEn ? 'Please try again in a little while.' : 'சிறிது நேரம் கழித்து மீண்டும் முயற்சிக்கவும்.',
-    pending: isEn ? 'Suggestions will appear once the weather is available.' : 'வானிலை கிடைத்தவுடன் பரிந்துரைகள் காட்டப்படும்.',
-    stampSuffix: isEn ? ' · hill weather can change quickly.' : ' · மலை வானிலை வேகமாக மாறலாம்.',
-    localeTag: isEn ? 'en-IN' : 'ta-IN'
-  };
-
-  let init = null;
-  try { const el = document.getElementById('weather-init'); if (el) init = JSON.parse(el.textContent || 'null'); } catch {}
-
-  function stamp() {
-    try {
-      $note.textContent = (isEn ? 'Last updated: ' : 'கடைசி புதுப்பிப்பு: ') + new Date().toLocaleString(S.localeTag, { day: '2-digit', month: 'short', hour: '2-digit', minute: '2-digit' }) + S.stampSuffix;
-    } catch {}
-  }
-  function renderAll(d) {
-    if (!$cur || !$days || !$advice) return;
-    if (!d || !d.current || !d.daily) {
-      $cur.innerHTML = '<div class="flex min-h-40 items-center justify-center text-center text-sm text-white/70">' + S.errMain + '<br/><span class="mt-2 block text-xs text-white/45">' + S.errSub + '</span></div>';
-      $advice.innerHTML = '';
-      return;
-    }
-    $cur.innerHTML = '<div class="h-full">' + renderCurrent(d) + '</div>';
-    $days.innerHTML = renderDays(d) || ph.repeat(7);
-    $advice.innerHTML = renderAdvice(buildAdvice(d));
-    stamp();
-  }
-
-  if (init) renderAll(init);
-  else if ($advice) $advice.innerHTML = '<p class="text-white/55">' + S.pending + '</p>';
-
-  (async () => {
-    try {
-      const r = await fetch(WX, { signal: AbortSignal.timeout(8000) });
-      if (r.ok) {
-        const j = await r.json();
-        if (j && j.current && j.daily) {
-          try { localStorage.setItem(KEY, JSON.stringify({ at: Date.now(), data: j })); } catch {}
-          renderAll(j);
-          return;
-        }
-      }
-    } catch {}
-    let cached = null;
-    try { const v = JSON.parse(localStorage.getItem(KEY) || 'null'); if (v && v.data && Date.now() - v.at < TTL) cached = v.data; } catch {}
-    if (cached && !init) renderAll(cached);
-  })();
-</script>
+<script>import {initWeather} from '../lib/weather-client';initWeather();</script>
+<style>#wx-current,#wx-days,#wx-advice,#wx-days>* {min-width:0;overflow-wrap:anywhere;}</style>

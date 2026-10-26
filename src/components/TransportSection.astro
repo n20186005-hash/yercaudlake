@@ -5,101 +5,113 @@ const { locale = 'ta' } = Astro.props;
 // How to reach Yercaud Lake & Boat House — neutral, type-based guidance only (no commercial names).
 const modesTa = [
   {
-    icon: '✈️', title: 'விமானம் (Air)',
-    steps: [
-      'அருகிலுள்ள வானூர்தி நிலையங்கள்: சேலம் (SXV, ~35 கி.மீ — வாராந்திர/சில இணைப்புகள்), கோயம்புத்தூர் (CJB, ~170 கி.மீ), பெங்களூரு (BLR, ~220 கி.மீ).',
-      'வானூர்தி நிலையத்திலிருந்து முன்பதிவு டாக்சி / கேப் மூலம் ஏற்காடு செல்லவும்.',
-      'சேலத்திலிருந்து ~1.5 மணி; கோயம்புத்தூரிலிருந்து ~4–5 மணி; பெங்களூரிலிருந்து ~5–6 மணி பயணம்.'
+    "icon": "✈️",
+    "title": "விமானம் (Air)",
+    "steps": [
+      "தற்போதைய முன்பதிவு விமானத்தை வைத்து விமான நிலையம் தேர்ந்தெடுத்து ஏற்காடு சாலை வழியைச் சரிபாருங்கள்.",
+      "அடுத்த போக்குவரத்து, விலை மற்றும் சந்திக்கும் இடத்தை வழங்குநரிடம் உறுதி செய்யுங்கள்.",
+      "மலைச் சாலை நிலைக்கு நேரம் ஒதுக்குங்கள்; இங்கு நிலையான பயணநேர உறுதி இல்லை."
     ]
   },
   {
-    icon: '🚆', title: 'ரயில் (Rail)',
-    steps: [
-      'முக்கிய ரயில் நிலையம்: சேலம் சந்திப்பு (Salem Junction, ~35 கி.மீ) — தமிழ்நாடு & கர்நாடகா இணைப்புகள் பல.',
-      'சேலம் சந்திப்பிலிருந்து அரசுப் பேருந்து (TNSTC) / டாக்சி / ஆட்டோ மூலம் ஏற்காடு செல்லலாம்.',
-      'மாவட்ட நிர்வாகத் தகவல்படி ஏற்காட்டிலிருந்து சேலம் ~35 கி.மீ தொலைவில் உள்ளது.'
+    "icon": "🚆",
+    "title": "ரயில் (Rail)",
+    "steps": [
+      "மாவட்டம் சேலம் சந்திப்பை ரயில் அணுகலாகக் குறிப்பிடுகிறது; அதன் 2018 பக்கம் சுமார் 35 கிமீ எனக் கூறுகிறது.",
+      "தற்போதைய ரயிலும் வந்திறங்கும் நிலையத்திலிருந்து அடுத்த வழியையும் சரிபாருங்கள்.",
+      "நிலைய நுழைவிலிருந்து நேரடிப் பேருந்து இருப்பதாகக் கருதாதீர்கள்."
     ]
   },
   {
-    icon: '🚌', title: 'பேருந்து (Bus)',
-    steps: [
-      'தமிழ்நாடு அரசுப் போக்குவரத்துக் (TNSTC) நிறுவனப் பேருந்துகள் சேலம்–ஏற்காடு இடையே அடிக்கடி இயக்கப்படுகின்றன.',
-      'கோயம்புத்தூர், பெங்களூரு ஆகியவற்றிலிருந்தும் மாநிலப் பேருந்துகள் கிடைக்கும்.',
-      'ஏற்காடு பேருந்து நிலையத்திலிருந்து லேக் ரோடு / படகு இல்லம் ~1–2 கி.மீ — ஆட்டோ அல்லது நடைப்பயணம்.'
+    "icon": "🚌",
+    "title": "பேருந்து (Bus)",
+    "steps": [
+      "சேலம் மற்றும் ஏற்காடு இடையிலான பேருந்து இணைப்பை மாவட்டம் குறிப்பிடுகிறது.",
+      "தற்போதைய இயக்குநர் நேரம், ஏறும் இடம் மற்றும் இணைப்பைச் சரிபாருங்கள்.",
+      "நிறுத்தத்திலிருந்து படகு இல்லம் செல்லும் இறுதி வழியை உறுதி செய்யுங்கள்; எல்லா நகரிலிருந்தும் நேரடிச் சேவை இருப்பதாகக் கருதாதீர்கள்."
     ]
   },
   {
-    icon: '🚕', title: 'டாக்சி / கேப் (Taxi / Cab)',
-    steps: [
-      'சேலம், கோயம்புத்தூர் அல்லது பெங்களூரிலிருந்து நேரடி டாக்சி / செயலி அடிப்படையிலான கேப் முன்பதிவு செய்யலாம்.',
-      'ரயில் நிலையம் / வானூர்தி நிலையம் / பேருந்து நிலையம் ஆகியவற்றில் முன்பணம் (prepaid) டாக்சி மையங்கள் பொதுவாக உள்ளன.',
-      'மலைப்பாதை ஏறுவதற்கு முன் ஓட்டுநருடன் கட்டணம் & நேரத்தை உறுதிப்படுத்தவும்.'
+    "icon": "🚕",
+    "title": "டாக்சி / கேப் (Taxi / Cab)",
+    "steps": [
+      "வழங்குநர், விலை மற்றும் உண்மையான ஏறும் இடத்தை உறுதி செய்தபின் முன்பதிவு செய்யுங்கள்.",
+      "அனுமதிக்கப்பட்ட ஏரிப் பகுதி இறங்கும் இடம் மற்றும் திரும்பச் சந்திக்கும் இடத்தைத் தீர்மானியுங்கள்.",
+      "இந்த வழிகாட்டி கிடைப்பை உறுதி செய்யாது."
     ]
   },
   {
-    icon: '🛺', title: 'உள்ளூர் போக்குவரத்து (Local)',
-    steps: [
-      'ஏற்காடு நகரில் ஆட்டோ ரிக்ஷா & பகிர்வு டாக்சி வசதிகள் உள்ளன.',
-      'ஏரி, அண்ணா பூங்கா, படகு இல்லம் ஆகியவை லேக் ரோடு பகுதியில் ஒருவருக்கொருவர் அருகிலேயே உள்ளன — நடந்து செல்லலாம்.',
-      'பகோடா பாயிண்ட், லேடீஸ் சீட் போன்ற காட்சிஇடங்களுக்கு ஆட்டோ / கேப் பரிந்துரைக்கப்படுகிறது.'
+    "icon": "🛺",
+    "title": "உள்ளூர் போக்குவரத்து (Local)",
+    "steps": [
+      "பகிர்வுச் சேவை இருப்பதாகக் கருதாமல் அன்றைய உள்ளூர் போக்குவரத்தைச் சரிபாருங்கள்.",
+      "அண்ணா பூங்கா அருகில் உள்ளது; நடக்குமுன் பாதை, கடத்தல் மற்றும் அணுகலை உறுதி செய்யுங்கள்.",
+      "காட்சிமுனை மற்றும் அருவியைத் தனியான பயணமாக, தனி அணுகல் சரிபார்ப்புடன் கருதுங்கள்."
     ]
   },
   {
-    icon: '🚗', title: 'சொந்த வாகனம் (Driving)',
-    steps: [
-      'சேலம்–ஏற்காடு மலைச்சாலை ~35 கி.மீ; வளைவுகள் நிறைந்த காட் (ghat) பாதை (~18 முட்களம் / hairpin bends).',
-      'மலை ஏறுவதற்கு முன் சேலத்திலேயே எரிபொருள் / EV சார்ஜிங்கை நிரப்பவும் (மேல் பகுதியில் நிலையங்கள் குறைவு).',
-      'மூடுபனி, மழை மற்றும் இரவுப் பயணங்களில் வேகத்தைக் குறைத்து, வளைவுகளில் எச்சரிக்கையாகச் செல்லவும்.'
+    "icon": "🚗",
+    "title": "சொந்த வாகனம் (Driving)",
+    "steps": [
+      "மலை ஏறும் முன் தற்போதைய வழி, சாலைக் கட்டுப்பாடு மற்றும் தெளிவைப் பாருங்கள்.",
+      "எரிபொருள் அல்லது சார்ஜிங்கை வழங்குநரின் தற்போதைய தகவலால் திட்டமிடுங்கள்.",
+      "மழை அல்லது மூடுபனியில் கவனமாக ஓட்டி அறிவிப்பையும் அனுமதிக்கப்பட்ட நிறுத்த விதியையும் பின்பற்றுங்கள்."
     ]
   }
 ];
 const modesEn = [
   {
-    icon: '✈️', title: 'Flight (Air)',
-    steps: [
-      'Nearest airports: Salem (SXV, ~35 km — limited weekly/some connections), Coimbatore (CJB, ~170 km), Bengaluru (BLR, ~220 km).',
-      'From the airport, take a pre-booked taxi / cab to Yercaud.',
-      'About 1.5 hr from Salem; 4–5 hr from Coimbatore; 5–6 hr from Bengaluru.'
+    "icon": "✈️",
+    "title": "Flight (Air)",
+    "steps": [
+      "Choose an airport using current booked flights, then check the actual road route to Yercaud.",
+      "Confirm onward transport, price and meeting place with the provider.",
+      "Allow for ghat-road conditions; fixed journey times are not guaranteed here."
     ]
   },
   {
-    icon: '🚆', title: 'Train (Rail)',
-    steps: [
-      'Main station: Salem Junction (Salem Junction, ~35 km) — many Tamil Nadu & Karnataka connections.',
-      'From Salem Junction you can take a government bus (TNSTC) / taxi / auto to Yercaud.',
-      'Per district administration info, Yercaud is about 35 km from Salem.'
+    "icon": "🚆",
+    "title": "Train (Rail)",
+    "steps": [
+      "The district lists Salem Junction as the rail approach; its 2018 page gives about 35 km.",
+      "Check current train services and the onward route from your arrival station.",
+      "Do not assume a direct bus leaves from the station entrance."
     ]
   },
   {
-    icon: '🚌', title: 'Bus',
-    steps: [
-      'Tamil Nadu government (TNSTC) buses run frequently between Salem and Yercaud.',
-      'State buses are also available from Coimbatore and Bengaluru.',
-      'From Yercaud bus stand, Lake Road / boat house is ~1–2 km — auto or walk.'
+    "icon": "🚌",
+    "title": "Bus",
+    "steps": [
+      "The district describes bus links between Salem and Yercaud.",
+      "Check the current operator timetable, boarding point and any connection.",
+      "Confirm the final route from the stop to the boat house; do not assume a direct service from every city."
     ]
   },
   {
-    icon: '🚕', title: 'Taxi / Cab',
-    steps: [
-      'You can pre-book a direct taxi / app-based cab from Salem, Coimbatore or Bengaluru.',
-      'Prepaid taxi counters are usually available at the railway / airport / bus stations.',
-      'Confirm fare & time with the driver before the ghat climb.'
+    "icon": "🚕",
+    "title": "Taxi / Cab",
+    "steps": [
+      "Book only after confirming the provider, fare and actual pickup.",
+      "Agree a permitted lake-area drop-off and return meeting point.",
+      "Availability is not guaranteed by this guide."
     ]
   },
   {
-    icon: '🛺', title: 'Local transport',
-    steps: [
-      'Yercaud town has auto-rickshaws & shared taxis.',
-      'The lake, Anna Park and boat house are close to each other on Lake Road — walkable.',
-      'Auto / cab is recommended for viewpoints like Pagoda Point and Ladies Seat.'
+    "icon": "🛺",
+    "title": "Local transport",
+    "steps": [
+      "Check available local transport on the day rather than assuming a shared service.",
+      "Anna Park is nearby; confirm surfaces, crossings and access before planning a walk.",
+      "Treat viewpoints and waterfalls as separate journeys with their own access checks."
     ]
   },
   {
-    icon: '🚗', title: 'Driving',
-    steps: [
-      'Salem–Yercaud ghat road ~35 km; winding ghat road (~18 hairpin bends).',
-      'Fill fuel / EV charge in Salem before climbing (fewer stations up top).',
-      'Slow down in fog, rain and at night; be careful on curves.'
+    "icon": "🚗",
+    "title": "Driving",
+    "steps": [
+      "Check the current route, road restrictions and visibility before climbing.",
+      "Arrange fuel or charging using current provider information.",
+      "Drive cautiously in rain or fog; follow signs and authorised parking rules."
     ]
   }
 ];
@@ -110,9 +122,7 @@ const intro = pick(locale,
   'ஏற்காடு சேலம் மாவட்டத்தின் செவராய் மலைப்பகுதியில் அமைந்துள்ளது. கீழே ஒவ்வொரு பயண முறைக்குமான படிநிலை வழிகாட்டி உள்ளது; விலை & நேரம் பருவத்திற்கேற்ப மாறலாம், பயண நாளில் உறுதிப்படுத்தவும்.',
   'Yercaud is in the Shevaroy Hills of Salem district. Step-by-step guidance for each travel mode is below; fare & time vary by season, so confirm on the day of travel.');
 const mapTitle = pick(locale, 'ஏற்காடு ஏரி மற்றும் படகு இல்லம் கூகுள் வரைபடம்', 'Google Maps of Yercaud Lake & Boat House');
-const mapNote = pick(locale,
-  'வரைபடம் Google Maps ஐச் சுட்டுகிறது; இறுதித் தூரம் & பாதைக்கு அதிகாரப்பூர்வ வரைபடத்தையும் உள்ளூர் அறிவுறுத்தல்களையும் பின்பற்றவும்.',
-  'The map points to Google Maps; follow the official map and local guidance for final distance & route.');
+const mapNote = pick(locale, "இது குறிப்பிட்ட ஏற்காடு இடத்திற்கான மூன்றாம் தரப்பு வரைபடம். தற்போதைய நுழைவு, நிறுத்தம், சாலை மற்றும் படகேற்ற வழியைத் தனியாக உறுதி செய்யுங்கள்.", "This third-party map identifies the Yercaud place. Confirm current entry, parking, road access and boarding separately.");
 ---
 <section id={sec(locale, 'transport')} class="container-shell py-16 md:py-24">
   <p class="kicker">{kicker}</p>

@@ -4,70 +4,82 @@ interface Props { locale?: Locale }
 const { locale = 'ta' } = Astro.props;
 const blocksTa = [
   {
-    icon: '🏞️', title: 'ஏரி + காடு = ஏற்காடு',
-    text: '“ஏற்காடு” என்பது “ஏரி” (யேரி) + “காடு” என்னும் சொற்களின் இணைப்பாகப் பொதுவாக விளக்கப்படுகிறது — அதாவது ஏரியைச் சூழ்ந்த காடு. செவராய் மலைத்தொடரில் அமைந்துள்ள இந்த இயற்கை ஏரி, மலை வாசஸ்தலத்திற்கே அடையாளமாக இருக்கிறது. மாவட்ட நிர்வாகம் இதனை “பெரிய ஏரி” என்றும் அதிகாரப்பூர்வமாகக் குறிப்பிடுகிறது.'
+    "icon": "🏞️",
+    "title": "பெரிய ஏரி",
+    "text": "மாவட்ட சுற்றுலாப் பக்கம் ஏற்காட்டின் பெரிய ஏரியை இயற்கை ஏரி மற்றும் படகுச் சுற்றுலா இடமாகக் குறிப்பிடுகிறது. ஏரியையும் படகு இல்லச் சேவையையும் வேறுபடுத்திப் பாருங்கள்."
   },
   {
-    icon: '⛰️', title: 'செவராய் மலை உயரம்',
-    text: 'ஏற்காடு நகரம் கடல் மட்டத்திலிருந்து ஏறத்தாழ 1,515 மீட்டர் (சுமார் 4,970 அடி) உயரத்தில் அமைந்துள்ளது. தமிழ்நாட்டின் கிழக்குத் தொடர்ச்சி மலைப் பகுதியின் ஒரு பகுதியான இம்மலை, பரந்த தோட்டங்கள், காடுகள் மற்றும் பார்வை இடங்களுக்குப் பெயர் பெற்றது. கோடையில் கூட மாலை நேரங்களில் குளிர்ந்த காற்று நிலவும்.'
+    "icon": "⛰️",
+    "title": "சேர்வராயன் மலைப்பகுதி",
+    "text": "ஏற்காடு கிழக்குத் தொடர்ச்சி மலையின் சேர்வராயன் பகுதியில் உள்ளது. மாவட்டம் நகரத்திற்கு சுமார் 1,515 மீ உயரம் குறிப்பிடுகிறது; அது ஏரி வானிலை நிலையத்தின் துல்லிய உயரம் அல்ல."
   },
   {
-    icon: '☕', title: 'காபி தோட்டங்களின் வரலாறு',
-    text: '19-ஆம் நூற்றாண்டில் இப்பகுதியில் காபி மற்றும் தோட்டப் பயிர்கள் விரிவடைந்தன. ஐரோப்பிய தோட்டக்காரர்கள் செவராய் மலைச் சரிவுகளில் காபித் தோட்டங்களை உருவாக்கியதாகப் பொதுப் பதிவுகள் கூறுகின்றன. பின்னர் தேயிலை, காய்கறிகள், பழங்கள் மற்றும் மசாலாப் பொருட்கள் வர்த்தகத்துடன் இணைந்தன. இன்றும் ஏற்காடு சுற்றிலும் தோட்டங்கள் பயணிகளை வரவேற்கின்றன.'
+    "icon": "☕",
+    "title": "அருகிலுள்ள அண்ணா பூங்கா",
+    "text": "அண்ணா பூங்கா ஏரிக்கு அருகில் இருப்பதாக மாவட்டம் குறிப்பிடுகிறது. அதன் நுழைவு தனியானது; அருகில் இருப்பது ஒரே டிக்கெட் அல்லது தடையற்ற அணுகலுக்குச் சான்றல்ல."
   },
   {
-    icon: '⛵', title: 'படகு இல்லமும் ஏரி வாழ்க்கையும்',
-    text: 'இந்த ஏரி நீண்ட காலமாக ஏற்காட்டின் மைய ஈர்ப்பாக இருந்து வருகிறது. படகு இல்லம் சேலம் மாவட்ட நிர்வாகத்தின் கீழ் படகுச் சேவையை வழங்குகிறது; குடும்பங்கள், நண்பர்கள் குழுக்கள் மற்றும் ஒற்றைப் பயணிகள் என அனைவரும் மரங்கள் சூழ்ந்த அமைதியான நீரில் மிதப்பதை அனுபவிக்கின்றனர்.'
+    "icon": "⛵",
+    "title": "படகு இல்ல இயக்குநர்",
+    "text": "23 மே 2025 அன்று புதுப்பிக்கப்பட்ட மாவட்டப் படகு இல்லப் பக்கம் TTDC மற்றும் மிதி, துடுப்பு, இயந்திரப் படகுகளைக் குறிப்பிடுகிறது. தற்போது இயங்குவதையும் கவுண்டர் விதியையும் உறுதி செய்யுங்கள்."
   },
   {
-    icon: '🌤️', title: '“மினி ஊட்டி” என்னும் அடைமொழி',
-    text: 'மிதமான காலநிலையும் பசுமையான தோற்றமும் காரணமாக ஏற்காடு சில சமயம் “மினி ஊட்டி” அல்லது “சிறிய ஊட்டி” என்று அன்புடன் அழைக்கப்படுகிறது. ஊட்டியின் கூட்ட நெரிசல் இல்லாமல் ஒரு நாள் அல்லது வார இறுதி ஓய்வுக்கு ஏற்ற மலை இடமாக இது கருதப்படுகிறது.'
+    "icon": "🌤️",
+    "title": "வரைபடப் பெயர்கள்",
+    "text": "இந்த ஏற்காடு இடத்திற்கு பெரிய ஏரி மற்றும் எமரால்ட் ஏரி பெயர்கள் பயன்படுத்தப்படுகின்றன. வேறு எமரால்ட் ஏரி அல்லது ஒத்த பெயருள்ள வணிகத்துடன் குழப்பாதீர்கள்."
   },
   {
-    icon: '🏛️', title: 'காலனித்துவ மலைவாசஸ்தலம்',
-    text: '19-ஆம் நூற்றாண்டில் பிரிட்டிஷ் காலனித்துவ காலத்தில் ஏற்காடு ஒரு மலைவாசஸ்தலமாக (hill station) மேம்படுத்தப்பட்டது. மிதமான தட்பவெப்ப நிலைக்காகக் கோடைக்காலத் தங்குமிடமாக இது பயன்படுத்தப்பட்டது; தோட்டங்கள், தேவாலயங்கள் மற்றும் மலை வீடுகள் (பங்களாக்கள்) அந்தக் காலகட்டத்தின் தடயங்களாக இன்றும் உள்ளன. சேலம் சமவெளியிலிருந்து மலைக்கு சாலை இணைப்பும் அப்போது உருவாக்கப்பட்டது.'
+    "icon": "🏛️",
+    "title": "கிளியூர் அருவிப் பின்னணி",
+    "text": "ஏற்காடு பகுதியின் அருவி மற்றும் ஏரி உபரிநீர், மலை நீரோட்டத் தொடர்பை மாவட்டம் விவரிக்கிறது. அது இன்றைய நீர்வரத்து அல்லது திறந்த பாதைக்கு உறுதி அல்ல."
   },
   {
-    icon: '🚤', title: 'ஏரியின் பராமரிப்பும் படகு இல்லமும்',
-    text: 'இயற்கையான நீர்நிலையாக இருந்த ஏரி, பொதுப் பணித் துறை / வனத் துறை மூலம் பராமரிக்கப்படும் நிரந்தர ஏரியாக (perennial lake) இன்றும் உள்ளது. ஏரிக்கரையில் அமைந்துள்ள படகு இல்லம் மாவட்ட நிர்வாகம் / சுற்றுலாத் துறையின் கீழ் இயங்குகிறது; இது ஏற்காட்டின் முக்கிய பொழுதுபோக்கு மையமாகத் தொடர்கிறது. காலனித்துவ காலப் பயணிகள் இந்த ஏரியை “எமரால்டு (Emerald)” என்று அழைத்ததாகவும் பொதுப் பதிவுகள் கூறுகின்றன.'
+    "icon": "🚤",
+    "title": "தேதியுள்ள பயணத் தகவல்",
+    "text": "மாவட்டப் பொதுப்பக்கம் 2018 தேதியுடையது; படகு இல்ல விழாப் பக்கம் 2025இல் புதுப்பிக்கப்பட்டது. அவற்றின் விலையும் நேரமும் இன்றைய உறுதியான சேவையாக அல்லாமல் அந்தத் தேதியுடன் படிக்கப்பட வேண்டும்."
   }
 ];
 const blocksEn = [
   {
-    icon: '🏞️', title: 'Lake + forest = Yercaud',
-    text: '“Yercaud” is commonly explained as a combination of “yeri” (lake) + “kaadu” (forest) — the forest that surrounds the lake. This natural lake in the Shevaroy range is the identity of the hill station. The district administration also officially refers to it as the “Big Lake”.'
+    "icon": "🏞️",
+    "title": "The Big Lake",
+    "text": "The district tourism page identifies Yercaud’s Big Lake as a natural lake and boating attraction. Keep the lake itself distinct from the boat-house service."
   },
   {
-    icon: '⛰️', title: 'Shevaroy Hills elevation',
-    text: 'Yercaud town sits at about 1,515 m (around 4,970 ft) above sea level. Part of Tamil Nadu’s Eastern Ghats, the hill is known for its sprawling gardens, forests and viewpoints. Even in summer, cool breeze prevails in the evenings.'
+    "icon": "⛰️",
+    "title": "Shevaroy setting",
+    "text": "Yercaud is in the Shevaroy range of the Eastern Ghats. The district gives about 1,515 m for the town; this is not a precise lake weather-station elevation."
   },
   {
-    icon: '☕', title: 'History of coffee plantations',
-    text: 'In the 19th century, coffee and plantation crops expanded in this region. Public records state that European planters established coffee estates on the Shevaroy slopes, later joined by trade in tea, vegetables, fruit and spices. Even today, plantations around Yercaud welcome travellers.'
+    "icon": "☕",
+    "title": "Anna Park nearby",
+    "text": "The district places Anna Park next to the lake. Its garden visit has separate entry arrangements; proximity is not proof of shared tickets or step-free access."
   },
   {
-    icon: '⛵', title: 'The boat house & lake life',
-    text: 'This lake has long been the central attraction of Yercaud. The boat house operates boat services under the Salem district administration; families, friend groups and solo travellers alike enjoy floating on its tree-lined calm waters.'
+    "icon": "⛵",
+    "title": "Boat-house operator",
+    "text": "The district’s boat-house page, updated 23 May 2025, identifies TTDC and pedal, rowing and motor-boat services. Confirm which currently operate and their counter rules."
   },
   {
-    icon: '🌤️', title: 'The “Mini Ooty” nickname',
-    text: 'Because of its mild climate and green look, Yercaud is sometimes affectionately called “Mini Ooty” or “Little Ooty”. Without Ooty’s crowds, it is considered a good hill getaway for a day or weekend.'
+    "icon": "🌤️",
+    "title": "Names on the map",
+    "text": "Big Lake and Emerald Lake are used for this Yercaud attraction. Do not confuse it with a different Emerald Lake or a similarly named business elsewhere."
   },
   {
-    icon: '🏛️', title: 'Colonial hill station',
-    text: 'In the 19th century, during British colonial rule, Yercaud was developed as a hill station. Used as a summer retreat for its moderate climate; plantations, churches and bungalows from that era remain traces today. The road link from the Salem plain to the hills was also built then.'
+    "icon": "🏛️",
+    "title": "Kiliyur Falls context",
+    "text": "The district describes a waterfall trip from the Yercaud area and a connection to lake overflow and hill runoff. That description does not establish today’s water flow or open trail."
   },
   {
-    icon: '🚤', title: 'Lake upkeep & the boat house',
-    text: 'Once a natural waterbody, the lake is today a perennial lake maintained by the Public Works / Forest department. The lakeside boat house runs under the district administration / tourism; it remains Yercaud’s key recreation centre. Colonial-era travellers are said to have called this lake “Emerald”, per public records.'
+    "icon": "🚤",
+    "title": "Reading dated visitor information",
+    "text": "The district’s general page is dated 2018; its boat-house festival page was updated 2025. Their prices and hours should be read with those dates, not as today’s confirmed offer."
   }
 ];
 const blocks = locale === 'en' ? blocksEn : blocksTa;
 const kicker = pick(locale, 'வரலாறு & தன்மை', 'History & nature');
 const heading = pick(locale, 'செவராய் மலைச் சரிவில் ஒரு இயற்கை ஏரி', 'A natural lake on the Shevaroy slope');
-const footnote = pick(locale,
-  'மேற்கண்ட குறிப்புகள் சேலம் மாவட்ட நிர்வாகம், தமிழ்நாடு சுற்றுலா வெளியீடுகள் மற்றும் பொதுப் பதிவுகளிலிருந்து தொகுக்கப்பட்டவை; அதிகாரப்பூர்வ வரலாற்று ஆய்வு நூலாக இது கருதப்படக்கூடாது.',
-  'The notes above are compiled from Salem district administration, Tamil Nadu tourism publications and public records; they should not be treated as an official historical research volume.');
+const footnote = pick(locale, "மாவட்டத்தின் 2018 பொதுப்பக்கம் மற்றும் 2025 படகு இல்லப் பக்கம் அடிப்படைச் சூழலைத் தருகின்றன. அவற்றின் தேதியை தற்போதைய சேவைக்கான உறுதியாகக் கருதாதீர்கள்.", "The district’s 2018 general page and 2025 boat-house page provide context. Their dates do not establish today’s services.");
 ---
 <section id={sec(locale, 'history')} class="bg-[#eaf4ee] py-16 md:py-24">
   <div class="container-shell">

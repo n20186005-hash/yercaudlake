@@ -1,6 +1,6 @@
 // i18n scaffolding for the Yercaud Lake guide.
 // Tamil (ta) is the original/local language and kept verbatim across components.
-// English (en) is the added locale to capture English queries (e.g. "yercaud lake").
+// English is the existing second language.
 
 export type Locale = 'ta' | 'en';
 export const locales: Locale[] = ['ta', 'en'];
@@ -65,11 +65,11 @@ export function navItems(locale: Locale): { id: string; label: string }[] {
 export function localizedPath(path: string, locale: Locale): string {
   if (locale === 'ta') return path;
   const clean = path === '/' ? '' : path.replace(/\/+$/, '');
-  return '/en' + (clean || '') + (clean ? '/' : '');
+  return '/en' + (clean || '') + '/';
 }
 
 // hreflang alternates for a given canonical path. x-default points to English
-// to better capture the international "yercaud lake" queries.
+// for the existing English counterpart.
 export function hreflangAlternates(path: string, site: string): { hreflang: string; href: string }[] {
   const base = site.replace(/\/+$/, '');
   const ta = base + localizedPath(path, 'ta');

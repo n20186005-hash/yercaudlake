@@ -1,67 +1,24 @@
-// Cloudflare Worker — serves the static Astro build (via the ASSETS binding) and
-// proxies /api/weather, fetching from Open-Meteo on the server and caching at the edge.
-// The weather data source is never exposed to site visitors.
-
-interface Env {
-  ASSETS: { fetch: (input: Request | string) => Promise<Response> };
+import {WX_URL as weatherUrl,validateWeather,LAT,LON,TTL,DEADLINE} from './lib/weather';
+interface Env {ASSETS:{fetch:(r:Request)=>Promise<Response>}}
+interface Context {waitUntil:(p:Promise<unknown>)=>void}
+const errors=new Set(['/404','/404/','/404.html','/en/404','/en/404/','/en/404.html']);
+async function errorPage(request:Request,env:Env){const url=new URL(request.url);let path=url.pathname.startsWith('/en/')?'/en/404/':'/404',response:Response|undefined;for(let i=0;i<3;i++){response=await env.ASSETS.fetch(new Request(new URL(path,url.origin)));if(![301,302,307,308].includes(response.status))break;const next=new URL(response.headers.get('location')||path,url.origin);if(next.origin!==url.origin||!errors.has(next.pathname))break;path=next.pathname+next.search;}const headers=new Headers(response?.headers);headers.delete('location');headers.delete('content-length');headers.delete('content-encoding');headers.set('x-robots-tag','noindex');headers.set('cache-control','no-store');headers.set('content-type','text/html; charset=utf-8');const body=response&&!([301,302,307,308].includes(response.status))?await response.text():'';return new Response(request.method==='HEAD'?null:body||'<!doctype html><title>404</title><h1>Page not found / பக்கம் கிடைக்கவில்லை</h1><a href="/">Yercaud Lake</a>',{status:404,headers});}
+function json(d:unknown,status=200,headers:Record<string,string>={}){return new Response(JSON.stringify(d),{status,headers:{'content-type':'application/json; charset=utf-8','cache-control':'no-store',...headers}});}
+async function weather(request:Request,ctx:Context){
+ const u=new URL(request.url);
+ if(!['GET','HEAD'].includes(request.method))return json({error:'method_not_allowed'},405,{allow:'GET, HEAD'});
+ if(u.searchParams.has('latitude')!==u.searchParams.has('longitude'))return json({error:'unsupported_location'},400);
+ for(const key of u.searchParams.keys())if(!['latitude','longitude','forecast_days'].includes(key)||u.searchParams.getAll(key).length!==1)return json({error:'unsupported_location'},400);
+ for(const [key,value]of [['latitude',LAT],['longitude',LON],['forecast_days',7]] as const)if(u.searchParams.has(key)&&(u.searchParams.get(key)===''||Number(u.searchParams.get(key))!==value))return json({error:'unsupported_location'},400);
+ const controller=new AbortController();let timer:ReturnType<typeof setTimeout>|undefined;
+ try{return await Promise.race([(async()=>{
+  const cache=(globalThis.caches as CacheStorage&{default?:Cache})?.default,key=new Request(weatherUrl);let hit:Response|undefined;
+  try{hit=await cache?.match(key);}catch{}
+  if(controller.signal.aborted)throw Error('Deadline');
+  if(hit)try{const at=Number(hit.headers.get('x-cached-at')),d=validateWeather(await hit.json()),age=Date.now()-at;if(!controller.signal.aborted&&Number.isFinite(at)&&at>0&&age>=0&&age<TTL)return json(d,200,{'cache-control':'public, max-age='+Math.max(0,Math.floor((TTL-age)/1000)),'x-cache':'HIT','x-cached-at':String(at)});}catch{}
+  if(controller.signal.aborted)throw Error('Deadline');
+  const response=await fetch(weatherUrl,{signal:controller.signal});if(!response.ok)throw Error('Provider HTTP');const d=validateWeather(await response.json());if(controller.signal.aborted)throw Error('Deadline');
+  const fresh=json(d,200,{'cache-control':'public, max-age=600','x-cache':'MISS','x-cached-at':String(Date.now())});if(cache)ctx.waitUntil(cache.put(key,fresh.clone()).catch(()=>{}));return fresh;
+ })(),new Promise<Response>(resolve=>{timer=setTimeout(()=>{controller.abort();resolve(json({error:'weather_unavailable'},502));},DEADLINE);})]);}catch{return json({error:'weather_unavailable'},502);}finally{clearTimeout(timer);}
 }
-
-const LAT = 11.78333;
-const LON = 78.21028;
-const CACHE_SECONDS = 600;
-
-function weatherUrl(): string {
-  const params = new URLSearchParams({
-    latitude: String(LAT),
-    longitude: String(LON),
-    current: 'temperature_2m,relative_humidity_2m,apparent_temperature,is_day,weather_code,wind_speed_10m',
-    daily: 'weather_code,temperature_2m_max,temperature_2m_min,precipitation_probability_max,uv_index_max',
-    timezone: 'Asia/Kolkata',
-    wind_speed_unit: 'kmh',
-    forecast_days: '7'
-  });
-  return 'https://api.open-meteo.com/v1/forecast?' + params.toString();
-}
-
-async function handleWeather(ctx: ExecutionContext): Promise<Response> {
-  const api = weatherUrl();
-  const cacheKey = new Request(api);
-  try {
-    const hit = await caches.default.match(cacheKey);
-    if (hit) return hit;
-  } catch { /* cache unavailable — fall through to live fetch */ }
-
-  let res: Response;
-  try {
-    res = await fetch(api, {
-      cf: { cacheTtl: CACHE_SECONDS },
-      headers: { 'User-Agent': 'yercaudlake-guide/1.0 (+https://yercaudlake.com)' }
-    });
-  } catch {
-    return jsonError(502);
-  }
-  if (!res || !res.ok) return jsonError(502);
-
-  const out = new Response(res.body, res);
-  out.headers.set('content-type', 'application/json; charset=utf-8');
-  out.headers.set('cache-control', `public, max-age=${CACHE_SECONDS}, s-maxage=${CACHE_SECONDS}`);
-  out.headers.set('access-control-allow-origin', '*');
-  try { ctx.waitUntil(caches.default.put(cacheKey, out.clone())); } catch { /* best-effort cache */ }
-  return out;
-}
-
-function jsonError(status: number): Response {
-  return new Response(JSON.stringify({ error: 'weather_unavailable' }), {
-    status,
-    headers: { 'content-type': 'application/json; charset=utf-8', 'cache-control': 'no-store' }
-  });
-}
-
-export default {
-  async fetch(request: Request, env: Env, ctx: ExecutionContext): Promise<Response> {
-    const url = new URL(request.url);
-    if (url.pathname === '/api/weather') return handleWeather(ctx);
-    // All other requests are served from the static Astro build.
-    return env.ASSETS.fetch(request);
-  }
-};
+export default {async fetch(request:Request,env:Env,ctx:Context){const u=new URL(request.url);if(u.hostname==='www.yercaudlake.com'||(u.hostname==='yercaudlake.com'&&u.protocol==='http:')){u.protocol='https:';u.hostname='yercaudlake.com';return new Response(null,{status:308,headers:{location:u.href}});}let response:Response;if(u.pathname==='/api/weather')response=await weather(request,ctx);else if(errors.has(u.pathname))response=await errorPage(request,env);else{response=await env.ASSETS.fetch(request);if(response.status===404)response=await errorPage(request,env);}return request.method==='HEAD'?new Response(null,{status:response.status,headers:response.headers}):response;}};

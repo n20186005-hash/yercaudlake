@@ -4,97 +4,113 @@ interface Props { locale?: Locale }
 const { locale = 'ta' } = Astro.props;
 const facilitiesTa = [
   {
-    icon: '🚻', title: 'கழிவறைகள் (WC)',
-    text: 'படகு இல்ல வளாகம் மற்றும் ஏரிக்கரைப் பகுதியில் பொது கழிவறை வசதியை எதிர்பார்க்கலாம். நாள் நேரம், பராமரிப்பு மற்றும் நெரிசலைப் பொறுத்து நிலை மாறலாம்; சில சமயங்களில் காத்திருப்பு அல்லது சிறு கட்டணம் இருக்கலாம்.'
+    "icon": "🚻",
+    "title": "கழிவறைகள் (WC)",
+    "text": "தற்போது திறந்துள்ள கழிப்பிடம், கட்டணம் மற்றும் அணுகல் தேவைகளைப் படகு இல்லத்தில் முன்கூட்டியே கேளுங்கள். விழாக்கால ஏற்பாடு ஆண்டு முழுவதற்கான வசதிக்குச் சான்றல்ல."
   },
   {
-    icon: '🅿️', title: 'வாகன நிறுத்தம்',
-    text: 'லேக் ரோடு மற்றும் படகு இல்லத்திற்கு அருகில் வாகன நிறுத்தம் உள்ளது. இரு சக்கர மற்றும் நான்கு சக்கர வாகனங்களுக்கு இடம் உண்டு; வார இறுதி, விடுமுறை நாட்களில் நிரம்பக்கூடும் என்பதால் முன்னதாக வருவது நடைமுறை.'
+    "icon": "🅿️",
+    "title": "வாகன நிறுத்தம்",
+    "text": "அனுமதிக்கப்பட்ட வாகன நிறுத்தம், தற்போதைய கட்டணம் மற்றும் நுழைவிடம் வரை நடக்கும் பகுதியை உள்ளூரில் உறுதி செய்யுங்கள். இடம் கிடைப்பது உறுதி அல்ல."
   },
   {
-    icon: '🍛', title: 'உணவு & பானங்கள்',
-    text: 'ஏரிக்கரை மற்றும் ஏற்காடு நகரில் தென்னிந்திய சைவ உணவு, இட்லி/தோசை போன்ற டிபன் வகைகள், காப்பி–தேநீர் கடைகள், சிற்றுண்டி மற்றும் பேக்கரிகள் உள்ளன. பயணத்தின் போது குடிநீர் பாட்டில் எடுத்துச் செல்வது நல்லது.'
+    "icon": "🍛",
+    "title": "உணவு & பானங்கள்",
+    "text": "தண்ணீர் எடுத்துச் செல்லுங்கள். உணவு வாங்கும் இடத்தின் நேரம், பட்டியல், விலை மற்றும் சுகாதாரத்தைச் சரிபாருங்கள்; ஏரிக்கரைக் கடை திறந்திருக்கும் எனக் கருதாதீர்கள்."
   },
   {
-    icon: '🛏️', title: 'தங்குமிடங்கள்',
-    text: 'ஏற்காடு நகரில் ஹோட்டல், ரிசார்ட், மலை வீடு (ஹோம்ஸ்டே) போன்ற பல தங்குமிட வகைகள் உள்ளன. முன்பதிவு, ஏரிக்கான தொலைவு, பருவம் ஆகியவற்றை ஒப்பிட்டு முடிவு செய்யுங்கள். இங்கு குறிப்பிட்ட நிறுவனப் பெயர்கள் பரிந்துரைக்கப்படவில்லை.'
+    "icon": "🛏️",
+    "title": "தங்குமிடங்கள்",
+    "text": "குறிப்பிட்ட தங்குமிடத்தின் தற்போதைய முகவரி, முன்பதிவு விதி மற்றும் ஏரி வரையிலான பயணத்தைச் சரிபாருங்கள். இது சரிபார்க்கப்பட்ட விடுதிப் பட்டியல் அல்ல."
   },
   {
-    icon: '🛒', title: 'பல்பொருள் கடைகள்',
-    text: 'தினசரி தேவைப் பொருட்கள், காய்கறிகள், பழங்கள், சிற்றுண்டி மற்றும் குடிநீர் ஆகியவை நகரில் கிடைக்கின்றன. ஏரியிலிருந்து வெளியேறிச் செல்லும் பயணங்களுக்குத் தேவையானவற்றை முன்கூட்டியே எடுத்துச் செல்வது வசதியாக இருக்கும்.'
+    "icon": "🛒",
+    "title": "பல்பொருள் கடைகள்",
+    "text": "மலைப் பயணத்திற்கு முன் தேவையான பொருட்களைத் தயார் செய்யுங்கள். வந்தவுடன் குறிப்பிட்ட கடையோ பொருளோ கிடைக்கும் என நம்பாதீர்கள்."
   },
   {
-    icon: '⛽', title: 'எரிபொருள் & EV சார்ஜிங்',
-    text: 'சேலம்–ஏற்காடு சாலை வழியிலும் நகரிலும் எரிபொருள் நிலையங்கள் உள்ளன. மலைப்பகுதியில் மின்சார வாகன சார்ஜிங் வசதி குறைவாக இருக்கலாம்; மேலே வரும் முன் சேலத்தில் பேட்டரியை முழுமையாக நிரப்பி வருவது பாதுகாப்பானது.'
+    "icon": "⛽",
+    "title": "எரிபொருள் & EV சார்ஜிங்",
+    "text": "வாகனம் ஓட்டும் முன் எரிபொருள் அல்லது சார்ஜிங் வழங்குநரின் தற்போதைய இடம் மற்றும் கிடைப்பைச் சரிபாருங்கள். குறிப்பிட்ட மலை சார்ஜிங் இடம் இங்கு உறுதி செய்யப்படவில்லை."
   },
   {
-    icon: '🏧', title: 'ATM & ரொக்கம்',
-    text: 'நகர மையத்தில் வங்கி மற்றும் ATM வசதிகள் உள்ளன. ஏரிக்கரைப் பகுதியில் ATM இருக்காது என்பதால் சிறிய அளவு ரொக்கம் எடுத்துச் செல்வது நல்லது.'
+    "icon": "🏧",
+    "title": "ATM & ரொக்கம்",
+    "text": "தேவைப்பட்டால் உங்கள் வங்கியின் தற்போதைய ATM இடத்தைக் காணுங்கள். கட்டண கவுண்டரில் ஏற்றுக்கொள்ளும் செலுத்தும் முறையைக் கேளுங்கள்; மின்னணு செலுத்தல் உறுதி அல்ல."
   },
   {
-    icon: '💊', title: 'மருந்தகம் & மருத்துவம்',
-    text: 'ஏற்காடு நகரில் மருந்தகங்களும் அடிப்படை சுகாதார வசதியும் உள்ளன. அவசர மருத்துவத் தேவைக்கு அருகிலுள்ள பெரிய மையம் சேலம்; பயணத்தின் போது முக்கிய அவசரத் தொடர்புகளைக் குறித்துக்கொள்வது நல்லது.'
+    "icon": "💊",
+    "title": "மருந்தகம் & மருத்துவம்",
+    "text": "தனிப்பட்ட மருந்து மற்றும் பொருத்தமான தற்போதைய மருத்துவ உதவியைப் பயணத்திற்கு முன் திட்டமிடுங்கள். அருகிலுள்ள மருத்துவமனையோ அவசர உதவி நேரமோ இங்கு உறுதி செய்யப்படவில்லை."
   },
   {
-    icon: '📶', title: 'இணையம் & தொலைபேசி வலைப்பின்னல்',
-    text: 'நகர் மையம் & ஏரிக்கரைப் பகுதியில் செல்பேசி வலைப்பின்னல் கிடைக்கும்; ஆழமான மலைப் பாதைகளில் 4G சிக்னல் துண்டிக்கப்படலாம். மலைச்சாலைக்கு முன் வழிசெலுத்தலை (offline map) பதிவிறக்கம் செய்துகொள்வது பாதுகாப்பானது.'
+    "icon": "📶",
+    "title": "இணையம் & தொலைபேசி வலைப்பின்னல்",
+    "text": "முகவரி, வழி மற்றும் திரும்பச் சந்திக்கும் இடத்தை இணையமின்றியும் பார்க்குமாறு வைத்திருங்கள். அலைபேசி இணைப்பு மாறலாம்; இந்த வழிகாட்டி உறுதி தராது."
   },
   {
-    icon: '♿', title: 'மாற்றுத்திறன் அணுகல்',
-    text: 'ஏரிக்கரை பேவ்டு (paved) நடைப்பாதை, படகு இல்லம் மற்றும் அண்ணா பூங்கா ஆகியவை சக்கர நாற்காலிக்கு ஏற்ற வகையில் அமைந்துள்ளன. வாகனம் மூலம் அணுகக்கூடிய காட்சிஇடங்களும் உள்ளன; ஆழமான பாதைகள் & அருவிகளில் அணுகல் குறைவாக இருக்கலாம்.'
+    "icon": "♿",
+    "title": "மாற்றுத்திறன் அணுகல்",
+    "text": "சக்கர நாற்காலியுடன் படகில் ஏறுதல், சரிவு, பாதை மற்றும் அணுகத்தக்க கழிப்பிடம் இங்கு ஆய்வு செய்யப்படவில்லை. உங்கள் குறிப்பிட்ட தேவையைப் படகு இல்லத்தில் முன்பே கேளுங்கள்; அண்ணா பூங்கா அருகில் இருப்பது தடையற்ற பாதைக்குச் சான்றல்ல."
   }
 ];
 const facilitiesEn = [
   {
-    icon: '🚻', title: 'Toilets (WC)',
-    text: 'Public toilets can be expected at the boat-house complex and lakeside. Condition varies with time of day, maintenance and crowding; sometimes there is a wait or a small fee.'
+    "icon": "🚻",
+    "title": "Toilets (WC)",
+    "text": "Ask the boat house about the nearest currently open toilet, charges and access needs before relying on it. Festival-only arrangements are not evidence of a year-round facility."
   },
   {
-    icon: '🅿️', title: 'Parking',
-    text: 'Parking is available near Lake Road and the boat house for two- and four-wheelers; it can fill up on weekends and holidays, so arriving earlier is practical.'
+    "icon": "🅿️",
+    "title": "Parking",
+    "text": "Confirm permitted parking, current charges and the walking section to the visitor entrance locally. A space is not guaranteed."
   },
   {
-    icon: '🍛', title: 'Food & drinks',
-    text: 'Lakeside and in Yercaud town you’ll find South Indian vegetarian food, tiffin items like idli/dosa, coffee–tea stalls, snacks and bakeries. Carry a bottle of drinking water on your trip.'
+    "icon": "🍛",
+    "title": "Food & drinks",
+    "text": "Carry drinking water. If buying a meal, check the actual venue’s opening, menu, price and hygiene rather than assuming a stall is open beside the lake."
   },
   {
-    icon: '🛏️', title: 'Stays',
-    text: 'Yercaud town has hotels, resorts and homestays of various types. Compare distance to the lake, season and reviews before booking; no specific business is recommended here.'
+    "icon": "🛏️",
+    "title": "Stays",
+    "text": "Check a specific property’s current address, booking terms and journey to the lake. This card is not a verified accommodation directory."
   },
   {
-    icon: '🛒', title: 'Groceries',
-    text: 'Daily-needs items, vegetables, fruit, snacks and drinking water are available in town. It is convenient to stock up before trips that leave the lake area.'
+    "icon": "🛒",
+    "title": "Groceries",
+    "text": "Bring essentials before leaving for the hills. Do not rely on a particular nearby shop or product being available on arrival."
   },
   {
-    icon: '⛽', title: 'Fuel & EV charging',
-    text: 'Fuel stations are along the Salem–Yercaud road and in town. EV charging in the hills may be limited; it is safer to fully charge in Salem before climbing up.'
+    "icon": "⛽",
+    "title": "Fuel & EV charging",
+    "text": "Use your fuel or charging provider’s current location and availability information before driving. No particular hill charging point has been verified here."
   },
   {
-    icon: '🏧', title: 'ATM & cash',
-    text: 'Bank and ATM facilities are in the town centre. There may be no ATM lakeside, so carry a little cash.'
+    "icon": "🏧",
+    "title": "ATM & cash",
+    "text": "Check your bank’s current ATM locator if needed. Ask the ticket counter which payment methods it accepts; do not assume cashless payment."
   },
   {
-    icon: '💊', title: 'Pharmacy & medical',
-    text: 'Yercaud town has pharmacies and basic healthcare. For emergencies the nearest major centre is Salem; note key emergency numbers while travelling.'
+    "icon": "💊",
+    "title": "Pharmacy & medical",
+    "text": "Prepare personal medication and identify suitable current medical help before travel. This guide has not verified a nearby clinic or emergency response time."
   },
   {
-    icon: '📶', title: 'Internet & phone network',
-    text: 'Mobile network is available in the town centre and lakeside; 4G signal can drop on deep hill trails. Download an offline map before the ghat road for safety.'
+    "icon": "📶",
+    "title": "Internet & phone network",
+    "text": "Keep the address, route and return meeting point available offline. Network coverage varies and is not guaranteed by this guide."
   },
   {
-    icon: '♿', title: 'Accessible',
-    text: 'The lakeside paved walkway, boat house and Anna Park are wheelchair-friendly. Vehicle-accessible viewpoints exist; deeper trails and waterfalls may have limited access.'
+    "icon": "♿",
+    "title": "Accessible",
+    "text": "Wheelchair boarding, ramps, path surfaces and accessible toilets have not been surveyed here. Contact the boat house about your particular needs before travelling; proximity to Anna Park does not prove a continuous step-free route."
   }
 ];
 const facilities = locale === 'en' ? facilitiesEn : facilitiesTa;
-const allText = pick(locale,
-  'இது வணிகப் பட்டியல் அல்ல — வசதி வகைகள் மட்டுமே கீழே தரப்படுகின்றன. குறிப்பிட்ட கடை, ஹோட்டல் அல்லது நிறுவனப் பெயர் எதுவும் பரிந்துரைக்கப்படவில்லை; தேர்வும் முடிவும் பயணியின் பொறுப்பு.',
-  'This is not a commercial listing — only facility types are listed below. No specific shop, hotel or business is recommended; the choice and decision rest with the visitor.');
+const allText = pick(locale, "இந்த அட்டைகள் பயணத்திற்கு முன் என்ன கேட்க வேண்டும் என்பதற்கான உதவி; தற்போதைய சேவைகளின் உறுதியான பட்டியல் அல்ல.", "These cards are questions to resolve before travel, not a verified inventory of currently available services.");
 const kicker = pick(locale, 'பயண வசதிகள்', 'Visitor facilities');
 const heading = pick(locale, 'ஏரிக்கரை & ஏற்காடு நகரில் தேவையானவை', 'What you need at the lakeside & Yercaud town');
-const footnote = pick(locale,
-  'சில காலங்களில் பராமரிப்பு, விடுமுறை அல்லது பருவநிலை காரணமாக வசதிகளின் செயல்பாடு மாறலாம். பயண நாளில் உள்ளூரில் மீண்டும் உறுதிப்படுத்தவும்.',
-  'At some times facilities may operate differently due to maintenance, holidays or weather. Reconfirm locally on the day of travel.');
+const footnote = pick(locale, "குறிப்பிட்ட வசதியின் இடம், திறந்த நேரம் மற்றும் உங்கள் தேவைக்கேற்ற பயன்பாட்டை நேரடியாக உறுதி செய்யுங்கள்.", "Confirm the particular facility’s location, opening and suitability directly.");
 ---
 <section id={sec(locale, 'facilities')} class="container-shell py-16 md:py-24">
   <p class="kicker">{kicker}</p>

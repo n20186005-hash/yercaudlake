@@ -4,17 +4,20 @@ import { type Locale, navItems, pick } from '../i18n';
 interface Props { locale?: Locale }
 const { locale = 'ta' } = Astro.props;
 const items = navItems(locale);
-const base = locale === 'en' ? '/en' : '';
+const base = locale === 'en' ? '/en/' : '/';
+const current=Astro.url.pathname.replace(/^\/en(?=\/|$)/,'')||'/';
+const peer=locale==='en'?current:'/en'+current;
 const mapLabel = pick(locale, 'வரைபடம்', 'Map');
 const navLabel = pick(locale, 'முதன்மை வழிசெலுத்தல்', 'Main navigation');
 const homeLabel = pick(locale, 'முகப்புப் பக்கம்', 'Home');
 ---
 <header class="sticky top-0 z-50 border-b border-[#174c48]/10 bg-[#fffdf8]/94 backdrop-blur-xl">
   <div class="container-shell flex min-h-18 items-center justify-between gap-5 py-3">
-    <a href={base || '/'} class="focus-ring rounded-lg no-underline" aria-label={homeLabel}><Logo compact /></a>
+    <a href={base || '/'} class="focus-ring rounded-lg no-underline" aria-label={homeLabel}><Logo compact locale={locale} /></a>
     <nav class="hidden items-center gap-3 text-[.8rem] font-bold xl:flex" aria-label={navLabel}>
       {items.map((it) => <a href={`${base}#${it.id}`} class="px-1 hover:text-[#0d6d70]">{it.label}</a>)}
     </nav>
+    <a href={peer} lang={locale==='en'?'ta-IN':'en-IN'} class="shrink-0 rounded-full border border-[#0d6d70]/30 px-3 py-2 text-sm font-bold no-underline">{locale==='en'?'தமிழ்':'English'}</a>
     <a href="https://maps.app.goo.gl/DnvJDBDKXe8s1Rmi9" target="_blank" rel="noopener noreferrer" class="focus-ring rounded-full bg-[#0d6d70] px-4 py-2 text-sm font-extrabold text-white no-underline hover:bg-[#0b5358]">{mapLabel}</a>
   </div>
 </header>

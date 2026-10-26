@@ -3,6 +3,7 @@ import { type Locale, sec, pick } from '../i18n';
 interface Props { locale?: Locale }
 const { locale = 'ta' } = Astro.props;
 const sourcesTa = [
+  {org:'சேலம் மாவட்டம் — படகு இல்லம்',type:'அரசு',desc:'2025 தேதியுள்ள படகு வகை மற்றும் இயக்குநர் தகவல்; தற்போதைய விலை உறுதி அல்ல',url:'https://salem.nic.in/boat-house-yercaud-2024/'},
   { org: 'சேலம் மாவட்ட நிர்வாகம்', type: 'அதிகாரப்பூர்வம்', desc: 'Yercaud Lake (Boat House) சுற்றுலா இடப் பக்கம் — நேரம் & படகு தகவல்', url: 'https://salem.nic.in/tourist-place/images-of-yercaudlake/' },
   { org: 'சேலம் மாவட்டம் — Yercaud Lake', type: 'அதிகாரப்பூர்வம்', desc: 'அதிகாரப்பூர்வ புகைப்படத் தொகுப்பு (மாவட்ட நிர்வாகம்)', url: 'https://salem.nic.in/gallery/yercaudlake/' },
   { org: 'தமிழ்நாடு சுற்றுலாத்துறை', type: 'அரசு', desc: 'தமிழ்நாடு மாநில சுற்றுலாத் தகவல் நுழைவாயில்', url: 'https://www.tamilnadutourism.tn.gov.in/' },
@@ -11,6 +12,7 @@ const sourcesTa = [
   { org: 'Yercaud — விக்கிப்பீடியா', type: 'குறிப்பு மூலம்', desc: 'ஏற்காட்டின் பொதுவான வரலாறு & புவியியல் (ஆங்கிலம்)', url: 'https://en.wikipedia.org/wiki/Yercaud' }
 ];
 const sourcesEn = [
+  {org:'Salem District — Boat House',type:'Government',desc:'Dated 2025 boat types and operator context, not a current fare guarantee',url:'https://salem.nic.in/boat-house-yercaud-2024/'},
   { org: 'Salem District Administration', type: 'Official', desc: 'Yercaud Lake (Boat House) tourist-place page — timings & boating info', url: 'https://salem.nic.in/tourist-place/images-of-yercaudlake/' },
   { org: 'Salem District — Yercaud Lake', type: 'Official', desc: 'Official photo gallery (district administration)', url: 'https://salem.nic.in/gallery/yercaudlake/' },
   { org: 'Tamil Nadu Tourism', type: 'Government', desc: 'Tamil Nadu state tourism information gateway', url: 'https://www.tamilnadutourism.tn.gov.in/' },
@@ -21,13 +23,13 @@ const sourcesEn = [
 const standardsTa = [
   'வணிக விளம்பரம், ஸ்பான்சர் அல்லது தரவரிசை இல்லை; இட வகைகள் மட்டுமே நடுநிலையாகத் தரப்படுகின்றன.',
   'தகவல்கள் அதிகாரப்பூர்வ / அரசு மூலங்களுடன் ஒப்பிட்டு தயாரிக்கப்படுகின்றன.',
-  'உள்ளடக்கத்தின் கடைசி புதுப்பிப்பு: 2026-09-04.',
+  'உள்ளடக்கத்தின் கடைசி புதுப்பிப்பு: 2026-10-25.',
   'படகு கட்டணம், நேரம், வானிலை மற்றும் அணுகல் நிலை மாறக்கூடும் — பயண நாளில் உள்ளூர் கவுண்டர்/அதிகாரப்பூர்வ அறிவிப்பு முன்னுரிமை.'
 ];
 const standardsEn = [
   'No commercial advertising, sponsorship or ranking; only location types are given neutrally.',
   'Information is compiled against official / government sources.',
-  'Last content update: 2026-09-04.',
+  'Last content update: 2026-10-25.',
   'Boat fare, timings, weather and access can change — local counter / official notice takes priority on the day of travel.'
 ];
 const sources = locale === 'en' ? sourcesEn : sourcesTa;
@@ -39,9 +41,8 @@ const intro = pick(locale,
   'The information on this independent, non-profit site is compiled against the official / government sources below. No commercial recommendations are made.');
 const standardsHeading = pick(locale, 'தலையங்கத் தரத் தரநிலைகள்', 'Editorial quality standards');
 const rightsNote = pick(locale,
-  'பட உரிமை: இத்தளத்தின் புகைப்படங்களின் பதிப்புரிமையும் உரிமைகளும் அசல் புகைப்படக் கலைஞர்களுக்கே சொந்தமானவை; திறந்த உரிமப் படங்களின் மூலம் &amp; உரிமம் திட்ட ஆவணத்தில் பதிவு செய்யப்பட்டுள்ளது.',
-  'Image rights: the copyright and related rights of the photographs on this site belong to their original photographers; the source & licence of openly licensed images are recorded in the project’s photo documentation.');
-const linkLabel = pick(locale, 'மூலம் ↗', 'source ↗');
+  'பட உரிமை: ஒவ்வொரு கோப்பின் ஆசிரியர், மூலம், தனி உரிமம் அல்லது பொதுக் கள நிலை வெளியிடப்பட்ட புகைப்பட நன்றிக் குறிப்பில் பதிவு செய்யப்பட்டுள்ளது.',
+  'Image rights: each file’s author, source and individual licence or public-domain status are recorded in the published Photograph credits.');
 ---
 <section id={sec(locale, 'sources')} class="container-shell py-16 md:py-24">
   <p class="kicker" set:html={kicker}></p>

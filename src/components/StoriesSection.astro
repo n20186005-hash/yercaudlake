@@ -4,65 +4,73 @@ interface Props { locale?: Locale }
 const { locale = 'ta' } = Astro.props;
 const storiesTa = [
   {
-    badge: 'பெயர்க் கதை', badgeClass: 'bg-[#f4d98d]/90 text-[#4a3410]',
-    title: '“யேரி–காடு” — பெயருக்குப் பின்னால்',
-    text: 'ஏற்காடு என்னும் பெயர் “ஏரி” + “காடு” என்ற சொற்களில் இருந்து வந்ததாகப் பரவலாகச் சொல்லப்படுகிறது. ஒரு பக்கத்தில் தெளிந்த ஏரியும், சுற்றிலும் அடர்ந்த காடும் சேர்ந்து இந்த மலை இடத்திற்கு அதன் பெயரையும் அடையாளத்தையும் தந்தன. இயற்கை ஏரி என்பதால் நீர்நிலை தனித்துவம் மிக்கது.'
+    "badge": "பயணப் பின்னணி",
+    "badgeClass": "bg-[#f4d98d]/90 text-[#4a3410]",
+    "title": "வேறு பெயர்கள், ஒரே இடம்",
+    "text": "வருகையைத் திட்டமிடும்போது சரியான ஏற்காடு வரைபடத்தைப் பயன்படுத்துங்கள். பொதுவான ஏரிப் பெயர் மட்டும் வேறு நகரின் இடத்தை அடையாளம் காணப் போதாது."
   },
   {
-    badge: 'வரலாற்றுக் குறிப்பு', badgeClass: 'bg-[#cde9d8] text-[#143d2c]',
-    title: 'எமரால்டு (Emerald) ஏரி ஏன்?',
-    text: 'பெரிய ஏரி “எமரால்டு ஏரி” என்றும் அழைக்கப்படுகிறது. காலனித்துவ காலப் பயணிகள் சூழ்ந்த மரங்களின் பசுமை மற்றும் நீரின் மென்மையான பச்சைத் தோற்றத்தைப் பார்த்து இந்தப் பெயரை வழங்கியதாகக் கூறப்படுகிறது. இதனால் ஏற்காட்டின் ஏரி வெறும் நீர்நிலையாக மட்டுமின்றி மலை அனுபவத்தின் அடையாளமாகவும் விளங்குகிறது.'
+    "badge": "பயணப் பின்னணி",
+    "badgeClass": "bg-[#cde9d8] text-[#143d2c]",
+    "title": "புகைப்படமும் மாற்றமும்",
+    "text": "படம் ஒரு குறிப்பிட்ட வருகையைப் பதிவு செய்கிறது. பழைய காட்சி இன்றைய நீர்மட்டம், அணுகல், படகு வகை அல்லது நேரத்தை உறுதி செய்யாது."
   },
   {
-    badge: 'வாழ்க்கை முறை', badgeClass: 'bg-[#e3d9f2] text-[#3a2a5c]',
-    title: 'மலை வீடுகளும் தோட்ட வாழ்கையும்',
-    text: 'தோட்டக்கால மரபின் தொடர்ச்சியாக ஏற்காட்டில் இன்றும் காபி, தேயிலை, பழ மரங்கள் மற்றும் மசாலாப் பயிர்கள் பரவலாகக் காணப்படுகின்றன. பழங்கால மலை வீடுகளும் (பங்களாக்கள்) தோட்ட வாசல்களும் அந்த வாழ்க்கை முறையை நினைவுபடுத்துகின்றன. பல பயணிகள் வெறும் ஏரியோடு நின்றுவிடாமல், தோட்டங்களுக்கு இடையேயான சாலைகளிலும் நடைபயணம் செய்கின்றனர்.'
+    "badge": "பயணப் பின்னணி",
+    "badgeClass": "bg-[#e3d9f2] text-[#3a2a5c]",
+    "title": "ஏரியும் பூங்காவும்",
+    "text": "அண்ணா பூங்கா அருகில் இருந்தாலும் அதன் நுழைவு மற்றும் நேரத்தைத் தனியாக உறுதிப்படுத்திச் சேருங்கள்."
   },
   {
-    badge: 'திரை மலை', badgeClass: 'bg-[#f6d9d3] text-[#5c2418]',
-    title: 'தமிழ்த் திரைப்படங்களின் பின்னணி',
-    text: 'ஏற்காட்டின் ஏரி, சாலைகள் மற்றும் மலைக் காட்சிகள் பல தமிழ்த் திரைப்படங்களுக்குப் படப்பிடிப்புத் தளமாக இருந்துள்ளன. குறிப்பாகப் பாடல் காட்சிகள் இங்கு அடிக்கடி படமாக்கப்படுகின்றன. இதனால் “நாம் படங்களில் பார்த்த அந்த மலை ஏரி” என்ற உணர்வோடு பல பயணிகள் ஏற்காட்டை அடைகின்றனர்.'
+    "badge": "பயணப் பின்னணி",
+    "badgeClass": "bg-[#f6d9d3] text-[#5c2418]",
+    "title": "மூன்று படகு வகைகள்",
+    "text": "மாவட்டத்தின் தேதியுள்ள படகு இல்லப் பக்கம் மிதி, துடுப்பு மற்றும் இயந்திரப் படகுகளை வேறுபடுத்துகிறது. இன்று கிடைப்பது, பயணி எண்ணிக்கை மற்றும் பாதுகாப்பு விதியைக் கேளுங்கள்."
   },
   {
-    badge: 'பருவக் குறிப்பு', badgeClass: 'bg-[#cde9ec] text-[#123c44]',
-    title: 'மழைக்காலத்தின் அழகு — கிளியூர் அருவி',
-    text: 'மழைக்காலங்களில் கிளியூர் அருவி உச்சக் காட்சியை அளிக்கும். ஏரிக்கரையிலிருந்து தொடங்கும் நடைப் பாதை, பருவம் மற்றும் பாதுகாப்பு நிலையைப் பொறுத்து மாறுபடும். மழைக்காலத்தில் மலைச்சாலைகள் வழுக்கும் என்பதால் உள்ளூர் வழிகாட்டுதல்களைப் பின்பற்றி, நிலையை முன்கூட்டியே கேட்டறிந்து செல்வது பாதுகாப்பானது.'
+    "badge": "பயணப் பின்னணி",
+    "badgeClass": "bg-[#cde9ec] text-[#123c44]",
+    "title": "அருவி ஒரு தனித் திட்டம்",
+    "text": "கிளியூர் அருவிக்குப் புறப்படுமுன் தற்போதைய அணுகல் மற்றும் நிலையைச் சரிபாருங்கள். முன்னறிவிப்பு மழை அழகான நீர்வரத்து அல்லது பாதுகாப்பான திறந்த வழிக்கு உறுதி அல்ல."
   }
 ];
 const storiesEn = [
   {
-    badge: 'Name story', badgeClass: 'bg-[#f4d98d]/90 text-[#4a3410]',
-    title: '“Yeri–Kaadu” — behind the name',
-    text: 'The name Yercaud is widely said to come from “yeri” (lake) + “kaadu” (forest). On one side a clear lake, all around dense forest — together they gave this hill place its name and identity. Being a natural lake makes the waterbody distinctive.'
+    "badge": "Visitor context",
+    "badgeClass": "bg-[#f4d98d]/90 text-[#4a3410]",
+    "title": "Different names, one destination",
+    "text": "Use the exact Yercaud place map when planning arrival. A familiar lake name is not enough to identify another town’s destination."
   },
   {
-    badge: 'Historical note', badgeClass: 'bg-[#cde9d8] text-[#143d2c]',
-    title: 'Why “Emerald” Lake?',
-    text: 'The Big Lake is also called “Emerald Lake”. Colonial-era travellers are said to have given it this name seeing the green of the surrounding trees and the soft green sheen of the water. So Yercaud’s lake is not just a waterbody but a symbol of the hill experience.'
+    "badge": "Visitor context",
+    "badgeClass": "bg-[#cde9d8] text-[#143d2c]",
+    "title": "Photographs and change",
+    "text": "Photographs record a particular visit. Older scenes do not prove today’s water level, access, boat types or operating hours."
   },
   {
-    badge: 'Lifestyle', badgeClass: 'bg-[#e3d9f2] text-[#3a2a5c]',
-    title: 'Plantation life & hill bungalows',
-    text: 'Continuing the plantation tradition, coffee, tea, fruit trees and spice crops are still common around Yercaud. Old hill bungalows and plantation gates recall that way of life. Many travellers walk the roads between plantations, not stopping only at the lake.'
+    "badge": "Visitor context",
+    "badgeClass": "bg-[#e3d9f2] text-[#3a2a5c]",
+    "title": "Lake and garden visits",
+    "text": "Anna Park is close to the lake, but confirm its own entry and hours before adding it to a lake visit."
   },
   {
-    badge: 'Cinema hills', badgeClass: 'bg-[#f6d9d3] text-[#5c2418]',
-    title: 'Backdrop of Tamil films',
-    text: 'Yercaud’s lake, roads and hill scenery have been filming locations for many Tamil films, especially song sequences. So many travellers arrive with the feeling of “that hill lake we saw in pictures”.'
+    "badge": "Visitor context",
+    "badgeClass": "bg-[#f6d9d3] text-[#5c2418]",
+    "title": "Three kinds of boats",
+    "text": "The district’s dated boat-house page distinguishes pedal, rowing and motor boats. Ask which are available and what capacity and safety rules apply today."
   },
   {
-    badge: 'Seasonal note', badgeClass: 'bg-[#cde9ec] text-[#123c44]',
-    title: 'Monsoon beauty — Kiliyur Falls',
-    text: 'In the monsoon, Kiliyur Falls is at its best. The walkway from the lakeside varies with season and safety. Since hill roads get slippery in the monsoon, follow local guidance and ask about conditions in advance.'
+    "badge": "Visitor context",
+    "badgeClass": "bg-[#cde9ec] text-[#123c44]",
+    "title": "A waterfall is a separate plan",
+    "text": "Check current Kiliyur Falls access and conditions before setting out. Rain in a forecast does not guarantee an attractive flow or a safe open route."
   }
 ];
 const stories = locale === 'en' ? storiesEn : storiesTa;
 const badgeBase = 'inline-block rounded-full px-3 py-1 text-xs font-black';
 const kicker = pick(locale, 'கதைகள் & நினைவுகள்', 'Stories & memories');
 const heading = pick(locale, 'ஏரியின் பெயர்களும் உள்ளூர் நினைவுகளும்', 'The lake’s names & local memories');
-const intro = pick(locale,
-  'பின்வரும் குறிப்புகள் மாவட்ட/சுற்றுலா பொதுப் பதிவுகள் மற்றும் பரவலாக நிலவும் விளக்கங்களின் அடிப்படையில் தொகுக்கப்பட்டவை; இவை அதிகாரப்பூர்வ வரலாற்று ஆய்வாகக் கருதப்படக்கூடாது. பயண அனுபவத்திற்கான பின்னணி என்பதோடு மட்டும் பார்க்கவும்.',
-  'The notes below are compiled from district/tourism public records and commonly held explanations; they should not be treated as an official historical study. Read them only as background for the travel experience.');
+const intro = pick(locale, "ஏரியின் பெயர், புகைப்படங்களில் தெரியும் காட்சி மற்றும் சுற்றுப்புறப் பயணத்தைப் புரிந்துகொள்ள உதவும் குறிப்புகள்.", "Explore the lake’s names, what photographs show, and how a garden or waterfall visit relates to the lake.");
 ---
 <section id={sec(locale, 'stories')} class="container-shell py-16 md:py-24">
   <p class="kicker">{kicker}</p>

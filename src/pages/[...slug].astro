@@ -1,0 +1,11 @@
+---
+// Tamil guide pages, served from the root: /<family>/<topic>/
+import GuideLayout from '../layouts/GuideLayout.astro';
+import { guides } from '../data/guides';
+
+export function getStaticPaths() {
+  return guides.map((page) => ({ params: { slug: page.slug }, props: { page } }));
+}
+const { page } = Astro.props;
+---
+<GuideLayout page={page} locale="ta" />

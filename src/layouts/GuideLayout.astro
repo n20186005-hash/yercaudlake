@@ -1,0 +1,244 @@
+---
+// Renders one bilingual guide page. English lives at /en/<slug>/ and the Tamil
+// counterpart at /<slug>/. The same data file drives both, so the two language
+// versions can never drift apart.
+import BaseLayout from './BaseLayout.astro';
+import { type Locale, pick } from '../i18n';
+import { FAMILIES, type GuidePage } from '../data/guides/types';
+import { resolveSources } from '../data/guides/sources';
+import { relatedGuides } from '../data/guides';
+import { withSiteNameEn, withSiteNameTa, GEO } from '../data/site';
+
+interface Props { page: GuidePage; locale: Locale }
+const { page, locale } = Astro.props;
+
+const text = locale === 'en' ? page.en : page.ta;
+const taPath = `/${page.slug}/`;
+const enPath = `/en/${page.slug}/`;
+const selfPath = locale === 'en' ? enPath : taPath;
+const homePath = locale === 'en' ? '/en/' : '/';
+const familyLabel = FAMILIES[page.family][locale];
+
+const sources = resolveSources(text.sourceIds);
+const related = relatedGuides(page);
+
+const labels = pick(locale,
+  JSON.stringify({
+    home: 'முகப்பு',
+    updated: 'கடைசியாகச் சரிபார்க்கப்பட்டது',
+    atAGlance: 'ஒரு பார்வையில்',
+    fromLake: 'ஏற்காடு ஏரியிலிருந்து',
+    faq: 'அடிக்கடி கேட்கப்படும் கேள்விகள்',
+    related: 'தொடர்புடைய வழிகாட்டிகள்',
+    sources: 'ஆதாரங்கள்',
+    openMap: 'வரைபடத்தில் திறக்கவும்',
+    disclaimer: 'இது ஒரு சுயாதீன, இலாப நோக்கமற்ற பயணிகள் வழிகாட்டி. அரசு அமைப்புகளுடனோ TTDC-யுடனோ நிர்வாகத் தொடர்பு இல்லை. மாறக்கூடிய கட்டணம், நேரம் மற்றும் அணுகலைப் பயண நாளில் மீண்டும் சரிபார்க்கவும்.'
+  }),
+  JSON.stringify({
+    home: 'Home',
+    updated: 'Last checked',
+    atAGlance: 'At a glance',
+    fromLake: 'From Yercaud Lake',
+    faq: 'Frequently asked questions',
+    related: 'Related guides',
+    sources: 'Sources',
+    openMap: 'Open in Google Maps',
+    disclaimer: 'This is an independent, non-profit visitor guide with no administrative affiliation with any government body or TTDC. Reconfirm changing fares, hours and access on the day of travel.'
+  })
+) as string;
+const t = JSON.parse(labels) as Record<string, string>;
+
+const title = locale === 'en' ? withSiteNameEn(text.title) : withSiteNameTa(text.title);
+const leading = locale === 'en' ? 'leading-7' : 'leading-8';
+
+const canonicalBase = Astro.site ? Astro.site.href.replace(/\/+$/, '') : '';
+const homeUrl = canonicalBase + homePath;
+const selfUrl = canonicalBase + selfPath;
+
+const breadcrumb = {
+  '@context': 'https://schema.org',
+  '@type': 'BreadcrumbList',
+  itemListElement: [
+    { '@type': 'ListItem', position: 1, name: t.home, item: homeUrl },
+    { '@type': 'ListItem', position: 2, name: text.h1, item: selfUrl }
+  ]
+};
+const faqSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'FAQPage',
+  mainEntity: text.faq.map((item) => ({
+    '@type': 'Question',
+    name: item.q,
+    acceptedAnswer: { '@type': 'Answer', text: item.a }
+  }))
+};
+const relatedItemList = {
+  '@context': 'https://schema.org',
+  '@type': 'ItemList',
+  name: t.related,
+  itemListElement: related.map((entry, index) => ({
+    '@type': 'ListItem',
+    position: index + 1,
+    name: locale === 'en' ? entry.en.title : entry.ta.title,
+    url: canonicalBase + (locale === 'en' ? `/en/${entry.slug}/` : `/${entry.slug}/`)
+  }))
+};
+const jsonLd = related.length > 0 ? [breadcrumb, faqSchema, relatedItemList] : [breadcrumb, faqSchema];
+---
+<BaseLayout
+  title={title}
+  description={text.description}
+  image="/images/yercaud-lake-boathouse.jpg"
+  imageAlt="Yercaud Lake & Boat House (Emerald Lake) — Lake Road, Yercaud, Tamil Nadu"
+  jsonLd={jsonLd}
+  locale={locale}
+  path={taPath}
+>
+  <article class="container-shell py-8 md:py-14">
+    <nav aria-label={locale === 'en' ? 'Breadcrumb' : 'வழிசெலுத்தல் பாதை'} class="text-xs font-bold text-[#4d635e]">
+      <ol class="flex flex-wrap items-center gap-2">
+        <li><a class="underline" href={homePath}>{t.home}</a></li>
+        <li aria-hidden="true">›</li>
+        <li>{familyLabel}</li>
+        <li aria-hidden="true">›</li>
+        <li class="text-[#0b4148]">{text.kicker}</li>
+      </ol>
+    </nav>
+
+    <header class="mt-6 max-w-3xl">
+      <p class="kicker">{text.kicker}</p>
+      <h1 class="section-title mt-3">{text.h1}</h1>
+      <p class={`mt-5 text-lg text-[#415a54] ${leading}`}>{text.lead}</p>
+      <div class="mt-6 flex flex-wrap items-center gap-3 text-sm font-bold">
+        <span class="rounded-full bg-[#eaf4ee] px-4 py-2 text-[#0b4148]">{t.updated}: {page.lastChecked}</span>
+        {page.mapsQuery && (
+          <a
+            class="rounded-full bg-[#0d6d70] px-4 py-2 text-white no-underline hover:bg-[#0b5358]"
+            href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(page.mapsQuery)}`}
+            target="_blank"
+            rel="noopener noreferrer"
+          >{t.openMap}</a>
+        )}
+      </div>
+    </header>
+
+    <section aria-label={t.fromLake} class="mt-10 max-w-3xl rounded-2xl border-l-4 border-[#0d6d70] bg-[#eaf4ee] p-5">
+      <h2 class="text-sm font-black uppercase tracking-[.12em] text-[#0d6d70]">{t.fromLake}</h2>
+      <p class={`mt-3 text-[#35504a] ${leading}`}>{locale === 'en' ? page.fromLake.en : page.fromLake.ta}</p>
+    </section>
+
+    {text.facts.length > 0 && (
+      <section aria-label={t.atAGlance} class="mt-10">
+        <h2 class="text-sm font-black uppercase tracking-[.12em] text-[#0d6d70]">{t.atAGlance}</h2>
+        <dl class="mt-4 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+          {text.facts.map((fact) => (
+            <div class="card p-5">
+              <dt class="text-xs font-black text-[#0d6d70]">{fact.label}</dt>
+              <dd class={`mt-2 font-bold text-[#0b4148] ${leading}`}>{fact.value}</dd>
+            </div>
+          ))}
+        </dl>
+      </section>
+    )}
+
+    <section class={`mt-12 max-w-3xl text-[#415a54] ${leading}`}>
+      {text.blocks.map((block) =>
+        block.kind === 'h2' ? (
+          <h2 class="mt-11 text-2xl font-black text-[#0b4148]">{block.text}</h2>
+        ) : block.kind === 'p' ? (
+          <p class="mt-4">{block.text}</p>
+        ) : block.kind === 'list' ? (
+          <ul class="mt-4 grid gap-2 pl-5">
+            {block.items.map((item) => <li class="list-disc">{item}</li>)}
+          </ul>
+        ) : block.kind === 'steps' ? (
+          <ol class="mt-5 grid gap-4">
+            {block.items.map((item, index) => (
+              <li class="flex gap-3">
+                <span class="mt-0.5 flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-[#0d6d70] text-sm font-black text-white">{index + 1}</span>
+                <span>{item}</span>
+              </li>
+            ))}
+          </ol>
+        ) : block.kind === 'table' ? (
+          <figure class="mt-6">
+            <div class="overflow-x-auto rounded-2xl border border-[#174c48]/12">
+              <table class="w-full min-w-[32rem] border-collapse text-sm">
+                <thead>
+                  <tr class="bg-[#eaf4ee] text-left">
+                    {block.head.map((cell) => <th class="px-4 py-3 font-black text-[#0b4148]">{cell}</th>)}
+                  </tr>
+                </thead>
+                <tbody>
+                  {block.rows.map((row) => (
+                    <tr class="border-t border-[#174c48]/10">
+                      {row.map((cell) => <td class="px-4 py-3 align-top">{cell}</td>)}
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+            {block.caption && <figcaption class="mt-2 text-xs text-[#4d635e]">{block.caption}</figcaption>}
+          </figure>
+        ) : (
+          <div class="mt-6 rounded-2xl border-l-4 border-[#d9a53b] bg-[#fdf6e6] p-5">
+            <p class="text-[#5b4a1f]">{block.text}</p>
+          </div>
+        )
+      )}
+    </section>
+
+    {text.faq.length > 0 && (
+      <section class="mt-14 max-w-3xl">
+        <h2 class="text-2xl font-black text-[#0b4148]">{t.faq}</h2>
+        <div class="mt-6 grid gap-4">
+          {text.faq.map((item) => (
+            <details class="card group p-5">
+              <summary class="cursor-pointer list-none pr-7 font-extrabold text-[#0b4148]">{item.q}</summary>
+              <p class={`mt-4 text-sm text-[#4a615b] ${leading}`}>{item.a}</p>
+            </details>
+          ))}
+        </div>
+      </section>
+    )}
+
+    {related.length > 0 && (
+      <section class="mt-14">
+        <h2 class="text-2xl font-black text-[#0b4148]">{t.related}</h2>
+        <ul class="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+          {related.map((entry) => {
+            const entryLabel = locale === 'en' ? entry.en.title : entry.ta.title;
+            const entryKicker = FAMILIES[entry.family][locale];
+            const entryHref = locale === 'en' ? `/en/${entry.slug}/` : `/${entry.slug}/`;
+            return (
+              <li class="card p-5">
+                <p class="text-xs font-black text-[#0d6d70]">{entryKicker}</p>
+                <a class="mt-2 block font-bold text-[#0b4148] no-underline hover:underline" href={entryHref}>{entryLabel}</a>
+              </li>
+            );
+          })}
+        </ul>
+      </section>
+    )}
+
+    {sources.length > 0 && (
+      <section class="mt-14 max-w-3xl">
+        <h2 class="text-2xl font-black text-[#0b4148]">{t.sources}</h2>
+        <ul class="mt-6 grid gap-4">
+          {sources.map((source) => (
+            <li class="card p-5">
+              <a class="font-bold text-[#0b4148] underline" href={source.url} target="_blank" rel="noopener noreferrer">{locale === 'en' ? source.label.en : source.label.ta}</a>
+              <p class="mt-1 text-xs font-bold text-[#0d6d70]">{locale === 'en' ? source.date.en : source.date.ta}</p>
+              {source.note && <p class={`mt-2 text-sm text-[#4a615b] ${leading}`}>{locale === 'en' ? source.note.en : source.note.ta}</p>}
+            </li>
+          ))}
+        </ul>
+      </section>
+    )}
+
+    <aside class="mt-14 max-w-3xl rounded-2xl bg-[#eaf4ee] p-5 text-sm text-[#35504a]">
+      <p class={leading}>{t.disclaimer}</p>
+      <p class="mt-3 text-xs text-[#4d635e]">{GEO.locality} · {GEO.region} · {GEO.postalCode}</p>
+    </aside>
+  </article>
+</BaseLayout>

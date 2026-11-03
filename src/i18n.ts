@@ -22,6 +22,7 @@ export const sectionIds: Record<string, Record<Locale, string>> = {
   itineraries:   { ta: 'இயக்கதிட்டங்கள்', en: 'itineraries' },
   responsibility: { ta: 'பொறுப்பு', en: 'responsibility' },
   surroundings:   { ta: 'சுற்றுப்புறம்', en: 'nearby' },
+  guides:        { ta: 'வழிகாட்டிகள்', en: 'guides' },
   faq:           { ta: 'கேள்விகள்', en: 'faq' },
   sources:       { ta: 'ஆதாரங்கள்', en: 'sources' }
 };

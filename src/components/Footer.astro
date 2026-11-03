@@ -18,6 +18,7 @@ const travelLinks = [
   { label: pick(locale, 'வரலாறு & கதைகள்', 'History & stories'), id: sec(locale, 'history') },
   { label: pick(locale, 'வானிலை முன்னறிவிப்பு', 'Weather forecast'), id: sec(locale, 'weather') },
   { label: pick(locale, 'புகைப்படத் தொகுப்பு', 'Photo gallery'), id: sec(locale, 'gallery') },
+  { label: pick(locale, 'வழிகாட்டிகள்', 'Guides'), id: sec(locale, 'guides') },
   { label: pick(locale, 'பொதுக் கேள்விகள்', 'FAQ'), id: sec(locale, 'faq') }
 ];
 const base = locale === 'en' ? '/en/' : '/';
@@ -25,7 +26,7 @@ const legalBase=locale==='en'?'/en/':'/';
 ---
 <footer class="mt-20 bg-[#0b3436] text-[#f9f5e9]">
   <div class="container-shell grid gap-10 py-14 lg:grid-cols-[1.2fr_.8fr]">
-    <div><Logo/><div class="mt-6 max-w-3xl space-y-3 text-sm leading-7 text-white/75">
+    <div><Logo locale={locale}/><div class="mt-6 max-w-3xl space-y-3 text-sm leading-7 text-white/75">
       <p>{p1}</p>
       <p>{p2}</p>
       <p>{p3}</p>
